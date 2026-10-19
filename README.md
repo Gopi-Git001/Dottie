@@ -39,5 +39,5 @@ npm run secret-scan
 - Shared interfaces change only through E01 (`docs/contracts/CONTRACTS.md`, ADR-0012). A schema change needs a version bump, fixtures and consumer tests.
 - Codex stays pinned at 0.163.0 unless an ADR changes the pin.
 
-## Licence
-The licence is to be decided. There is no licence file until that choice lands (`docs/LICENSE-OPTIONS.md`). Until then, all rights are reserved. Third-party components keep their own licences (Codex is Apache-2.0).
+## License
+Copyright (c) 2026 Gopi Thungam. All rights reserved. This repository is public for visibility only; no license is granted to use, copy, modify, or distribute it.
