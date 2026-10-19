@@ -1,0 +1,17 @@
+{
+  "schema": "dottie.event",
+  "version": 2,
+  "type": "TaskCancelled",
+  "eventId": "evt-taskcancelled-clean",
+  "correlationId": "corr-1",
+  "timestamp": "2026-10-18T14:03:00.123-05:00",
+  "payload": {
+    "taskId": "task-1",
+    "stopStatus": "stopped_no_side_effects",
+    "sideEffects": "none",
+    "sideEffectsCommitted": false,
+    "committedActions": [],
+    "report": "Stopped before anything changed."
+  },
+  "taskId": "task-1"
+}

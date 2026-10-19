@@ -59,6 +59,52 @@ including `ui.Click`, `window.`, `UI.x`, `Window.close` and the valid `ui.click`
 null = display_unavailable). Vectors: 5 negatives (those five methods) and 2 positives (`uix.click`, `file.read`).
 No existing hash changed (73 of 73). E03's `hasUiActionPrefix` is case-sensitive and should take the `i` flag.
 
+Plain-object hardening (E03 report, 2026-10-19): the validators used `in` for required keys, so a display whose fields
+were all inherited (`Object.create({kind, ...})`) validated while `canonicalJson` refused it. Now
+`validateApprovalDisplay` (nested `app` included), `validateEvent` and `computeActionId` take only plain data
+objects (`isPlainObject`: prototype `Object.prototype` or null, no symbol keys, own enumerable data properties only,
+so no getters) and plain dense arrays (`isPlainArray`). Every required/allowed key check uses `hasOwn`. A JSON-parsed
+`"__proto__"` key is an unknown own key and is rejected. A key named like an `Object.prototype` member (`constructor`,
+`toString`) is no longer treated as a known event field. A polluted `Object.prototype` / `Array.prototype` never
+supplies a missing field or array entry. Null-prototype objects are accepted and hash the same. No hash changed (75
+of 75); two `displaysInvalid` error strings changed.
+
+E01 ruling 2i (closed internal events; given 2026-10-19 11:23 CDT, not yet committed in dottie-e01, so no pin SHA:
+the pin stays at the last E01 commit mirrored). Internal Dottie events are closed. The envelope and every payload
+object reject unknown keys (prototype names included) without throwing. `test/closed-events.test.ts` is table-driven
+over every event type's valid fixtures: it injects an ordinary unknown key and every `Object.prototype` member name
+(as own keys) into every object node and expects exactly that path rejected. The three open-by-contract maps
+(ObservedState's tool-specific scalar keys, `observedState.checks`, `redactedMetadata`; §5/§3.2) stay open for
+ordinary keys. Prototype member names (`RESERVED_KEY_NAMES`) are now rejected there too ("reserved prototype member
+name"). No hash changed.
+
+E01 ruling 2j (given 2026-10-19 11:31 CDT via E02's dispatcher, not yet committed in dottie-e01, so no pin SHA).
+`TaskCancelled.committedActions[].observedState` is `ObservedState | null`. (a) Null only for an unverified entry
+whose side effect is possible. `CommittedAction` has no separate `verified` / `sideEffect` member, so this reads
+the entry's `certainty` as its side effect: null only with `certainty: 'possible'`, rejected at
+`committedActions[k].observedState`. (b) If any entry is null, `stopStatus` is neither `stopped_no_side_effects` nor
+`completed_before_stop`, and `sideEffects` is `possible` or `committed`. (c) The key is always present; a missing key
+is rejected (closed objects). Fixtures: valid `task-cancelled-null-observed-state{,-mixed}.json` and the clean-stop
+pair `task-cancelled-{stopped-no-side-effects,completed-before-stop}.json`; invalid
+`cancelled-null-observed-state-{certainty-committed,stopped-no-side-effects,completed-before-stop,side-effects-none}.json`
+and `cancelled-observed-state-missing.json`. No JSON Schema or Python record covers events, so none changed. No
+hash changed. E01 approved this reading (see below).
+
+E01 approvals (2026-10-19 11:41 CDT, relayed by E02's dispatcher; not yet in dottie-e01, no pin SHA). (1) 2i's
+approval-request exception is approved. An unknown TOP-LEVEL key on an App Server approval request stays fail-closed:
+exactly one `decline` (`schema_invalid`), no dialog, nothing forwarded. Nested unknown fields are dropped. (2) The
+2j reading is approved. `CommittedAction` gets no new members; `certainty` is the entry's side effect, so
+`observedState: null` only with `certainty: 'possible'`. Also from 2i: the adapter's reply routing (connection.ts)
+uses `Object.hasOwn`, not `in`.
+
+Lint guard for 2i (E02 tooling, not an E01 ruling). `npm run lint` (ESLint 10, flat config `eslint.config.mjs`, identical in
+packages/contracts and packages/codex-adapter; `codex-adapter/test/lint-config.test.ts` fails on drift) bans the `in`
+operator in `src` and `test` via `no-restricted-syntax` on `BinaryExpression[operator='in']`, with a message pointing to
+`Object.hasOwn`, and bans `for...in` (`ForInStatement`), pointing to `Object.keys` / `Object.entries`. `npm run check` runs it too, so CI's existing `check` step enforces the ban. Every disable comment must name its rule(s), carry a reason (`-- why`), and actually suppress something
+(`@eslint-community/eslint-plugin-eslint-comments`: require-description, no-unlimited-disable, no-unused-disable;
+`reportUnusedDisableDirectives: error`). The one allowed disable is a test that checks INHERITED members on purpose
+(`wire-tolerance.test.ts`, proving Object.prototype was restored).
+
 When E01 lands a new ruling, update the mirror and this pin in the same commit. Where CONTRACTS leaves
 something open, the conservative reading is implemented and noted at the code site (search for
 `ruling` / `TODO(DOT-095)` / `TODO(E03 port`).

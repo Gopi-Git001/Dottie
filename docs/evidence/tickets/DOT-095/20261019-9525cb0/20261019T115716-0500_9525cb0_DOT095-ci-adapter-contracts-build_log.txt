@@ -1,0 +1,7 @@
+{"caseId": "DOT095-ci-adapter-contracts-build", "commit": "9525cb0f54682ed96426b71c4f1035db2aa925e3", "build": null, "installerSha256": null, "buildNote": "n/a: unpackaged", "startedAt": "2026-10-19T11:57:16-05:00", "finishedAt": "2026-10-19T11:57:18-05:00", "runner": "linux-box-e02", "command": "(cd packages/contracts && npm ci --no-audit --no-fund && npm run build)", "exitCode": 0, "durationMs": 2340, "result": "pass", "dirtyTree": false, "platform": "Linux (never Windows evidence)", "rawOutputSha256": "ce096bad378d4eab56c5363a6bc333710f927a60e653692c00d6f1ee26e9cbbb", "linesWithheld": 0}
+
+added 98 packages in 801ms
+
+> @dottie/contracts@2.0.0 build
+> tsc
+

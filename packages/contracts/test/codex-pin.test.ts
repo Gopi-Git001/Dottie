@@ -16,7 +16,7 @@ test('pin is rust-v0.163.0 at the ADR-0003 commit with well-formed digests', () 
   for (const [asset, sha] of Object.entries(CODEX_PIN.assets)) assert.match(sha, SHA, asset);
   for (const [k, b] of Object.entries(CODEX_PIN.binaries)) {
     assert.match(b.sha256, SHA, k);
-    assert.ok(b.asset in CODEX_PIN.assets, `${k} asset ${b.asset} has a pinned digest`);
+    assert.ok(Object.hasOwn(CODEX_PIN.assets, b.asset), `${k} asset ${b.asset} has a pinned digest`);
   }
   assert.ok(pinnedBinaryFor('linux-x64'));
   assert.ok(pinnedBinaryFor('win32-x64'));

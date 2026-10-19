@@ -1,0 +1,5 @@
+{"caseId": "DOT095-ci-contracts-check", "commit": "204f911650f61c5b69d7dc9aace7dfc707cef006", "build": null, "installerSha256": null, "buildNote": "n/a: unpackaged", "startedAt": "2026-10-19T11:54:26-05:00", "finishedAt": "2026-10-19T11:54:29-05:00", "runner": "linux-box-e02", "command": "(cd packages/contracts && npm run check)", "exitCode": 0, "durationMs": 2950, "result": "pass", "dirtyTree": false, "platform": "Linux (never Windows evidence)", "rawOutputSha256": "c44242719cb6371bff0c26553ff394c87b4b55e6963d56df33765988bbf9afdc", "linesWithheld": 0}
+
+> @dottie/contracts@2.0.0 check
+> tsc --noEmit && tsc -p tsconfig.codex-generated.json && eslint .
+

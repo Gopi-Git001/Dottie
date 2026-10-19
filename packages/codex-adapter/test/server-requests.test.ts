@@ -34,7 +34,7 @@ test('each pinned server request gets exactly one schema-valid deny/-32601 reply
   const methods = pinnedServerRequestMethods();
   const lines = methods.flatMap((m, i) => {
     const e = EXPECTED[m]!;
-    const reply = 'result' in e ? { id: `srv-${i}`, result: e.result } : { id: `srv-${i}`, error: { code: e.errorCode, message: 'Method not found' } };
+    const reply = Object.hasOwn(e, 'result') ? { id: `srv-${i}`, result: (e as { result: unknown }).result } : { id: `srv-${i}`, error: { code: (e as { errorCode: number }).errorCode, message: 'Method not found' } };
     return [`<< ${JSON.stringify({ id: `srv-${i}`, method: m, params: {} })}`, `>> ${JSON.stringify(reply)}`];
   });
   // Synthetic params ({}) are not schema-valid for most methods, so only the adapter's replies are schema-checked here;
@@ -42,9 +42,9 @@ test('each pinned server request gets exactly one schema-valid deny/-32601 reply
   const h = setup({ scripts: [concat(HANDSHAKE, ...lines)], fake: { validateEmitted: false } });
   await h.adapter.start();
   await h.fakes[0]!.done();
-  await until(() => h.fakes[0]!.received.filter((m) => !('method' in m)).length === methods.length, 'all replies');
+  await until(() => h.fakes[0]!.received.filter((m) => !(Object.hasOwn(m, 'method'))).length === methods.length, 'all replies');
   assert.deepEqual(h.problems(), []);
-  const replies = h.fakes[0]!.received.filter((m) => !('method' in m));
+  const replies = h.fakes[0]!.received.filter((m) => !(Object.hasOwn(m, 'method')));
   assert.equal(new Set(replies.map((r) => r['id'])).size, methods.length, 'one reply per id');
   const text = JSON.stringify(replies);
   for (const yes of ['"accept"', 'acceptForSession', '"approved"', 'approved_for_session']) assert.ok(!text.includes(yes), `never ${yes}`);
@@ -54,7 +54,7 @@ test('legacy applyPatchApproval / execCommandApproval are denied (anomaly logged
   const h = setup({ scripts: [concat(HANDSHAKE, loadTranscript('legacy-approvals.jsonl'))] });
   await h.adapter.start();
   await h.fakes[0]!.done();
-  await until(() => h.fakes[0]!.received.filter((m) => !('method' in m)).length === 4, '4 replies');
+  await until(() => h.fakes[0]!.received.filter((m) => !(Object.hasOwn(m, 'method'))).length === 4, '4 replies');
   assert.deepEqual(h.problems(), []);
   const events = h.logger.entries.map((e) => e.event);
   assert.equal(events.filter((e) => e === 'codex.server_request.anomaly').length, 2);

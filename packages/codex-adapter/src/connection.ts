@@ -172,8 +172,14 @@ export class AppServerConnection {
     }
     this.answering.delete(key);
     if (this.closed) return;
-    if ('noReply' in reply) return;
-    this.transport.write('result' in reply ? encodeResult(id, reply.result) : encodeError(id, reply.error.code, reply.error.message));
+    // Ruling 2i: route by OWN keys only; a polluted Object.prototype must never turn an error into a result or drop a reply.
+    if (Object.hasOwn(reply, 'noReply')) return;
+    if (Object.hasOwn(reply, 'result')) {
+      this.transport.write(encodeResult(id, (reply as { readonly result: unknown }).result));
+      return;
+    }
+    const { error } = reply as { readonly error: { readonly code: number; readonly message: string } };
+    this.transport.write(encodeError(id, error.code, error.message));
   }
 
   private onExit(info: ExitInfo): void {

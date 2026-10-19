@@ -1,0 +1,31 @@
+{"caseId": "DOT095-adapter-live-smoke-0163-signed-out", "commit": "204f911650f61c5b69d7dc9aace7dfc707cef006", "build": null, "installerSha256": null, "buildNote": "n/a: unpackaged", "startedAt": "2026-10-19T11:54:54-05:00", "finishedAt": "2026-10-19T11:54:58-05:00", "runner": "linux-box-e02", "command": "(cd packages/codex-adapter && npm run test:live)", "exitCode": 0, "durationMs": 4434, "result": "pass", "dirtyTree": false, "platform": "Linux (never Windows evidence)", "rawOutputSha256": "c0334f9a1b3a909ee2644358cb677be08a425773f8b90ac1cb4ddd3c13f551ef", "linesWithheld": 0}
+
+> @dottie/codex-adapter@0.1.0 test:live
+> npm run build && DOTTIE_CODEX_LIVE=1 node --test dist/test/live-smoke.test.js
+
+
+> @dottie/codex-adapter@0.1.0 build
+> npm --prefix ../contracts run build && tsc
+
+
+> @dottie/contracts@2.0.0 build
+> tsc
+
+TAP version 13
+# live forced_login_method=chatgpt (origin sessionFlags); child env keys=CODEX_HOME,HOME,LANG,LC_ALL,LOGNAME,PATH,USER
+# live wire: 8 messages; out=initialize,initialized,account/read,account/read
+# Subtest: live 0.163.0: handshake and signed-out account/read
+ok 1 - live 0.163.0: handshake and signed-out account/read
+  ---
+  duration_ms: 927.620956
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1032.691539

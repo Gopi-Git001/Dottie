@@ -1,0 +1,26 @@
+{
+  "errorPath": "payload.stopStatus",
+  "event": {
+    "schema": "dottie.event",
+    "version": 2,
+    "type": "TaskCancelled",
+    "eventId": "evt-2j-b2",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-18T14:03:00.123-05:00",
+    "payload": {
+      "taskId": "task-1",
+      "stopStatus": "completed_before_stop",
+      "sideEffects": "possible",
+      "sideEffectsCommitted": false,
+      "committedActions": [
+        {
+          "toolId": "files.write",
+          "observedState": null,
+          "certainty": "possible"
+        }
+      ],
+      "report": "Stopped."
+    },
+    "taskId": "task-1"
+  }
+}

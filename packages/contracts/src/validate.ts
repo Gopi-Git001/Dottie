@@ -26,6 +26,7 @@ import {
   VERIFIER_OUTCOMES,
   type ApprovalCategory,
 } from './enums.js';
+import { hasOwn, isPlainArray, isPlainObject } from './canonical.js';
 import { DISPLAY_KIND_SOURCE, DISPLAY_KINDS, validateApprovalDisplay, type DisplayKind } from './display.js';
 import { EVENT_SCHEMA, EVENT_TYPES, EVENT_VERSION, REDACTED_METADATA_MAX_BYTES, REDACTED_METADATA_MAX_KEYS, type AnyEvent, type EventType } from './events.js';
 
@@ -42,9 +43,8 @@ type Check = (value: unknown, path: string, issues: ValidationIssue[]) => void;
 
 const ISO_WITH_OFFSET = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,9})?(Z|[+-]\d{2}:\d{2})$/;
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
+/** Plain data objects only (E03 report): prototype Object.prototype or null, own enumerable data keys (isPlainObject). */
+const isRecord = isPlainObject;
 
 const str: Check = (v, p, i) => {
   if (typeof v !== 'string') i.push({ path: p, message: 'must be a string' });
@@ -71,8 +71,8 @@ const oneOf =
 const arrayOf =
   (item: Check): Check =>
   (v, p, i) => {
-    if (!Array.isArray(v)) {
-      i.push({ path: p, message: 'must be an array' });
+    if (!isPlainArray(v)) {
+      i.push({ path: p, message: 'must be a plain dense array' });
       return;
     }
     v.forEach((el, idx) => item(el, `${p}[${idx}]`, i));
@@ -84,10 +84,25 @@ interface Field {
 }
 /** Shape only; the X5 display rules run in invariants() after the category rules, so those keep their own messages. */
 const objectShape: Check = (v, p, i) => {
-  if (typeof v !== 'object' || v === null || Array.isArray(v)) i.push({ path: p, message: 'must be an object' });
+  if (!isPlainObject(v)) i.push({ path: p, message: 'must be a plain object' });
 };
 const req = (check: Check): Field => ({ check });
 const opt = (check: Check): Field => ({ check, optional: true });
+
+/**
+ * E01 ruling 2i: internal events are closed. Object.prototype member names (and `__proto__`) are never a valid key,
+ * not even in the maps that are open by contract (ObservedState's tool-specific scalars, `checks`,
+ * RedactedMetadata). Fixed list, so that a polluted runtime cannot change it.
+ */
+export const RESERVED_KEY_NAMES: ReadonlySet<string> = new Set([
+  '__proto__', 'constructor', 'hasOwnProperty', 'isPrototypeOf', 'propertyIsEnumerable', 'toLocaleString', 'toString', 'valueOf',
+  '__defineGetter__', '__defineSetter__', '__lookupGetter__', '__lookupSetter__',
+]);
+const reserved = (k: string, p: string, i: ValidationIssue[]): boolean => {
+  if (!RESERVED_KEY_NAMES.has(k)) return false;
+  i.push({ path: `${p}.${k}`, message: 'is a reserved prototype member name (ruling 2i)' });
+  return true;
+};
 
 function objectOf(fields: Readonly<Record<string, Field>>, open?: Check): Check {
   return (v, p, i) => {
@@ -96,7 +111,7 @@ function objectOf(fields: Readonly<Record<string, Field>>, open?: Check): Check 
       return;
     }
     for (const [name, field] of Object.entries(fields)) {
-      const value = v[name];
+      const value = hasOwn(v, name) ? v[name] : undefined;
       if (value === undefined) {
         if (!field.optional) i.push({ path: `${p}.${name}`, message: 'is required' });
         continue;
@@ -104,8 +119,8 @@ function objectOf(fields: Readonly<Record<string, Field>>, open?: Check): Check 
       field.check(value, `${p}.${name}`, i);
     }
     for (const key of Object.keys(v)) {
-      if (key in fields) continue;
-      if (open) open(v[key], `${p}.${key}`, i);
+      if (hasOwn(fields, key)) continue;
+      if (open && !reserved(key, p, i)) open(v[key], `${p}.${key}`, i);
       else i.push({ path: `${p}.${key}`, message: 'is not a v2 field' });
     }
   };
@@ -121,7 +136,7 @@ const checksMap: Check = (v, p, i) => {
     i.push({ path: p, message: 'must be an object' });
     return;
   }
-  for (const [k, r] of Object.entries(v)) oneOf(CHECK_RESULTS)(r, `${p}.${k}`, i);
+  for (const [k, r] of Object.entries(v)) if (!reserved(k, p, i)) oneOf(CHECK_RESULTS)(r, `${p}.${k}`, i);
 };
 
 const observedState: Check = objectOf(
@@ -147,6 +162,7 @@ const redactedMetadata: Check = (v, p, i) => {
   }
   const entries = Object.entries(v);
   for (const [k, val] of entries) {
+    if (reserved(k, p, i)) continue;
     const ok = val === null || typeof val === 'string' || typeof val === 'boolean' || (typeof val === 'number' && Number.isFinite(val));
     if (!ok) i.push({ path: `${p}.${k}`, message: 'must be a string, number, boolean or null' });
   }
@@ -211,7 +227,9 @@ const PAYLOADS: Readonly<Record<EventType, Check>> = {
     sideEffects: req(oneOf(SIDE_EFFECT_SUMMARIES)),
     sideEffectsCommitted: req(bool),
     committedActions: req(
-      arrayOf(objectOf({ toolId: req(nonEmpty), observedState: req(observedState), certainty: req(oneOf(['committed', 'possible'])) })),
+      // E01 ruling 2j: observedState is ObservedState | null. The key is always present (a missing key is rejected),
+      // and null is only for an unverified entry whose side effect is possible (cross-checks below).
+      arrayOf(objectOf({ toolId: req(nonEmpty), observedState: req((v, p, i) => (v === null ? undefined : observedState(v, p, i))), certainty: req(oneOf(['committed', 'possible'])) })),
     ),
     report: req(str),
   }),
@@ -265,13 +283,13 @@ function invariants(type: EventType, envelope: Record<string, unknown>, payload:
       // Rulings 1o/1q (CONTRACTS dd082ec): advisory metadata keys, no text. awaitingClarification is a boolean and true
       // only while LISTENING (ADR-0010); false or absent is valid in any state. turnsSoFar is a number.
       const md = payload['redactedMetadata'] as Record<string, unknown>;
-      if ('awaitingClarification' in md && typeof md['awaitingClarification'] !== 'boolean') {
+      if (hasOwn(md, 'awaitingClarification') && typeof md['awaitingClarification'] !== 'boolean') {
         i.push({ path: 'payload.redactedMetadata.awaitingClarification', message: 'must be a boolean (ruling 1o)' });
       }
       if (md['awaitingClarification'] === true && payload['state'] !== 'LISTENING') {
         i.push({ path: 'payload.redactedMetadata.awaitingClarification', message: "true only with state 'LISTENING' (ruling 1q, ADR-0010)" });
       }
-      if ('turnsSoFar' in md && typeof md['turnsSoFar'] !== 'number') {
+      if (hasOwn(md, 'turnsSoFar') && typeof md['turnsSoFar'] !== 'number') {
         i.push({ path: 'payload.redactedMetadata.turnsSoFar', message: 'must be a number (ruling 1o)' });
       }
       break;
@@ -328,6 +346,28 @@ function invariants(type: EventType, envelope: Record<string, unknown>, payload:
     case 'TaskCancelled':
       if ((payload['sideEffects'] === 'committed') !== payload['sideEffectsCommitted']) {
         i.push({ path: 'payload.sideEffectsCommitted', message: "must be true exactly when sideEffects is 'committed'" });
+      }
+      {
+        // E01 ruling 2j. (a) A null observedState means nothing was verified. CommittedAction has no separate
+        // verified/sideEffect field, so the entry's side effect is its certainty: null only with certainty
+        // 'possible' (a 'committed' claim needs an observed state). (b) Any null entry means the stop is not clean.
+        const actions = Array.isArray(payload['committedActions']) ? (payload['committedActions'] as unknown[]) : [];
+        let anyNull = false;
+        actions.forEach((a, k) => {
+          if (!isRecord(a) || !hasOwn(a, 'observedState') || a['observedState'] !== null) return;
+          anyNull = true;
+          if (a['certainty'] !== 'possible') {
+            i.push({ path: `payload.committedActions[${k}].observedState`, message: "may be null only for an unverified entry with certainty 'possible' (ruling 2j)" });
+          }
+        });
+        if (anyNull) {
+          if (payload['stopStatus'] === 'stopped_no_side_effects' || payload['stopStatus'] === 'completed_before_stop') {
+            i.push({ path: 'payload.stopStatus', message: `cannot be '${String(payload['stopStatus'])}' while an entry's observedState is null (ruling 2j)` });
+          }
+          if (payload['sideEffects'] !== 'possible' && payload['sideEffects'] !== 'committed') {
+            i.push({ path: 'payload.sideEffects', message: "must be at least 'possible' while an entry's observedState is null (ruling 2j)" });
+          }
+        }
       }
       break;
     default:

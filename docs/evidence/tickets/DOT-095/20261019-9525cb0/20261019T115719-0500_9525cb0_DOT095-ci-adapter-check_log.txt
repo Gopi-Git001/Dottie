@@ -1,0 +1,5 @@
+{"caseId": "DOT095-ci-adapter-check", "commit": "9525cb0f54682ed96426b71c4f1035db2aa925e3", "build": null, "installerSha256": null, "buildNote": "n/a: unpackaged", "startedAt": "2026-10-19T11:57:19-05:00", "finishedAt": "2026-10-19T11:57:22-05:00", "runner": "linux-box-e02", "command": "(cd packages/codex-adapter && npm run check)", "exitCode": 0, "durationMs": 3311, "result": "pass", "dirtyTree": false, "platform": "Linux (never Windows evidence)", "rawOutputSha256": "2878177f41f3e54e1000ee746dc421e1c7cd8a77e30ab96fb5cd07c97e66b7ba", "linesWithheld": 0}
+
+> @dottie/codex-adapter@0.1.0 check
+> tsc --noEmit && eslint .
+

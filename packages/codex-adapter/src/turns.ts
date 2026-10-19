@@ -545,7 +545,9 @@ export class CodexTaskRunner implements CodexPort {
         const item = obj(p['item']);
         const type = str(item['type']);
         const id = str(item['id']);
-        if (type === undefined || id === undefined || !(type in TOOL_PROGRESS)) return;
+        // Ruling 2i: own-key lookup only. `in` let a wire type named after an Object.prototype member
+        // ('constructor', 'toString'…) through as a tool item and pushed the inherited function into progress.
+        if (type === undefined || id === undefined || !Object.hasOwn(TOOL_PROGRESS, type)) return;
         const mayHaveSideEffects = !NO_LOCAL_SIDE_EFFECTS.has(type);
         if (mayHaveSideEffects) a.ledgerTouched = true;
         this.safeHook(() => a.hooks.toolStarted({ toolId: id, mayHaveSideEffects }));

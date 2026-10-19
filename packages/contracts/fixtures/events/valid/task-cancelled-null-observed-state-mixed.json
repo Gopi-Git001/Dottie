@@ -1,0 +1,37 @@
+{
+  "schema": "dottie.event",
+  "version": 2,
+  "type": "TaskCancelled",
+  "eventId": "evt-taskcancelled-null-os-mixed",
+  "correlationId": "corr-1",
+  "timestamp": "2026-10-18T14:03:00.123-05:00",
+  "payload": {
+    "taskId": "task-1",
+    "stopStatus": "stopped_after_side_effects",
+    "sideEffects": "committed",
+    "sideEffectsCommitted": true,
+    "committedActions": [
+      {
+        "toolId": "files.mkdir",
+        "observedState": {
+          "outcome": "verified",
+          "decision": "done",
+          "checks": {
+            "exists": "pass",
+            "sizeMatches": "pass"
+          },
+          "sideEffect": "committed",
+          "bytes": 42
+        },
+        "certainty": "committed"
+      },
+      {
+        "toolId": "files.write",
+        "observedState": null,
+        "certainty": "possible"
+      }
+    ],
+    "report": "Stopped. The folder was created; a file may also have been written."
+  },
+  "taskId": "task-1"
+}

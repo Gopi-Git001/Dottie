@@ -62,8 +62,12 @@ export interface ToolError {
 
 export interface CommittedAction {
   readonly toolId: string;
-  /** The redacted ObservedState object (§5), never a string (E01 2026-10-19). */
-  readonly observedState: ObservedState;
+  /**
+   * The redacted ObservedState object (§5), never a string (E01 2026-10-19). E01 ruling 2j: `null` when nothing
+   * was observed, allowed only with certainty 'possible'. Then stopStatus is neither 'stopped_no_side_effects' nor
+   * 'completed_before_stop', and sideEffects is at least 'possible'. The key is always present.
+   */
+  readonly observedState: ObservedState | null;
   readonly certainty: 'committed' | 'possible';
 }
 

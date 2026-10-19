@@ -166,3 +166,15 @@ Exactly one reply per server request id, except when the server resolved the req
   `"decline"` with `display_unavailable`, with exactly one reply per request id, no dialog and no coordinator request.
 - A coordinator answer of `expired`, `{approved:false, reason:"display_unavailable"}` or
   `{approved:false, reason:"duplicate_request"}` is always `"decline"` and never accepts. No token is requested.
+
+## Unknown wire fields (E01 ruling 2i; test/wire-tolerance.test.ts)
+
+The App Server wire is tolerant. Unknown fields, ordinary names and `__proto__` / `constructor` arriving as own JSON
+keys, are dropped. Every object the adapter hands on (hooks, `CodexRunResult`, `CodexApprovalRequest` and its display,
+the turn store, audit/log fields, `AuthStatusInfo`) is built field by field from known members. No wire object is
+spread or forwarded. Wire members are read by own key only (`Object.hasOwn`), never `in`. Fixed 2i leak: `item/started`
+with `item.type` named after an `Object.prototype` member (`constructor`, `toString`…) passed the `in TOOL_PROGRESS`
+check. It fired `toolStarted`, marked the ledger touched and handed the inherited function to `progress`. It's now an
+unknown item. Nested unknown fields in approval members (`networkApprovalContext`, amendments, file-change entries)
+don't change the display or the bound actionId. The one deliberate exception is an unknown TOP-LEVEL key on an
+approval request. It's tolerated fail-closed: exactly one `decline` (`schema_invalid`), no dialog, never approved unseen.

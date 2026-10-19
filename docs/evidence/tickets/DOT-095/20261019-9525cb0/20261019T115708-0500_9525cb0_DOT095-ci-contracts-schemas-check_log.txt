@@ -1,0 +1,9 @@
+{"caseId": "DOT095-ci-contracts-schemas-check", "commit": "9525cb0f54682ed96426b71c4f1035db2aa925e3", "build": null, "installerSha256": null, "buildNote": "n/a: unpackaged", "startedAt": "2026-10-19T11:57:08-05:00", "finishedAt": "2026-10-19T11:57:10-05:00", "runner": "linux-box-e02", "command": "(cd packages/contracts && npm run schemas:check)", "exitCode": 0, "durationMs": 1661, "result": "pass", "dirtyTree": false, "platform": "Linux (never Windows evidence)", "rawOutputSha256": "3ddd9a7d2607b8d6ccaee292f4abd3f706097096a9a8c9ec66f5c5f8e7791184", "linesWithheld": 0}
+
+> @dottie/contracts@2.0.0 schemas:check
+> npm run build && node scripts/json-schemas.mjs --check
+
+
+> @dottie/contracts@2.0.0 build
+> tsc
+

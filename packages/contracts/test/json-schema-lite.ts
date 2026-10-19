@@ -47,7 +47,7 @@ export function valid(root: Schema, value: unknown): boolean {
       const ts = Array.isArray(s['type']) ? (s['type'] as string[]) : [s['type'] as string];
       if (!ts.some((t) => typeOk(t, v))) return false;
     }
-    if ('const' in s && !equal(s['const'], v)) return false;
+    if (Object.hasOwn(s, 'const') && !equal(s['const'], v)) return false;
     if (s['enum'] !== undefined && !(s['enum'] as unknown[]).some((e) => equal(e, v))) return false;
     if (typeof v === 'string') {
       if (s['pattern'] !== undefined && !new RegExp(s['pattern'] as string, 'u').test(v)) return false;
@@ -61,10 +61,10 @@ export function valid(root: Schema, value: unknown): boolean {
     }
     if (typeOk('object', v)) {
       const o = v as Record<string, unknown>;
-      if (s['required'] !== undefined && !(s['required'] as string[]).every((k) => k in o)) return false;
+      if (s['required'] !== undefined && !(s['required'] as string[]).every((k) => Object.hasOwn(o, k))) return false;
       const props = (s['properties'] ?? {}) as Record<string, Schema>;
       for (const [k, x] of Object.entries(o)) {
-        if (k in props) {
+        if (Object.hasOwn(props, k)) {
           if (!ev(props[k]!, x)) return false;
         } else if (s['additionalProperties'] !== undefined && !ev(s['additionalProperties'] as Schema, x)) return false;
       }

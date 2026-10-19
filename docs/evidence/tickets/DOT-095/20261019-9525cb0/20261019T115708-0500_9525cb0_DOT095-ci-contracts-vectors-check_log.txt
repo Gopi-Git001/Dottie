@@ -1,0 +1,6 @@
+{"caseId": "DOT095-ci-contracts-vectors-check", "commit": "9525cb0f54682ed96426b71c4f1035db2aa925e3", "build": null, "installerSha256": null, "buildNote": "n/a: unpackaged", "startedAt": "2026-10-19T11:57:08-05:00", "finishedAt": "2026-10-19T11:57:08-05:00", "runner": "linux-box-e02", "command": "(cd packages/contracts && npm run vectors:check)", "exitCode": 0, "durationMs": 160, "result": "pass", "dirtyTree": false, "platform": "Linux (never Windows evidence)", "rawOutputSha256": "d9243e453c3d02edcefb00eea3bb6caedfd993cb903d501193b8a32365611e89", "linesWithheld": 0}
+
+> @dottie/contracts@2.0.0 vectors:check
+> node scripts/action-id-vectors.mjs --check
+
+action-id vectors up to date
