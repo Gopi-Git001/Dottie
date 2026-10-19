@@ -92,7 +92,7 @@ test('live 0.163.0: handshake and signed-out account/read', { skip: (!bin && 'DO
     assert.equal((await adapter.auth.getStatus()).status, 'signed_out');
     assert.deepEqual(opened, []);
     const env = launched!.env;
-    for (const k of Object.keys(HOSTILE)) assert.ok(!(k in env), `${k} reached the child`);
+    for (const k of Object.keys(HOSTILE)) assert.ok(!(Object.hasOwn(env, k)), `${k} reached the child`);
     for (const v of Object.values(HOSTILE)) assert.ok(!Object.values(env).includes(v), 'hostile value reached the child');
     await adapter.stop();
     const forced = await readForcedLoginMethod(launched!);
@@ -106,13 +106,13 @@ test('live 0.163.0: handshake and signed-out account/read', { skip: (!bin && 'DO
   const methods = new Map<unknown, string>();
   const issues: string[] = [];
   for (const { dir, msg } of wire) {
-    if (dir === 'out' && typeof msg['method'] === 'string' && 'id' in msg) methods.set(msg['id'], msg['method']);
-    if (dir === 'in' && 'result' in msg) {
+    if (dir === 'out' && typeof msg['method'] === 'string' && Object.hasOwn(msg, 'id')) methods.set(msg['id'], msg['method']);
+    if (dir === 'in' && Object.hasOwn(msg, 'result')) {
       const rel = RESPONSE_SCHEMAS[methods.get(msg['id']) ?? ''];
       const err = rel ? schemaError(rel, msg['result']) : null;
       if (err) issues.push(err);
     }
-    if (dir === 'in' && typeof msg['method'] === 'string' && !('id' in msg)) {
+    if (dir === 'in' && typeof msg['method'] === 'string' && !(Object.hasOwn(msg, 'id'))) {
       const { emittedAtMs: _x, ...n } = msg;
       const err = schemaError('ServerNotification.json', n);
       if (err) issues.push(err);

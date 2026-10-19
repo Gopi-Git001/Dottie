@@ -300,6 +300,7 @@ test('ruling 2i: reply routing uses OWN keys only: a polluted Object.prototype.r
       delete proto[k];
     }
   }
+  // eslint-disable-next-line no-restricted-syntax -- deliberately checks INHERITED members: proves the prototype pollution was undone.
   assert.ok(!('result' in {}) && !('noReply' in {}), 'Object.prototype restored');
   assert.deepEqual(await route({ noReply: true }), [], 'an own noReply still writes nothing');
 });

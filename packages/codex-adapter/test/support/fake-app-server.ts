@@ -180,7 +180,7 @@ export class FakeAppServer implements Transport {
 
   /** Answer a request the script did not expect, so the adapter call fails instead of hanging. */
   private refuse(msg: Record<string, unknown>): void {
-    if (typeof msg['method'] !== 'string' || !('id' in msg) || this.exited) return;
+    if (typeof msg['method'] !== 'string' || !(Object.hasOwn(msg, 'id')) || this.exited) return;
     const reply = JSON.stringify({ id: msg['id'], error: { code: -32603, message: 'fake app-server: not in transcript' } });
     setImmediate(() => this.lineCbs.forEach((cb) => cb(reply)));
   }
@@ -201,7 +201,7 @@ export class FakeAppServer implements Transport {
   remaining(): string {
     return this.steps
       .slice(this.cursor)
-      .map((s) => ('msg' in s ? `${s.kind}@${s.line} ${JSON.stringify(s.msg).slice(0, 120)}` : s.kind))
+      .map((s) => (s.kind === 'expect' || s.kind === 'emit' ? `${s.kind}@${s.line} ${JSON.stringify(s.msg).slice(0, 120)}` : s.kind))
       .join('\n');
   }
 
@@ -271,9 +271,9 @@ export class FakeAppServer implements Transport {
 
   private emit(template: Record<string, Json>, line: number): void {
     const msg: Record<string, Json> = { ...template };
-    if ('id' in msg) msg['id'] = this.substitute(msg['id'] as Json);
+    if (Object.hasOwn(msg, 'id')) msg['id'] = this.substitute(msg['id'] as Json);
     if (this.options.validateEmitted !== false) this.validateEmitted(msg, line);
-    if (typeof msg['method'] === 'string' && 'id' in msg) this.serverMethods.set(String(msg['id']), msg['method']);
+    if (typeof msg['method'] === 'string' && Object.hasOwn(msg, 'id')) this.serverMethods.set(String(msg['id']), msg['method']);
     const text = JSON.stringify(msg);
     this.lineCbs.forEach((cb) => cb(text));
   }
@@ -283,8 +283,8 @@ export class FakeAppServer implements Transport {
     let err: string | null = null;
     if (typeof msg['method'] === 'string') {
       const { emittedAtMs: _drop, ...wire } = msg;
-      err = schemaError('id' in msg ? 'ServerRequest.json' : 'ServerNotification.json', wire);
-    } else if ('result' in msg) {
+      err = schemaError(Object.hasOwn(msg, 'id') ? 'ServerRequest.json' : 'ServerNotification.json', wire);
+    } else if (Object.hasOwn(msg, 'result')) {
       const method = this.clientMethods.get(String(msg['id']));
       const rel = method ? RESPONSE_SCHEMAS[method] : undefined;
       if (rel) err = schemaError(rel, msg['result']);
@@ -302,7 +302,7 @@ export class FakeAppServer implements Transport {
       return;
     }
     this.received.push(msg);
-    if ('jsonrpc' in msg) this.fail('adapter sent a "jsonrpc" member');
+    if (Object.hasOwn(msg, 'jsonrpc')) this.fail('adapter sent a "jsonrpc" member');
     this.guard(msg);
     this.validateClient(msg);
     if (this.exited) {
@@ -318,7 +318,7 @@ export class FakeAppServer implements Transport {
     const expected = step.msg;
     let ok: boolean;
     if (typeof expected['method'] === 'string') {
-      ok = msg['method'] === expected['method'] && (!('params' in expected) || isSubset(msg['params'], expected['params']));
+      ok = msg['method'] === expected['method'] && (!(Object.hasOwn(expected, 'params')) || isSubset(msg['params'], expected['params']));
     } else {
       const exp = { ...expected, id: this.substitute(expected['id'] as Json) };
       ok = deepEqual(msg, exp);
@@ -328,7 +328,7 @@ export class FakeAppServer implements Transport {
       this.refuse(msg);
       return;
     }
-    if ('id' in msg && typeof msg['method'] === 'string') {
+    if (Object.hasOwn(msg, 'id') && typeof msg['method'] === 'string') {
       this.lastId = msg['id'];
       this.clientMethods.set(String(msg['id']), msg['method']);
       const want = expected['id'];
@@ -354,13 +354,13 @@ export class FakeAppServer implements Transport {
   private validateClient(msg: Record<string, unknown>): void {
     let err: string | null = null;
     if (typeof msg['method'] === 'string') {
-      err = schemaError('id' in msg ? 'ClientRequest.json' : 'ClientNotification.json', msg);
-    } else if ('result' in msg) {
+      err = schemaError(Object.hasOwn(msg, 'id') ? 'ClientRequest.json' : 'ClientNotification.json', msg);
+    } else if (Object.hasOwn(msg, 'result')) {
       const method = this.serverMethods.get(String(msg['id']));
       const rel = method ? SERVER_REQUEST_RESPONSE_SCHEMAS[method] : undefined;
       if (rel) err = schemaError(rel, msg['result']);
       else err = `reply to unknown server request id ${String(msg['id'])}`;
-    } else if ('error' in msg) {
+    } else if (Object.hasOwn(msg, 'error')) {
       err = schemaError('JSONRPCError.json', msg);
     }
     if (err) this.schemaIssues.push(`adapter message: ${err}`);

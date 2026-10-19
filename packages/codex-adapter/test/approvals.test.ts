@@ -111,9 +111,10 @@ function tokens(tamper: (t: J, r: ApprovalTokenRequest) => J | undefined = (t) =
 function decision(r: ServerReply | undefined, method = CMD): string | 'none' {
   assert.ok(r, 'bridge answered');
   if (r === NO_REPLY) return 'none';
-  assert.ok('result' in r, JSON.stringify(r));
-  schemaOk(method === CMD ? 'CommandExecutionRequestApprovalResponse.json' : 'FileChangeRequestApprovalResponse.json', r.result);
-  const d = (r.result as J)['decision'];
+  assert.ok(Object.hasOwn(r, 'result'), JSON.stringify(r));
+  const result = (r as { readonly result: unknown }).result;
+  schemaOk(method === CMD ? 'CommandExecutionRequestApprovalResponse.json' : 'FileChangeRequestApprovalResponse.json', result);
+  const d = (result as J)['decision'];
   assert.equal(typeof d, 'string', 'only the plain string decisions (CR4): never an amendment object');
   return d as string;
 }
@@ -520,7 +521,7 @@ test('A9-I4 audit records hold ids, hashes, category, risk, decision, times: nev
   assert.match(String(resolved.fields['actionId']), /^[0-9a-f]{64}$/, 'actionId kept verbatim (hex exemption)');
   assert.match(String(resolved.fields['argsHash']), /^[0-9a-f]{64}$/);
   assert.equal(resolved.fields['argsHash'], resolved.fields['actionId'], 'CONTRACTS §3.2: argsHash = the canonical-action hash');
-  for (const k of ['category', 'risk', 'decision', 'wireReply', 'requestedAt', 'expiresAt', 'resolvedAt', 'outcome']) assert.ok(k in resolved.fields, k);
+  for (const k of ['category', 'risk', 'decision', 'wireReply', 'requestedAt', 'expiresAt', 'resolvedAt', 'outcome']) assert.ok(Object.hasOwn(resolved.fields, k), k);
 });
 
 // ---------------------------------------------------------------- A9-I5 (bridge part; wire part in approvals-wire.test.ts)

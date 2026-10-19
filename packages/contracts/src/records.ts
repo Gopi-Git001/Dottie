@@ -425,7 +425,7 @@ export function validateAuditRecord(v: unknown): RecordResult<AuditRecord | Audi
   // Per-kind ids (§3.2, E08 R4 / K-10 / K-11).
   const ids = ['actionId', 'taskId', 'toolId'] as const;
   if (AUDIT_KINDS_WITHOUT_IDS.includes(k)) {
-    for (const f of ids) if (f in v) out.push({ path: f, message: `${k} omits actionId/taskId/toolId entirely, even as null` });
+    for (const f of ids) if (Object.hasOwn(v, f)) out.push({ path: f, message: `${k} omits actionId/taskId/toolId entirely, even as null` });
   }
   if (AUDIT_KINDS_WITH_IDS.includes(k)) {
     for (const f of ids) if (v[f] === undefined) out.push({ path: f, message: `is required for ${k}` });

@@ -311,7 +311,7 @@ test('ruling 2a (dottie-e01 972d5f4): pre_dispatch read/navigate build and valid
 });
 
 test('2a addition (with E03): method is NEVER cut; 64 code points accepted, 65 → display_unavailable / rejected (ui_action and tool)', () => {
-  assert.equal('method' in DISPLAY_MAX, false, 'method is not a cut field');
+  assert.equal(Object.hasOwn(DISPLAY_MAX, 'method'), false, 'method is not a cut field');
   const app = { category: 'local_change', appName: 'Notepad', windowTitle: 't', processImage: 'notepad.exe' } as const;
   const ui64 = 'window.' + 'x'.repeat(57), ui65 = ui64 + 'x';
   assert.deepEqual([[...ui64].length, [...ui65].length], [64, 65]);
