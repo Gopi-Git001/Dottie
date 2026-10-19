@@ -231,7 +231,7 @@ export class FakeToolHost implements ToolHostPort {
     | { ok: true; context: ToolCallContext; targetIds: string[] }
     | { ok: false; code: string; sideEffect?: string } {
     const advisory = this.turns.at(-1) ?? null;
-    const actionId = 'actionId' in opts ? opts.actionId : advisory ? hostActionId(toolId, modelArgs, advisory) : undefined;
+    const actionId = Object.hasOwn(opts, 'actionId') ? opts.actionId : advisory ? hostActionId(toolId, modelArgs, advisory) : undefined;
     this.sentActionIds.push(actionId);
     const auth = c.authorizeToolCall({ toolId, modelArgs, actionId } as AuthorizeToolCallParams);
     if (!auth.ok) return { ok: false, code: auth.error.code, sideEffect: auth.sideEffect };

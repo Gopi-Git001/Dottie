@@ -633,7 +633,7 @@ test('1v final limits (CUT): max-1 / max / max+1 for every cut field; at or unde
     assert.equal(astral, '\u{1F600}'.repeat(max - 1) + ELL, `${name}: astral`);
   }
   // ui_action has no targetLabel (1v)
-  assert.equal(K.targetLabel in ui({}), false);
+  assert.equal(Object.hasOwn(ui({}), K.targetLabel), false);
 });
 
 test('1v final limits (NEVER cut): limit passes unchanged, limit+1 → null (display_unavailable) for command bytes, path count, path bytes, cwd bytes, escalation count and entry length', async () => {

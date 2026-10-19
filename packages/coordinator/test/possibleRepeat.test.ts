@@ -164,7 +164,7 @@ test('C-25 (D14): a read-category retry gets no possibleRepeat (no warning), but
   const gate = requestsFor(f, retryTaskId)[0]!;
   assert.equal(gate.category, 'read');
   assert.equal(gate.possibleRepeat, undefined);
-  assert.ok(!('possibleRepeat' in gate));
+  assert.ok(!(Object.hasOwn(gate, 'possibleRepeat')));
   f.c.resolveApproval(approval(gate.actionId, true, f), 'secure_ui');
   await flush();
   const inTurn = requestsFor(f, retryTaskId)[1]!;
@@ -190,7 +190,7 @@ test('C-25 (D14): a retry after a clean failure (ledger none) has no possibleRep
   assert.equal(f.c.state, 'PERMISSION_REQUIRED', 'no forced CONFIRMING: dispatched under normal policy');
   const reqs = requestsFor(f, retryTaskId);
   assert.equal(reqs.length, 1);
-  assert.ok(!('possibleRepeat' in reqs[0]!));
+  assert.ok(!(Object.hasOwn(reqs[0]!, 'possibleRepeat')));
   f.c.resolveApproval(approval(reqs[0]!.actionId, true, f), 'secure_ui');
   await f.drain();
 });
@@ -315,7 +315,7 @@ test('C-25 (D14): only the user retry field marks a repeat: an adapter-supplied 
   await flush();
   const reqs = requestsFor(f, (r as { taskId: string }).taskId);
   assert.equal(reqs.length, 1, 'no forced confirmation: not a user retry');
-  assert.ok(!('possibleRepeat' in reqs[0]!), 'Codex can never set possibleRepeat');
+  assert.ok(!(Object.hasOwn(reqs[0]!, 'possibleRepeat')), 'Codex can never set possibleRepeat');
   const strip = f.log.find('coordinator.input.field_stripped');
   assert.equal(strip.length, 1, 'the injected field is noticed (E01 1g/1h)');
   assert.deepEqual({ ...strip[0]!.fields }, { field: 'possibleRepeat', sourceChannel: 'codex', reason: 'untrusted_origin', taskId: reqs[0]!.taskId });
@@ -525,7 +525,7 @@ test('C-25 (D14, E01 rule 1): a clean-failure retry gets no forced approval; a p
   const reqs = requestsFor(f, (r as { taskId: string }).taskId);
   assert.equal(reqs.length, 1, 'only the policy approval');
   assert.equal(reqs[0]!.category, 'delete');
-  assert.ok(!('possibleRepeat' in reqs[0]!));
+  assert.ok(!(Object.hasOwn(reqs[0]!, 'possibleRepeat')));
   f.c.resolveApproval(approval(reqs[0]!.actionId, false, f), 'secure_ui');
   await f.drain();
   allValid(f);
@@ -547,7 +547,7 @@ test('C-25 (D14, E01 1g): a navigate approval inside a possible-repeat retry car
   await flush();
   const nav = requestsFor(f, retryTaskId)[1]!;
   assert.equal(nav.category, 'navigate');
-  assert.ok(!('possibleRepeat' in nav));
+  assert.ok(!(Object.hasOwn(nav, 'possibleRepeat')));
   f.c.resolveApproval(approval(nav.actionId, true, f), 'secure_ui');
   await f.drain();
   allValid(f);
