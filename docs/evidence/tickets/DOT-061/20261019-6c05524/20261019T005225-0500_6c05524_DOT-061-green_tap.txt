@@ -1,0 +1,307 @@
+# {"caseId": "DOT-061-green", "commit": "6c05524", "build": null, "installerSha256": null, "startedAt": "2026-10-19T00:52:25-05:00", "finishedAt": "2026-10-19T00:52:27-05:00", "runner": "named host: grok-box (linux)", "command": "cd packages/coordinator && npm test", "exitCode": 0, "durationMs": null, "result": "pass", "platform": "Linux box (Node v20.19.2); NOT Windows evidence", "tree": "dirty: packages/coordinator untracked on branch owned by E06; HEAD 6c05524 does not contain this code"}
+# note: GREEN after the gate fix + v2 migration, before Ruling 1/2 tests were added. 59/59.
+TAP version 13
+# Subtest: DOT-061: signed_in dispatches exactly once
+ok 1 - DOT-061: signed_in dispatches exactly once
+  ---
+  duration_ms: 9.60715
+  ...
+# Subtest: DOT-061: auth state 'unknown' blocks dispatch (0 run() calls, blocked_auth)
+ok 2 - DOT-061: auth state 'unknown' blocks dispatch (0 run() calls, blocked_auth)
+  ---
+  duration_ms: 1.411288
+  ...
+# Subtest: DOT-061: auth state 'unavailable' blocks dispatch (0 run() calls, blocked_auth)
+ok 3 - DOT-061: auth state 'unavailable' blocks dispatch (0 run() calls, blocked_auth)
+  ---
+  duration_ms: 3.500178
+  ...
+# Subtest: DOT-061: auth state 'signing_in' blocks dispatch (0 run() calls, blocked_auth)
+ok 4 - DOT-061: auth state 'signing_in' blocks dispatch (0 run() calls, blocked_auth)
+  ---
+  duration_ms: 1.270019
+  ...
+# Subtest: DOT-061: auth state 'expired' blocks dispatch (0 run() calls, blocked_auth)
+ok 5 - DOT-061: auth state 'expired' blocks dispatch (0 run() calls, blocked_auth)
+  ---
+  duration_ms: 2.11257
+  ...
+# Subtest: DOT-061: auth state 'unsupported' blocks dispatch (0 run() calls, blocked_auth)
+ok 6 - DOT-061: auth state 'unsupported' blocks dispatch (0 run() calls, blocked_auth)
+  ---
+  duration_ms: 1.741447
+  ...
+# Subtest: DOT-061: auth state 'signed_out' blocks dispatch (0 run() calls, blocked_auth)
+ok 7 - DOT-061: auth state 'signed_out' blocks dispatch (0 run() calls, blocked_auth)
+  ---
+  duration_ms: 0.901135
+  ...
+# Subtest: DOT-061: an auth read that throws synchronously blocks dispatch
+ok 8 - DOT-061: an auth read that throws synchronously blocks dispatch
+  ---
+  duration_ms: 0.882837
+  ...
+# Subtest: DOT-061: an auth read that rejects blocks dispatch
+ok 9 - DOT-061: an auth read that rejects blocks dispatch
+  ---
+  duration_ms: 1.156203
+  ...
+# Subtest: DOT-061: a hung auth read blocks after authReadTimeoutMs, and a late signed_in does not dispatch
+ok 10 - DOT-061: a hung auth read blocks after authReadTimeoutMs, and a late signed_in does not dispatch
+  ---
+  duration_ms: 1.867433
+  ...
+# Subtest: DOT-061: a slow read that answers signed_in inside the bound dispatches
+ok 11 - DOT-061: a slow read that answers signed_in inside the bound dispatches
+  ---
+  duration_ms: 1.372222
+  ...
+# Subtest: DOT-061: auth flipping during CONFIRMING (between check and dispatch) blocks dispatch
+ok 12 - DOT-061: auth flipping during CONFIRMING (between check and dispatch) blocks dispatch
+  ---
+  duration_ms: 2.825735
+  ...
+# Subtest: DOT-061: a sign-out notification that lands while the auth read is in flight wins
+ok 13 - DOT-061: a sign-out notification that lands while the auth read is in flight wins
+  ---
+  duration_ms: 1.03729
+  ...
+# Subtest: DOT-061: every retry re-checks auth; expiry during backoff stops the retry
+ok 14 - DOT-061: every retry re-checks auth; expiry during backoff stops the retry
+  ---
+  duration_ms: 1.647959
+  ...
+# Subtest: DOT-061: a queued task is gated at its own dispatch time
+ok 15 - DOT-061: a queued task is gated at its own dispatch time
+  ---
+  duration_ms: 2.392228
+  ...
+# Subtest: DOT-061: completing sign-in afterwards resumes nothing (user re-issues the command)
+ok 16 - DOT-061: completing sign-in afterwards resumes nothing (user re-issues the command)
+  ---
+  duration_ms: 0.962279
+  ...
+# Subtest: DOT-061: boot with an unconfirmed auth state rests in AUTH_REQUIRED, not STANDBY
+ok 17 - DOT-061: boot with an unconfirmed auth state rests in AUTH_REQUIRED, not STANDBY
+  ---
+  duration_ms: 0.630562
+  ...
+# Subtest: DOT-061: plan_limit is never retried: one run, no RECOVERING, outcome failed, no API-key fallback
+ok 18 - DOT-061: plan_limit is never retried: one run, no RECOVERING, outcome failed, no API-key fallback
+  ---
+  duration_ms: 1.154755
+  ...
+# Subtest: report text never claims a clean stop when side effects exist (all combinations)
+ok 19 - report text never claims a clean stop when side effects exist (all combinations)
+  ---
+  duration_ms: 2.044063
+  ...
+# Subtest: cancel before any side effect: clean stop, propagated to Codex, reported as clean
+ok 20 - cancel before any side effect: clean stop, propagated to Codex, reported as clean
+  ---
+  duration_ms: 12.560748
+  ...
+# Subtest: cancel AFTER an external side effect is never reported as clean
+ok 21 - cancel AFTER an external side effect is never reported as clean
+  ---
+  duration_ms: 3.808063
+  ...
+# Subtest: cancel while a side-effecting tool is still in flight reports "possible", not clean and not committed
+ok 22 - cancel while a side-effecting tool is still in flight reports "possible", not clean and not committed
+  ---
+  duration_ms: 1.995303
+  ...
+# Subtest: unacknowledged cancel reports stop_unconfirmed; later side effects are surfaced, not swallowed
+ok 23 - unacknowledged cancel reports stop_unconfirmed; later side effects are surfaced, not swallowed
+  ---
+  duration_ms: 4.333672
+  ...
+# Subtest: cancel during VERIFYING reports that the task had already completed
+ok 24 - cancel during VERIFYING reports that the task had already completed
+  ---
+  duration_ms: 2.670014
+  ...
+# Subtest: cancel while an approval is pending denies the action and stops cleanly
+ok 25 - cancel while an approval is pending denies the action and stops cleanly
+  ---
+  duration_ms: 1.716315
+  ...
+# Subtest: cancel during backoff (RECOVERING) stops without another attempt
+ok 26 - cancel during backoff (RECOVERING) stops without another attempt
+  ---
+  duration_ms: 1.5247
+  ...
+# Subtest: stop speaking during execution halts TTS only; the task keeps running and finishes
+ok 27 - stop speaking during execution halts TTS only; the task keeps running and finishes
+  ---
+  duration_ms: 2.258541
+  ...
+# Subtest: stop speaking during the result response returns to standby without any cancel event
+ok 28 - stop speaking during the result response returns to standby without any cancel event
+  ---
+  duration_ms: 1.359437
+  ...
+# Subtest: new task during execution (queue policy): queued, not merged, runs after the first; overflow rejected
+ok 29 - new task during execution (queue policy): queued, not merged, runs after the first; overflow rejected
+  ---
+  duration_ms: 3.201355
+  ...
+# Subtest: new task during execution (cancel_then_start policy): first is cancelled honestly, then second runs
+ok 30 - new task during execution (cancel_then_start policy): first is cancelled honestly, then second runs
+  ---
+  duration_ms: 1.295993
+  ...
+# Subtest: shutdown during execution cancels first, records the stop, then reaches SHUTDOWN
+ok 31 - shutdown during execution cancels first, records the stop, then reaches SHUTDOWN
+  ---
+  duration_ms: 1.15648
+  ...
+# Subtest: every event the coordinator emits validates against contract v1 and carries ids + timestamps
+ok 32 - every event the coordinator emits validates against contract v1 and carries ids + timestamps
+  ---
+  duration_ms: 11.32275
+  ...
+# Subtest: inbound E05/E06 events validate too
+ok 33 - inbound E05/E06 events validate too
+  ---
+  duration_ms: 0.300538
+  ...
+# Subtest: validator rejects unknown versions, unknown types, missing fields, bad enums and bad timestamps
+ok 34 - validator rejects unknown versions, unknown types, missing fields, bad enums and bad timestamps
+  ---
+  duration_ms: 0.32253
+  ...
+# Subtest: happy path walks the spec state sequence and reports a verified outcome
+ok 35 - happy path walks the spec state sequence and reports a verified outcome
+  ---
+  duration_ms: 9.918661
+  ...
+# Subtest: tool-reported success without verification is not reported as success
+ok 36 - tool-reported success without verification is not reported as success
+  ---
+  duration_ms: 1.557679
+  ...
+# Subtest: injected verifier decides the postcondition
+ok 37 - injected verifier decides the postcondition
+  ---
+  duration_ms: 3.374581
+  ...
+# Subtest: invalid inputs are rejected and logged, never silently applied
+ok 38 - invalid inputs are rejected and logged, never silently applied
+  ---
+  duration_ms: 3.534765
+  ...
+# Subtest: mute blocks wake; mute during a task is deferred and applied when the task ends
+ok 39 - mute blocks wake; mute during a task is deferred and applied when the task ends
+  ---
+  duration_ms: 1.63046
+  ...
+# Subtest: expired sign-in: wake still works, dispatch is blocked truthfully, reconnect returns to STANDBY
+ok 40 - expired sign-in: wake still works, dispatch is blocked truthfully, reconnect returns to STANDBY
+  ---
+  duration_ms: 3.694735
+  ...
+# Subtest: auth expiring mid-task goes to AUTH_REQUIRED and is not retried
+ok 41 - auth expiring mid-task goes to AUTH_REQUIRED and is not retried
+  ---
+  duration_ms: 1.193705
+  ...
+# Subtest: transient failures retry with exponential backoff, resume the same thread, then succeed
+ok 42 - transient failures retry with exponential backoff, resume the same thread, then succeed
+  ---
+  duration_ms: 2.508475
+  ...
+# Subtest: retries are bounded by maxAttempts
+ok 43 - retries are bounded by maxAttempts
+  ---
+  duration_ms: 3.942005
+  ...
+# Subtest: never retries after a side effect was committed (or may have been)
+ok 44 - never retries after a side effect was committed (or may have been)
+  ---
+  duration_ms: 2.083336
+  ...
+# Subtest: fatal errors are not retried
+ok 45 - fatal errors are not retried
+  ---
+  duration_ms: 0.854818
+  ...
+# Subtest: approval: secure UI approves; voice cannot approve under the default fail-closed policy; single use
+ok 46 - approval: secure UI approves; voice cannot approve under the default fail-closed policy; single use
+  ---
+  duration_ms: 1.539716
+  ...
+# Subtest: approval: a spoken "no" is accepted as a denial; silence expires to denial
+ok 47 - approval: a spoken "no" is accepted as a denial; silence expires to denial
+  ---
+  duration_ms: 2.205664
+  ...
+# Subtest: pre-dispatch CONFIRMING: decline finishes as declined without contacting Codex
+ok 48 - pre-dispatch CONFIRMING: decline finishes as declined without contacting Codex
+  ---
+  duration_ms: 1.330575
+  ...
+# Subtest: idle faults: recoverable -> RECOVERING -> STANDBY; fatal -> ERROR -> RECOVERING -> STANDBY
+ok 49 - idle faults: recoverable -> RECOVERING -> STANDBY; fatal -> ERROR -> RECOVERING -> STANDBY
+  ---
+  duration_ms: 0.309312
+  ...
+# Subtest: empty transcription prompts and returns to standby without creating a task
+ok 50 - empty transcription prompts and returns to standby without creating a task
+  ---
+  duration_ms: 0.7749
+  ...
+# Subtest: normalisation ignores case, punctuation, spacing and a leading wake word
+ok 51 - normalisation ignores case, punctuation, spacing and a leading wake word
+  ---
+  duration_ms: 1.777015
+  ...
+# Subtest: guard: same requestId always duplicate; same text only within the window; allowRepeat bypasses text only
+ok 52 - guard: same requestId always duplicate; same text only within the window; allowRepeat bypasses text only
+  ---
+  duration_ms: 4.260956
+  ...
+# Subtest: coordinator: replayed UtteranceReady and double-wake resubmission produce exactly one Codex run
+ok 53 - coordinator: replayed UtteranceReady and double-wake resubmission produce exactly one Codex run
+  ---
+  duration_ms: 14.90229
+  ...
+# Subtest: transition table covers every state and only targets known states
+ok 54 - transition table covers every state and only targets known states
+  ---
+  duration_ms: 2.118221
+  ...
+# Subtest: spec happy path (with and without CONFIRMING) is valid
+ok 55 - spec happy path (with and without CONFIRMING) is valid
+  ---
+  duration_ms: 0.138158
+  ...
+# Subtest: every additional state is reachable from the main loop and can leave (except SHUTDOWN)
+ok 56 - every additional state is reachable from the main loop and can leave (except SHUTDOWN)
+  ---
+  duration_ms: 0.301965
+  ...
+# Subtest: a running task can never be silently abandoned
+ok 57 - a running task can never be silently abandoned
+  ---
+  duration_ms: 0.145496
+  ...
+# Subtest: StateMachine applies exactly the table: exhaustive pairwise check
+ok 58 - StateMachine applies exactly the table: exhaustive pairwise check
+  ---
+  duration_ms: 0.785195
+  ...
+# Subtest: invalid transitions are rejected, logged, recorded and not applied
+ok 59 - invalid transitions are rejected, logged, recorded and not applied
+  ---
+  duration_ms: 0.224993
+  ...
+1..59
+# tests 59
+# suites 0
+# pass 59
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 223.302302

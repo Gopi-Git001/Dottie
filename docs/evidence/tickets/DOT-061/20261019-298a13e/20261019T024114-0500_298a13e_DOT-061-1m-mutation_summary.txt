@@ -1,0 +1,19 @@
+# {"caseId": "DOT-061-1m-mutation", "commit": "298a13e", "build": null, "installerSha256": null, "startedAt": null, "finishedAt": null, "runner": "named host: grok-box (linux)", "command": "python3 mut4.py", "exitCode": 0, "durationMs": null, "result": "7/7 killed", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "tree": "working copy == 298a13e"}
+M1 expiry announced without decision: KILLED (2 failing)
+    not ok 10 - DOT-060 AC 10 (E01 1m): the C-08 timeout emits ApprovalResolved{approved:false, decision:expired} exactly once per request, before TaskFinished (fake clock)
+    not ok 11 - DOT-060 AC 10 (E01 1m): joined requests all get expired at the FIRST expiry, with one ApprovalResolved{decision:expired} for the one dialog
+M2 inbound decision accepted: KILLED (1 failing)
+    not ok 13 - E01 1m: the desktop never sends expiry: an inbound ApprovalResolved with decision:expired is rejected and the dialog stays open
+M3 validator: expired+approved:true accepted: KILLED (1 failing)
+    not ok 15 - E01 1n: validateEvent on ApprovalResolved: decision only expired, reason only display_unavailable; rejects expired+approved:true, reason+approved:true, decision+reason
+M4 validator: reason+approved:true accepted: KILLED (1 failing)
+    not ok 15 - E01 1n: validateEvent on ApprovalResolved: decision only expired, reason only display_unavailable; rejects expired+approved:true, reason+approved:true, decision+reason
+M5 validator: decision+reason accepted: KILLED (1 failing)
+    not ok 15 - E01 1n: validateEvent on ApprovalResolved: decision only expired, reason only display_unavailable; rejects expired+approved:true, reason+approved:true, decision+reason
+M6 decision on every announce: KILLED (1 failing)
+    not ok 12 - E01 1m: a cancel-settled approval is announced without decision (only expiry carries decision:expired)
+M7 committed dropped from POSSIBLE_REPEAT_SIDE_EFFECTS: KILLED (3 failing)
+    not ok 9 - DOT-060 AC 9 (E01 1m): POSSIBLE_REPEAT_SIDE_EFFECTS includes committed, and a committed prior ledger yields priorSideEffect committed
+    not ok 101 - C-25 (D14, E01 ruling 4): a prior with only committed side effects now gets possibleRepeat {committed} and a forced approval
+    not ok 103 - validator (D14): possibleRepeat is accepted on a non-read ApprovalRequested and rejected on read, malformed, or the old priorOutcome shape
+TOTAL 7/7 killed

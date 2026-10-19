@@ -1,0 +1,313 @@
+{
+  "_comment": "Redacted 0.163.0 wire frames from E09's pre-auth run /workspace/dottie-e09/wire-probe/runs/preauth-linux-20261019T0112/frames.jsonl (Linux, 2026-10-19). Thread/turn ids are mapped to turn-wire-0.163.0.json's ids, cwd -> /work/ws, cf-ray and request ids removed. VERIFIED on wire. goalCleared and turnsListResult: E09 v0.3.0 run preauth-linux-20261019T0139-v0.3.0 (resume scenario, p2), same redaction, clientIds e09-8e012564.* -> t1.*; VERIFIED on wire.",
+  "interruptResult": {},
+  "interruptStatusIdle": {
+    "method": "thread/status/changed",
+    "params": {
+      "threadId": "01a14f34-cf2b-7621-a615-1cee92b705c9",
+      "status": {
+        "type": "idle"
+      }
+    },
+    "emittedAtMs": 1792390405687
+  },
+  "interruptTurnCompleted": {
+    "method": "turn/completed",
+    "params": {
+      "threadId": "01a14f34-cf2b-7621-a615-1cee92b705c9",
+      "turn": {
+        "id": "01a14f34-cf39-74b0-b9e3-92bdb893a4c2",
+        "rootTurnId": "01a14f34-cf39-74b0-b9e3-92bdb893a4c2",
+        "items": [],
+        "itemsView": "notLoaded",
+        "status": "interrupted",
+        "error": null,
+        "startedAt": 1792390402,
+        "completedAt": 1792390405,
+        "durationMs": 3524
+      }
+    },
+    "emittedAtMs": 1792390405687
+  },
+  "resumeNotificationsBeforeResult": [
+    {
+      "method": "deprecationNotice",
+      "params": {
+        "summary": "Full-history hydration is deprecated for paginated threads; use `excludeTurns: true`, then page with `thread/turns/list` and `thread/items/list`.",
+        "details": null
+      },
+      "emittedAtMs": 1792390424129
+    },
+    {
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "01a14f34-cf2b-7621-a615-1cee92b705c9",
+        "status": {
+          "type": "idle"
+        }
+      },
+      "emittedAtMs": 1792390424168
+    }
+  ],
+  "resumeResult": {
+    "thread": {
+      "id": "01a14f34-cf2b-7621-a615-1cee92b705c9",
+      "environments": [
+        {
+          "environmentId": "local",
+          "cwd": "/work/ws",
+          "runtimeWorkspaceRoots": [
+            "/work/ws"
+          ]
+        }
+      ],
+      "extra": null,
+      "sessionId": "01a14f34-cf2b-7621-a615-1cee92b705c9",
+      "forkedFromId": null,
+      "parentThreadId": null,
+      "preview": "Remember this code word: PELICAN-8FD95B9C. Reply with just OK.",
+      "ephemeral": false,
+      "section": null,
+      "sectionEnteredAt": null,
+      "projectId": null,
+      "historyMode": "paginated",
+      "modelProvider": "openai",
+      "model": "gpt-6.1-sol",
+      "reasoningEffort": null,
+      "createdAt": 1792390410,
+      "updatedAt": 1792390424,
+      "recencyAt": 1792390410,
+      "status": {
+        "type": "idle"
+      },
+      "path": "/redacted/codex-home/sessions/2026/10/19/rollout-2026-10-19T01-13-30-01a14f34-cf2b-7621-a615-1cee92b705c9.jsonl",
+      "cwd": "/work/ws",
+      "cliVersion": "0.163.0",
+      "originator": "dottie",
+      "source": "vscode",
+      "canAcceptDirectInput": true,
+      "threadSource": null,
+      "agentNickname": null,
+      "agentRole": null,
+      "gitInfo": null,
+      "name": null,
+      "daybreakEnabled": null,
+      "turns": [
+        {
+          "id": "01a14f34-cf39-74b0-b9e3-92bdb893a4c2",
+          "rootTurnId": "01a14f34-cf39-74b0-b9e3-92bdb893a4c2",
+          "items": [
+            {
+              "type": "userMessage",
+              "id": "01a152cb-32ee-7d82-af91-dcdb0acb47c3",
+              "clientId": "redacted-client-id",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Remember this code word: PELICAN-8FD95B9C. Reply with just OK.",
+                  "text_elements": []
+                }
+              ]
+            }
+          ],
+          "itemsView": "full",
+          "status": "failed",
+          "error": {
+            "message": "unexpected status 401 Unauthorized: Missing bearer or basic authentication in header, url: https://api.openai.com/v1/responses, cf-ray: <redacted>, request id: <redacted>",
+            "codexErrorInfo": {
+              "httpConnectionFailed": {
+                "httpStatusCode": 401
+              }
+            },
+            "additionalDetails": null,
+            "misalignment": null
+          },
+          "startedAt": 1792390410,
+          "completedAt": 1792390423,
+          "durationMs": 13080
+        }
+      ]
+    },
+    "model": "gpt-6.1-sol",
+    "modelProvider": "openai",
+    "serviceTier": null,
+    "disabledPluginIds": [],
+    "cwd": "/work/ws",
+    "runtimeWorkspaceRoots": [
+      "/work/ws"
+    ],
+    "instructionSources": [],
+    "approvalPolicy": "on-request",
+    "approvalsReviewer": "user",
+    "sandbox": {
+      "type": "readOnly",
+      "networkAccess": false
+    },
+    "activePermissionProfile": null,
+    "reasoningEffort": null,
+    "collaborationMode": {
+      "mode": "default",
+      "settings": {
+        "model": "gpt-6.1-sol",
+        "reasoning_effort": null,
+        "developer_instructions": null
+      }
+    },
+    "multiAgentMode": "explicitRequestOnly",
+    "initialTurnsPage": null,
+    "turnsBackwardsCursor": "{\"requestedThreadId\":\"01a14f34-cf2b-7621-a615-1cee92b705c9\",\"rolloutOrdinal\":1,\"includeAnchor\":true,\"scope\":{\"kind\":\"turns\"}}",
+    "itemsBackwardsCursor": "{\"requestedThreadId\":\"01a14f34-cf2b-7621-a615-1cee92b705c9\",\"rolloutOrdinal\":10,\"includeAnchor\":true,\"scope\":{\"kind\":\"itemsByCreatedAtOrdinal\"}}"
+  },
+  "rpcErrors": {
+    "handshake": [
+      {
+        "code": -32600,
+        "message": "Not initialized",
+        "hasData": false
+      },
+      {
+        "code": -32600,
+        "message": "Already initialized",
+        "hasData": false
+      }
+    ],
+    "account": [
+      {
+        "code": -32600,
+        "message": "codex account authentication required to read rate limits",
+        "hasData": false
+      }
+    ],
+    "errors": [
+      {
+        "code": -32600,
+        "message": "Invalid request: unknown variant `e09/doesNotExist`, expected one of \u2026",
+        "hasData": false
+      },
+      {
+        "code": -32600,
+        "message": "Invalid request: missing field `input`",
+        "hasData": false
+      },
+      {
+        "code": -32600,
+        "message": "Invalid request: unknown variant `no-such-mode`, expected one of `read-only`, `workspace-write`, `danger-full-access`",
+        "hasData": false
+      },
+      {
+        "code": -32600,
+        "message": "thread not found: 203c683f-2b8f-4b33-a26d-7c47ce5d01cc",
+        "hasData": false
+      },
+      {
+        "code": -32600,
+        "message": "no rollout found for thread id 203c683f-2b8f-4b33-a26d-7c47ce5d01cc",
+        "hasData": false
+      },
+      {
+        "code": -32600,
+        "message": "thread not loaded: 203c683f-2b8f-4b33-a26d-7c47ce5d01cc",
+        "hasData": false
+      },
+      {
+        "code": -32600,
+        "message": "no active turn to interrupt",
+        "hasData": false
+      },
+      {
+        "code": -32600,
+        "message": "no active turn to steer",
+        "hasData": false
+      },
+      {
+        "code": -32600,
+        "message": "expected active turn id `bdee3ab4-5c18-4303-b038-6e7753c33bc2` but found `01a152ca-a404-7d01-829c-68c1ae5cffc6`",
+        "hasData": false
+      },
+      {
+        "code": -32600,
+        "message": "expected active turn id 528be94f-1f43-4b50-950f-e05b313af67f but found 01a152ca-a404-7d01-829c-68c1ae5cffc6",
+        "hasData": false
+      }
+    ]
+  },
+  "goalCleared": {
+    "method": "thread/goal/cleared",
+    "params": {
+      "threadId": "01a14f34-cf2b-7621-a615-1cee92b705c9"
+    },
+    "emittedAtMs": 1792392060658
+  },
+  "turnsListResult": {
+    "data": [
+      {
+        "id": "01a152e4-5ef4-71d2-bf24-f47a7e9fb237",
+        "rootTurnId": "01a152e4-5ef4-71d2-bf24-f47a7e9fb237",
+        "items": [
+          {
+            "type": "userMessage",
+            "id": "01a152e4-5f43-7662-87c2-0135e8e7a3c7",
+            "clientId": "t1.t2",
+            "content": [
+              {
+                "type": "text",
+                "text": "What code word did I ask you to remember? Reply with only the code word.",
+                "text_elements": []
+              }
+            ]
+          }
+        ],
+        "itemsView": "summary",
+        "status": "failed",
+        "error": {
+          "message": "unexpected status 401 Unauthorized: Missing bearer or basic authentication in header, url: https://api.openai.com/v1/responses",
+          "codexErrorInfo": {
+            "httpConnectionFailed": {
+              "httpStatusCode": 401
+            }
+          },
+          "additionalDetails": null,
+          "misalignment": null
+        },
+        "startedAt": 1792392060,
+        "completedAt": 1792392074,
+        "durationMs": 13513
+      },
+      {
+        "id": "01a152e4-29ab-7c31-bc1a-47e0310e31d3",
+        "rootTurnId": "01a152e4-29ab-7c31-bc1a-47e0310e31d3",
+        "items": [
+          {
+            "type": "userMessage",
+            "id": "01a152e4-2a07-7012-97ba-6f9d64b99238",
+            "clientId": "t1.t1",
+            "content": [
+              {
+                "type": "text",
+                "text": "Remember this code word: PELICAN-5DDE2A06. Reply with just OK.",
+                "text_elements": []
+              }
+            ]
+          }
+        ],
+        "itemsView": "summary",
+        "status": "failed",
+        "error": {
+          "message": "unexpected status 401 Unauthorized: Missing bearer or basic authentication in header, url: https://api.openai.com/v1/responses",
+          "codexErrorInfo": {
+            "httpConnectionFailed": {
+              "httpStatusCode": 401
+            }
+          },
+          "additionalDetails": null,
+          "misalignment": null
+        },
+        "startedAt": 1792392047,
+        "completedAt": 1792392060,
+        "durationMs": 13474
+      }
+    ],
+    "nextCursor": null,
+    "backwardsCursor": null
+  }
+}

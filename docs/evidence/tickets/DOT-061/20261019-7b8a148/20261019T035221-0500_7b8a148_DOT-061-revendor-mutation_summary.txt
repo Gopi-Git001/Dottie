@@ -1,0 +1,49 @@
+# {"caseId": "DOT-061-revendor-mutation", "commit": "7b8a148", "build": null, "installerSha256": null, "startedAt": null, "finishedAt": "2026-10-19T03:51:45-05:00", "runner": "named host: grok-box (linux)", "command": "python3 /tmp/d14/mutr.py (R1-R13, npm test per mutant)", "exitCode": 0, "durationMs": null, "result": "pass", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "tree": "7b8a148 tree, one mutant at a time, restored after each"}
+R1 1y prefix guard: toolDisplay uses the strict 1z regex (was Z17): KILLED (2 failing)
+    not ok 203 - 1z: UI-action method is exactly ^(ui|window)\\.[a-z][a-z0-9_]*$ in the builder and in validateEvent
+    not ok 207 - 1y prefix rule (OUR guard, not in the vendored validator): kind tool rejects every ui./window. method, also the ones the 1z regex does not match
+R2 1y prefix guard: validateEvent uses the strict 1z regex (was Z18): KILLED (2 failing)
+    not ok 203 - 1z: UI-action method is exactly ^(ui|window)\\.[a-z][a-z0-9_]*$ in the builder and in validateEvent
+    not ok 207 - 1y prefix rule (OUR guard, not in the vendored validator): kind tool rejects every ui./window. method, also the ones the 1z regex does not match
+R3 1y prefix guard: both removed: KILLED (2 failing)
+    not ok 203 - 1z: UI-action method is exactly ^(ui|window)\\.[a-z][a-z0-9_]*$ in the builder and in validateEvent
+    not ok 207 - 1y prefix rule (OUR guard, not in the vendored validator): kind tool rejects every ui./window. method, also the ones the 1z regex does not match
+R4 never-cut: tool method cut again: KILLED (2 failing)
+    not ok 38 - 1v final limits (NEVER cut): limit passes unchanged, limit+1 → null (display_unavailable) for command bytes, path count, path bytes, cwd bytes, escalation cou
+    not ok 133 - E02 vectors: all 57 invalid displays are rejected by the vendored validator, the port hash and our validateEvent; the 16 1z / 2a / never-cut ones are refused
+R5 never-cut: ui_action method cut again: SURVIVED (0 failing)
+R6 port: hash without the vendored validation: KILLED (3 failing)
+    not ok 133 - E02 vectors: all 57 invalid displays are rejected by the vendored validator, the port hash and our validateEvent; the 16 1z / 2a / never-cut ones are refused
+    not ok 205 - 2a: pre_dispatch / codex_command / codex_file_change are valid for read and navigate (and hashable); tool and ui_action read/navigate → display_unavailable; 
+    not ok 206 - 2b: credential_access is rejected for every display kind (builders, validateEvent, port hash)
+R7 builder gate removed (codex_command): KILLED (2 failing)
+    not ok 133 - E02 vectors: all 57 invalid displays are rejected by the vendored validator, the port hash and our validateEvent; the 16 1z / 2a / never-cut ones are refused
+    not ok 206 - 2b: credential_access is rejected for every display kind (builders, validateEvent, port hash)
+R8 validateEvent: vendored display rules not applied: KILLED (7 failing)
+    not ok 26 - 1r validateEvent: requestSource required (codex | tool_host | coordinator); every wrong kind/source pairing rejected; UI-action methods only as ui_action
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+    not ok 133 - E02 vectors: all 57 invalid displays are rejected by the vendored validator, the port hash and our validateEvent; the 16 1z / 2a / never-cut ones are refused
+    not ok 136 - strip set: our untrusted strip equals E02 for every code point; lone surrogates become U+FFFD; our validateEvent rejects a hidden character left in an untrus
+R9 isUiActionMethod back to the prefix regex (ours): KILLED (1 failing)
+    not ok 203 - 1z: UI-action method is exactly ^(ui|window)\\.[a-z][a-z0-9_]*$ in the builder and in validateEvent
+R10 2b: display.category = event category check removed: KILLED (8 failing)
+    not ok 22 - validateEvent (X5, 1l/1m/1o): display is required and must follow its kind rule
+    not ok 27 - 1r validateEvent: each pre_dispatch mismatch is rejected (possibleRepeat, retryOfTaskId vs priorTaskId, category, risk)
+    not ok 208 - 2b (b): E02 2581593 per-kind negative event fixtures (display.category ≠ event category) are rejected by our validateEvent at payload.display.category; the s
+    not ok 209 - 2b (b): tool: validateEvent requires display.category === payload.category (both directions)
+R11 2b: category check only for tool and pre_dispatch: KILLED (5 failing)
+    not ok 22 - validateEvent (X5, 1l/1m/1o): display is required and must follow its kind rule
+    not ok 208 - 2b (b): E02 2581593 per-kind negative event fixtures (display.category ≠ event category) are rejected by our validateEvent at payload.display.category; the s
+    not ok 210 - 2b (b): ui_action: validateEvent requires display.category === payload.category (both directions)
+    not ok 211 - 2b (b): codex_command: validateEvent requires display.category === payload.category (both directions)
+R12 2b: Codex read/navigate raised to local_change: KILLED (5 failing)
+    not ok 145 - C-25 (D14): a read-category retry gets no possibleRepeat (no warning), but still goes through approval
+    not ok 160 - C-25 (D14, E01 1f b): the forced category skips navigate and read: last approval navigate → the earlier delete; only navigate/read → local_change/high
+    not ok 163 - C-25 (D14, E01 1g): a navigate approval inside a possible-repeat retry carries no possibleRepeat (like read)
+    not ok 214 - 2b (a): a Codex read approval opens exactly one dialog with its real category (no raise), bound in the display hash, and can be approved
+R13 2b: Codex read/navigate skipped (declined, no dialog): KILLED (6 failing)
+    not ok 98 - every event the coordinator emits validates against contract v1 and carries ids + timestamps
+    not ok 145 - C-25 (D14): a read-category retry gets no possibleRepeat (no warning), but still goes through approval
+    not ok 160 - C-25 (D14, E01 1f b): the forced category skips navigate and read: last approval navigate → the earlier delete; only navigate/read → local_change/high
+    not ok 163 - C-25 (D14, E01 1g): a navigate approval inside a possible-repeat retry carries no possibleRepeat (like read)
+TOTAL 12/13 killed

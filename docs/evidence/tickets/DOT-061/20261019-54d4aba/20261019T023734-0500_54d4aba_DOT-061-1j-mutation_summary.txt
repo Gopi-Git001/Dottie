@@ -1,0 +1,57 @@
+# {"caseId": "DOT-061-1j-mutation", "commit": "54d4aba", "build": null, "installerSha256": null, "startedAt": null, "finishedAt": null, "runner": "named host: grok-box (linux)", "command": "python3 mut3.py / mut3b.py (replace source string, npx tsc, node --test, restore + verify)", "exitCode": 0, "durationMs": null, "result": "16/17 killed; Q5 equivalent", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "tree": "working copy == 54d4aba"}
+Q1 catalog SHA not verified: KILLED (3 failing)
+    not ok 111 - catalog (E01): the coordinator catalog reads the pinned tool-catalog.json bytes and verifies the P27 SHA-256
+    not ok 112 - catalog (E01): a hash mismatch makes every tool count for D14 (navigate-only prior now triggers), like no catalog
+    not ok 132 - E01 1l (1): a failed categoryOf lookup never supplies the forced category → local_change / high
+Q2 precedence unknown > committed: KILLED (2 failing)
+    not ok 95 - C-25 (D14, E01) precedence committed > unknown > possible: anything that definitely happened wins
+    not ok 128 - E01 retry set: a ToolCatalogPort lookup that throws counts as unknown
+Q3 uncategorised in-flight stays possible (no unknown floor): KILLED (3 failing)
+    not ok 106 - C-25 (D14, E01 1j h): a tool missing from the catalog counts, as class unknown (fail closed)
+    not ok 128 - E01 retry set: a ToolCatalogPort lookup that throws counts as unknown
+    not ok 132 - E01 1l (1): a failed categoryOf lookup never supplies the forced category → local_change / high
+Q4 throwing lookup excluded: KILLED (2 failing)
+    not ok 128 - E01 retry set: a ToolCatalogPort lookup that throws counts as unknown
+    not ok 132 - E01 1l (1): a failed categoryOf lookup never supplies the forced category → local_change / high
+Q5 cancelled prior retryable: SURVIVED (0 failing)
+Q6 all outcomes retryable: KILLED (4 failing)
+    not ok 117 - E01 retry set: a 'succeeded' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+    not ok 118 - E01 retry set: a 'answered' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+    not ok 119 - E01 retry set: a 'declined' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+    not ok 120 - E01 retry set: a 'blocked_auth' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+Q7 clarification reasons retryable: KILLED (1 failing)
+    not ok 121 - E01 retry set: a 'clarification' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+Q8 refusal check removed: KILLED (6 failing)
+    not ok 91 - ruling 1j (c): a CANCELLED prior is not retryable: nothing starts, TaskFinished{failed, retry_not_allowed}, silent
+    not ok 117 - E01 retry set: a 'succeeded' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+    not ok 118 - E01 retry set: a 'answered' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+    not ok 119 - E01 retry set: a 'declined' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+    not ok 120 - E01 retry set: a 'blocked_auth' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+    not ok 121 - E01 retry set: a 'clarification' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+Q9 refusal speaks: KILLED (6 failing)
+    not ok 91 - ruling 1j (c): a CANCELLED prior is not retryable: nothing starts, TaskFinished{failed, retry_not_allowed}, silent
+    not ok 117 - E01 retry set: a 'succeeded' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+    not ok 118 - E01 retry set: a 'answered' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+    not ok 119 - E01 retry set: a 'declined' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+    not ok 120 - E01 retry set: a 'blocked_auth' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+    not ok 121 - E01 retry set: a 'clarification' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+Q10 retry_not_allowed accepted with failed_after_side_effects: KILLED (2 failing)
+    not ok 67 - CONTRACTS §2.1/§3 (E01 2026-10-19): any reason from the shared set is accepted with failed_after_side_effects; anything outside the set is rejected for every outcome
+    not ok 127 - E01 retry set: retry_not_allowed pairs only with failed in validateEvent
+Q11 join re-emits (no join): KILLED (1 failing)
+    not ok 129 - E01: a joined (duplicate) approval for a pending actionId keeps the FIRST expiry, emits one ApprovalRequested, and both waiters get the decision
+Q12 prior threadId not applied: KILLED (1 failing)
+    not ok 113 - ruling 1j (a): a tray retry ("Retry the last task." + retryOfTaskId) starts the new task on the prior task's threadId
+Q13 endReason tray dropped: KILLED (1 failing)
+    not ok 116 - ruling 1j (c)(d): endReason tray validates; failed_after_side_effects + approval_unavailable is a valid TaskFinished pair
+Q14 strip log uses channel: KILLED (1 failing)
+    not ok 99 - C-25 (D14): only the user retry field marks a repeat: an adapter-supplied possibleRepeat is dropped, and a new task without retryOfTaskId is not flagged
+TOTAL 13/14 killed
+DONE
+Q5b cancelled prior recorded as failed: KILLED (1 failing)
+    not ok 91 - ruling 1j (c): a CANCELLED prior is not retryable: nothing starts, TaskFinished{failed, retry_not_allowed}, silent
+Q15 late join reopens the dialog: KILLED (1 failing)
+    not ok 133 - E01 1k (c) / 1l: a join after resolution gets that decision and a join after expiry gets expired; neither reopens the dialog
+Q16 joined waiters never settled: KILLED (1 failing)
+    not ok 129 - E01: a joined (duplicate) approval for a pending actionId keeps the FIRST expiry, emits one ApprovalRequested, and both waiters get the decision
+TOTAL 3/3 killed

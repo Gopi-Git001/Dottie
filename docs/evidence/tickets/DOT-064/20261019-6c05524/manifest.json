@@ -1,0 +1,154 @@
+{
+ "schema": "dottie.evidence.manifest",
+ "version": 1,
+ "ticket": "DOT-064",
+ "caseIds": [
+  "DOT-064-pytest",
+  "DOT-064-lint",
+  "DOT-064-env",
+  "DOT-064-baseline",
+  "DOT-064-sweep"
+ ],
+ "commit": "6c05524",
+ "build": null,
+ "installerSha256": null,
+ "runner": "named host: grok-box (linux)",
+ "platform": "Linux box (Linux fakes only, no Windows build); NOT Windows evidence",
+ "createdAt": "2026-10-19T01:04:30-05:00",
+ "owner": "E11",
+ "tree": {
+  "head": "6c05524",
+  "headCommitDate": "2026-10-18T08:51:18-05:00",
+  "srcVerifierTracked": false,
+  "srcVerifierIgnoredBy": ".gitignore:3:/src/\tsrc/verifier",
+  "srcVerifierContentSha256": "3a8181bc425948b00c7db7199c409699bc49c34f12609be80da5d0b33e477abb",
+  "srcVerifierFileCount": 39,
+  "srcVerifierContentHashMethod": "sha256 of sorted 'sha256  relpath' lines of every file under src/verifier, excluding caches",
+  "gitStatusPorcelain": [
+   " D apps/desktop/build/installer.nsh",
+   " M apps/desktop/src/shared/channels.ts",
+   " M apps/desktop/src/shared/ipc.ts",
+   " M apps/desktop/src/shared/states.ts",
+   "?? apps/desktop/src/shared/runtime.ts",
+   "?? arch/",
+   "?? audit.md",
+   "?? docs/evidence/",
+   "?? docs/qa/",
+   "?? docs/verifier-contract-proposal.md",
+   "?? docs/verifier-design.md",
+   "?? e04-scratch/",
+   "?? e04-tools-plan.md",
+   "?? e04-tools-plan.v1-2026-10-18.md",
+   "?? e10/",
+   "?? packages/",
+   "?? perf-reliability-plan.md",
+   "?? skills-review/",
+   "?? spec.md",
+   "?? voice-plan.md"
+  ],
+  "clean": false
+ },
+ "verdict": "pass",
+ "results": {
+  "pytest": {
+   "result": "pass",
+   "passed": 400,
+   "failed": 0,
+   "exitCode": 0
+  },
+  "ruff": {
+   "result": "pass",
+   "version": "ruff 0.17.1",
+   "exitCode": 0
+  },
+  "secretSweep": "clean"
+ },
+ "baselineRatchet": {
+  "metric": "pytest passed (src/verifier)",
+  "from": 230,
+  "to": 400,
+  "allowed": true
+ },
+ "files": [
+  {
+   "path": "20261019T010429-0500_6c05524_DOT-064-lint_ruff-log.txt",
+   "sha256": "4d64904be58c5fac47eff485def59c66d59166e0ee6f509149b98e3a6132ced9",
+   "size": 725,
+   "producedBy": "cd src/verifier && uvx ruff@0.17.1 --version && uvx ruff@0.17.1 check ."
+  },
+  {
+   "path": "20261019T010429-0500_6c05524_DOT-064-pytest_junit.xml",
+   "sha256": "a25ca2a80e0def4aff81519d58ca58d63c8a79b2e1b20f6b1266f8b8bd000849",
+   "size": 65525,
+   "producedBy": "cd src/verifier && python3 -m pytest -q -p no:cacheprovider --junitxml=<tmp>; hostname attribute redacted"
+  },
+  {
+   "path": "20261019T010429-0500_6c05524_DOT-064-pytest_log.txt",
+   "sha256": "59b4d52328542937cac867924d536cfe49fb1b4c4cc148ef0bb90073430ee5b9",
+   "size": 1153,
+   "producedBy": "cd src/verifier && python3 -m pytest -q -p no:cacheprovider (fresh env -i bash --noprofile --norc)"
+  },
+  {
+   "path": "20261019T010429-0500_6c05524_DOT-064-pytest_results.json",
+   "sha256": "cc0a3059ebc4e241c51f07615ddaa66bdd704d716082c463e3bf20de5eab2db8",
+   "size": 83224,
+   "producedBy": "derived from the JUnit XML by the pack script"
+  },
+  {
+   "path": "20261019T010429-0500_6c05524_DOT-064_baseline-ratchet.json",
+   "sha256": "59c784dc54a9521079437b21ac8305b968ea30594124fd9b7c32e6a3131541f0",
+   "size": 1429,
+   "producedBy": "pack script"
+  },
+  {
+   "path": "20261019T010429-0500_6c05524_DOT-064_environment.json",
+   "sha256": "338148f36f62841afb68fc850602c35b5d3ed60adea70117c2d7f309000e97de",
+   "size": 2274,
+   "producedBy": "pack script (os-release, uname -srm, tool --version, git)"
+  },
+  {
+   "path": "20261019T010429-0500_6c05524_DOT-064_secret-sweep.txt",
+   "sha256": "2fbecdc76e6d0e7baeb726153fce75ec6768bef05661b97918fae87edcb3953b",
+   "size": 1047,
+   "producedBy": "skill step 5 rg sweep + host/user-path patterns"
+  },
+  {
+   "path": "README.md",
+   "sha256": "5da87386d1eb2c0d107f35fb67ab47ed14a6e0a7227dea88535941831b6e2731",
+   "size": 2486,
+   "producedBy": "pack script (hand-reviewed summary)"
+  },
+  {
+   "path": "20261019T010712-0500_c24eb44_DOT-064_addendum-commit.md",
+   "sha256": "fc719b7c27db91e3660fa8ffd03a2cca1fcbd21cca72857dcaf724c575b38b20",
+   "size": 2193,
+   "producedBy": "E11 addendum (hand-written record of git binding + committed-tree re-run)",
+   "amendment": 1
+  }
+ ],
+ "generator": {
+  "name": "make_dot064_pack.py (E11 scratch on the box, not in the repo)",
+  "sha256": "0dc611482627f69dc518332a4b21e5640df92b6e8a4ca0f4658c7c60c4a14c09"
+ },
+ "sealMethod": "sha256 of json.dumps({k: manifest[k] for k != 'seal'}, sort_keys=True, separators=(',', ':')) encoded UTF-8",
+ "originalSeal": "2afa5e994a8b182ed059147fe7cc61c880ae67c3682afeadf6765a32b778fe4e",
+ "amendments": [
+  {
+   "n": 1,
+   "addedAt": "2026-10-19T01:07:12-05:00",
+   "file": "20261019T010712-0500_c24eb44_DOT-064_addendum-commit.md",
+   "reason": "bind evidence to version control",
+   "branch": "feature/E11-verifier",
+   "commit": "c24eb447e24d5083d2b43118ce4fd72ceef2b814",
+   "srcVerifierContentSha256AtCommit": "3a8181bc425948b00c7db7199c409699bc49c34f12609be80da5d0b33e477abb",
+   "matchesRecorded": true,
+   "committedTreeRerun": {
+    "pytest": "400 passed, exit 0",
+    "ruff": "0.17.1 all checks passed, exit 0",
+    "at": "2026-10-19T01:06:45-05:00"
+   },
+   "originalFilesUnchanged": true
+  }
+ ],
+ "seal": "918b43db4253b7ded3f5e9778f6f85c28105035c922bc035244bd95286383d53"
+}

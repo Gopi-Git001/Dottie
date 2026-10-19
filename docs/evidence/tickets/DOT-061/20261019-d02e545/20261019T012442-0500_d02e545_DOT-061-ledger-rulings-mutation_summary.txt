@@ -1,0 +1,6 @@
+# {"caseId": "DOT-061-ledger-rulings-mutation", "commit": "d02e545", "build": null, "installerSha256": null, "startedAt": "2026-10-19T01:24:42-05:00", "finishedAt": "2026-10-19T01:24:42-05:00", "runner": "named host: grok-box (linux)", "command": "temporary src mutation, npx tsc, node --test --test-timeout=8000 dist/test/*.test.js; src restored after each (diff-verified)", "exitCode": 0, "durationMs": null, "result": "pass", "platform": "Linux box (Node v20.19.2); NOT Windows evidence", "tree": "pre-commit working copy in worktree /workspace/dottie-e03 (tests only; src identical to da8215a); committed as d02e545"}
+# note: fail>0 = caught.
+M32 final outcome uses the per-TURN ledger instead of the per-task ledger => # pass 112 # fail 2 # cancelled 0 
+M33 retry eligibility uses the per-TASK ledger instead of the per-turn ledger => # pass 111 # fail 3 # cancelled 0 
+M34 non-strict ledger: a started side-effecting tool does not block the retry => # pass 111 # fail 3 # cancelled 0 
+M35 failure text omits committed actions => # pass 109 # fail 5 # cancelled 0 

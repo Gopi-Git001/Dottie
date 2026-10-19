@@ -1,0 +1,27 @@
+{"caseId":"DOT099-FU3-DIRTY-evidencefile","commit":"b370fa491ef67f9c29983329340a3af96f3e0711","dirtyTree":false,"dirtyTreeScope":"repo, excluding docs/evidence/","build":null,"installerSha256":null,"buildNote":"n/a: unpackaged","startedAt":"2026-10-19T06:18:37.057-05:00","finishedAt":"2026-10-19T06:18:38.106-05:00","command":"electron . --dottie-smoke-test --dottie-smoke-ui (timeout 1000 ms)","exitCode":null,"signal":"SIGTRAP","durationMs":1049,"result":"fail","timedOut":true,"failedStep":null,"run":1,"runner":"linux-box"}
+[586575:1019/061837.116261:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[586575:1019/061837.116336:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[586575:1019/061837.275364:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[586575:1019/061837.275403:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[586575:1019/061837.296870:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[586575:1019/061837.296977:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[586575:1019/061837.300467:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[dottie] settings loaded at /home/box/.config/Dottie/settings.json
+[586575:1019/061837.305092:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[586575:1019/061837.306559:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[586575:1019/061837.306748:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[586575:1019/061837.306763:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[586575:1019/061837.324131:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[586575:1019/061837.339113:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[dottie] ipc dottie:v1:approval:get: Error: sender page not allowed for this channel
+
+DOTTIE_SMOKE_RUNNER_TIMEOUT run=1 after 1000 ms; output above kept
+[586575:1019/061838.067243:ERROR:content/common/zygote/zygote_communication_linux.cc:291] Failed to send GetTerminationStatus message to zygote
+[586575:1019/061838.071433:ERROR:content/common/zygote/zygote_communication_linux.cc:291] Failed to send GetTerminationStatus message to zygote
+[586575:1019/061838.072109:ERROR:content/browser/network_service_instance_impl.cc:650] Network service crashed or was terminated, restarting service.
+[586575:1019/061838.076599:ERROR:content/browser/gpu/gpu_process_host.cc:1029] GPU process launch failed: error_code=1002
+[586575:1019/061838.077384:ERROR:content/browser/gpu/gpu_process_host.cc:1029] GPU process launch failed: error_code=1002
+[586575:1019/061838.077755:ERROR:content/browser/gpu/gpu_process_host.cc:1029] GPU process launch failed: error_code=1002
+[586575:1019/061838.077773:FATAL:content/browser/gpu/gpu_data_manager_impl_private.cc:417] GPU process isn't usable. Goodbye.
+
+DOTTIE_SMOKE_RUNNER_RESULT {"run":1,"ok":false,"code":null,"signal":"SIGTRAP","timedOut":true,"ms":1049,"failedStep":null,"groupLeftover":null}

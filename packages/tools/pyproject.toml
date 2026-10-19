@@ -1,0 +1,11 @@
+[project]
+name = "dottie-tools"
+version = "0.0.0"
+description = "Dottie Windows tool adapters (contract layer; Windows mocked on Linux)"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "tests"]
+testpaths = ["tests"]
+addopts = "-q"
+xfail_strict = true

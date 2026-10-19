@@ -1,0 +1,35 @@
+{
+  "errorPath": "payload.stopStatus",
+  "event": {
+    "schema": "dottie.event",
+    "version": 2,
+    "type": "TaskCancelled",
+    "eventId": "evt-taskcancelled",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-18T14:03:00.123-05:00",
+    "payload": {
+      "taskId": "task-1",
+      "stopStatus": "stopped",
+      "sideEffects": "committed",
+      "sideEffectsCommitted": true,
+      "committedActions": [
+        {
+          "toolId": "files.mkdir",
+          "observedState": {
+            "outcome": "verified",
+            "decision": "done",
+            "checks": {
+              "exists": "pass",
+              "sizeMatches": "pass"
+            },
+            "sideEffect": "committed",
+            "bytes": 42
+          },
+          "certainty": "committed"
+        }
+      ],
+      "report": "Stopped. The folder was already created."
+    },
+    "taskId": "task-1"
+  }
+}

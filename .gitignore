@@ -1,0 +1,60 @@
+# ---- Dottie monorepo .gitignore (draft, E01 2026-10-19). Never commit credentials (spec §5, RB-01).
+# Credentials / Codex state (ADR-0004, ADR-0014)
+auth.json
+**/auth.json
+.codex/
+**/codex-home/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+*.cer
+*.keystore
+# Week-1 probe default output dir. Transcripts are redacted, but review + sweep them before committing (dottie-evidence-pack)
+/evidence/
+scripts/week1-probe/evidence/
+# Codex binaries are pinned by sha256 (ADR-0003), downloaded, never committed
+codex.exe
+codex-*.exe
+codex-*.zip
+codex-*.tar.gz
+codex-x86_64-*
+codex-aarch64-*
+# Node / Electron
+node_modules/
+dist/
+release/
+out/
+.vite/
+coverage/
+*.tsbuildinfo
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+*.egg-info/
+# Local data / logs (Dottie writes these under %LOCALAPPDATA%\Dottie, never in the repo)
+*.log
+*.sqlite
+*.sqlite3
+*.db
+# Raw audio: only consented fixtures under tests/fixtures/consented/ may be committed
+*.wav
+*.flac
+*.mp3
+*.webm
+!tests/fixtures/consented/**
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json

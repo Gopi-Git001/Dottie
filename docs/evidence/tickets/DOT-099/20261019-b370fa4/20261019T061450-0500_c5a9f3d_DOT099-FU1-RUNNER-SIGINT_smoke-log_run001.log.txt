@@ -1,0 +1,33 @@
+{"caseId":"DOT099-FU1-RUNNER-SIGINT","commit":"c5a9f3db36816eeef708e49cbc38a6a369aae3f0","dirtyTree":false,"dirtyTreeScope":"repo, excluding docs/evidence/","build":null,"installerSha256":null,"buildNote":"n/a: unpackaged","startedAt":"2026-10-19T06:14:50.088-05:00","finishedAt":"2026-10-19T06:14:53.143-05:00","command":"electron . --dottie-smoke-test --dottie-smoke-ui (timeout 90000 ms)","exitCode":null,"signal":"SIGTRAP","durationMs":3055,"result":"fail","timedOut":false,"failedStep":null,"run":1,"runner":"linux-box"}
+[581672:1019/061450.148308:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[581672:1019/061450.148394:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[581672:1019/061450.304835:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[581672:1019/061450.304874:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[581672:1019/061450.325113:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[581672:1019/061450.326138:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[581672:1019/061450.329004:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[dottie] settings loaded at /home/box/.config/Dottie/settings.json
+[581672:1019/061450.333569:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[581672:1019/061450.335510:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[581672:1019/061450.335770:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[581672:1019/061450.335990:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[581672:1019/061450.354325:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[581672:1019/061450.368064:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[dottie] ipc dottie:v1:approval:get: Error: sender page not allowed for this channel
+[581672:1019/061451.216862:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[581672:1019/061451.218346:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[dottie] ipc dottie:v1:approval:resolve: IpcHandlerError: Approve is not available until the warning has been shown.
+[dottie] ipc dottie:v1:approval:resolve: IpcHandlerError: This approval is no longer valid.
+[581672:1019/061452.223897:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[581672:1019/061452.225645:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[dottie] ipc dottie:v1:approval:resolve: IpcHandlerError: Approve is available once this window has been on screen and focused for a moment.
+[581672:1019/061453.096121:ERROR:content/common/zygote/zygote_communication_linux.cc:291] Failed to send GetTerminationStatus message to zygote
+[581672:1019/061453.097857:ERROR:content/common/zygote/zygote_communication_linux.cc:291] Failed to send GetTerminationStatus message to zygote
+[581672:1019/061453.099513:ERROR:content/browser/network_service_instance_impl.cc:650] Network service crashed or was terminated, restarting service.
+[581672:1019/061453.103895:ERROR:content/common/zygote/zygote_communication_linux.cc:291] Failed to send GetTerminationStatus message to zygote
+[581672:1019/061453.106342:ERROR:content/browser/gpu/gpu_process_host.cc:1029] GPU process launch failed: error_code=1002
+[581672:1019/061453.107188:ERROR:content/browser/gpu/gpu_process_host.cc:1029] GPU process launch failed: error_code=1002
+[581672:1019/061453.107529:ERROR:content/browser/gpu/gpu_process_host.cc:1029] GPU process launch failed: error_code=1002
+[581672:1019/061453.107548:FATAL:content/browser/gpu/gpu_data_manager_impl_private.cc:417] GPU process isn't usable. Goodbye.
+
+DOTTIE_SMOKE_RUNNER_RESULT {"run":1,"ok":false,"code":null,"signal":"SIGTRAP","timedOut":false,"ms":3055,"failedStep":null,"groupLeftover":null}

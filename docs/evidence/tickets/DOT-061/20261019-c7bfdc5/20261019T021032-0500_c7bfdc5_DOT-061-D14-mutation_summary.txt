@@ -1,0 +1,42 @@
+# {"caseId": "DOT-061-D14-mutations", "commit": "c7bfdc5", "build": null, "installerSha256": null, "startedAt": "2026-10-19T02:10:32-05:00", "finishedAt": "2026-10-19T02:11:08-05:00", "runner": "named host: grok-box (linux)", "command": "python3 mut.py (per mutant: npx tsc; node --test dist/test/*.test.js; source restored + verified byte-equal)", "exitCode": 0, "durationMs": null, "result": "pass", "platform": "Linux box (Node v20.19.2); NOT Windows evidence", "tree": "committed c7bfdc5, mutated in place and restored"}
+M1 validator accepts possibleRepeat on read: KILLED (1 failing)
+    not ok 95 - validator (D14): possibleRepeat is accepted on a non-read ApprovalRequested and rejected on read, malformed, or the old priorOutcome shape
+M2 validator open shape (old priorOutcome key accepted): KILLED (1 failing)
+    not ok 95 - validator (D14): possibleRepeat is accepted on a non-read ApprovalRequested and rejected on read, malformed, or the old priorOutcome shape
+M3 no forced pre-dispatch approval for a retry: KILLED (7 failing)
+    not ok 89 - C-25 (D14): a non-read retry after a sideEffect:unknown attempt opens a fresh approval with possibleRepeat {priorTaskId, unknown} before anything is dispatched
+    not ok 90 - C-25 (D14): the same after a ledger:possible attempt (side-effecting tool started, never reported) → priorSideEffect possible
+    not ok 91 - C-25 (D14): a prior task CANCELLED with possible side effects (stopped_after_side_effects) also triggers possibleRepeat
+    not ok 99 - C-25 (D14): the possible-repeat approval is never auto-approved: deny → declined, expiry → declined, non-secure_ui channel rejected; nothing dispatched
+    not ok 100 - C-25 (D14): a non-secure_ui channel cannot approve a possible-repeat Codex approval inside the retry either
+    not ok 101 - C-25 (D14): dedupe/idempotency: a retry with the same text inside the dedupe window is NOT deduped against the prior task; a replayed retry requestId is
+    not ok 102 - C-25 (D14): a retry naming a task the coordinator has no record of fails closed: treated as unknown, forced approval with the warning
+M4 possibleRepeat also on read approvals: KILLED (1 failing)
+    not ok 92 - C-25 (D14): a read-category retry gets no possibleRepeat (no warning), but still goes through approval
+M5 ToolResult unknown signal ignored: KILLED (1 failing)
+    not ok 89 - C-25 (D14): a non-read retry after a sideEffect:unknown attempt opens a fresh approval with possibleRepeat {priorTaskId, unknown} before anything is dispatched
+M6 in-flight ledger possible ignored: KILLED (2 failing)
+    not ok 90 - C-25 (D14): the same after a ledger:possible attempt (side-effecting tool started, never reported) → priorSideEffect possible
+    not ok 91 - C-25 (D14): a prior task CANCELLED with possible side effects (stopped_after_side_effects) also triggers possibleRepeat
+M7 secure_ui not required for possible-repeat: KILLED (2 failing)
+    not ok 99 - C-25 (D14): the possible-repeat approval is never auto-approved: deny → declined, expiry → declined, non-secure_ui channel rejected; nothing dispatched
+    not ok 100 - C-25 (D14): a non-secure_ui channel cannot approve a possible-repeat Codex approval inside the retry either
+M8 retry not exempt from same-text dedupe: KILLED (1 failing)
+    not ok 101 - C-25 (D14): dedupe/idempotency: a retry with the same text inside the dedupe window is NOT deduped against the prior task; a replayed retry requestId is
+M9 unknown prior not fail-closed: KILLED (1 failing)
+    not ok 102 - C-25 (D14): a retry naming a task the coordinator has no record of fails closed: treated as unknown, forced approval with the warning
+M10 cancelled tasks not remembered: KILLED (1 failing)
+    not ok 91 - C-25 (D14): a prior task CANCELLED with possible side effects (stopped_after_side_effects) also triggers possibleRepeat
+M11 priorTaskId = the new taskId: KILLED (4 failing)
+    not ok 89 - C-25 (D14): a non-read retry after a sideEffect:unknown attempt opens a fresh approval with possibleRepeat {priorTaskId, unknown} before anything is dispatched
+    not ok 90 - C-25 (D14): the same after a ledger:possible attempt (side-effecting tool started, never reported) → priorSideEffect possible
+    not ok 91 - C-25 (D14): a prior task CANCELLED with possible side effects (stopped_after_side_effects) also triggers possibleRepeat
+    not ok 102 - C-25 (D14): a retry naming a task the coordinator has no record of fails closed: treated as unknown, forced approval with the warning
+M12 empty string accepted as non-empty: KILLED (2 failing)
+    not ok 95 - validator (D14): possibleRepeat is accepted on a non-read ApprovalRequested and rejected on read, malformed, or the old priorOutcome shape
+    not ok 96 - validator (D14, PROPOSED): UtteranceReady.retryOfTaskId is an optional non-empty string
+M13 committed-only treated as possible repeat: KILLED (1 failing)
+    not ok 94 - C-25 (D14, E01 trigger): a prior with only committed side effects is not a possible repeat (trigger is possible|unknown only)
+M14 adapter fields passed through (possibleRepeat injectable): KILLED (1 failing)
+    not ok 98 - C-25 (D14): only the user retry field marks a repeat: an adapter-supplied possibleRepeat is dropped, and a new task without retryOfTaskId is not flagged
+TOTAL 14/14 killed

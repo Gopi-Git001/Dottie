@@ -1,0 +1,12 @@
+{"caseId":"DOT098-AC3","commit":"7158f2f2c5eea283bd608d171fe2f467a39efcb8","dirtyTree":false,"build":null,"installerSha256":null,"startedAt":"2026-10-19T04:54:16.132-05:00","finishedAt":"2026-10-19T05:05:15.659-05:00","runner":"linux-box","command":"node scripts/smoke-run.mjs --runs 100 --out /workspace/smoke-logs/7158f2f/runner-100 --timeout-ms 90000","exitCode":0,"durationMs":659527,"result":"pass","headerSource":"retrofit 2026-10-19 (ADDENDUM-20261019.md): finishedAt = file mtime, startedAt = finishedAt - durationMs","boxLogDir":"/workspace/smoke-logs/7158f2f/runner-100-named"}
+{
+  "runs": 100,
+  "ok": 100,
+  "failed": 0,
+  "timedOut": 0,
+  "hangs": 0,
+  "msMin": 6519,
+  "msMedian": 6591,
+  "msMax": 6726,
+  "boxLogDir": "/workspace/smoke-logs/7158f2f/runner-100-named"
+}

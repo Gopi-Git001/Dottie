@@ -1,0 +1,42 @@
+{
+ "header": {
+  "caseId": "DOT-064-env",
+  "commit": "2878b58",
+  "build": null,
+  "installerSha256": null,
+  "startedAt": "2026-10-19T01:41:53-05:00",
+  "finishedAt": "2026-10-19T01:41:54-05:00",
+  "runner": "named host: grok-box (linux)",
+  "command": "cd src/verifier && python3 --version && python3 -m pytest --version && uv --version",
+  "exitCode": 0,
+  "durationMs": 117,
+  "result": "pass",
+  "platform": "Linux box (Linux fakes only, no Windows build); NOT Windows evidence",
+  "tree": "committed tree 2878b58 (src/verifier tracked); run from git archive, so no uncommitted change can be in it",
+  "srcVerifierContentSha256": "2ebccaee1747cf3fd755820a8f4287bab5756b8279b4ee5d3ded06cc2d35d8d9"
+ },
+ "os": "Debian GNU/Linux 13 (trixie)",
+ "kernel": "Linux 6.12.94+ x86_64",
+ "python": "Python 3.13.5",
+ "pytest": "pytest 9.1.1",
+ "uv": "uv 0.13.1 (x86_64-unknown-linux-gnu)",
+ "ruff": "ruff 0.17.1",
+ "ruffConfig": "src/verifier/pyproject.toml: required-version ==0.17.1, frozen 0.17.1 default rules (407) + E501 @ 100",
+ "windows": null,
+ "windowsBuild": null,
+ "scope": "Linux fakes only (tests/fakes.py); win32_backend.py is not executed. Windows validation is separate (DOT-031).",
+ "tree": {
+  "head": "2878b58",
+  "commit": "2878b581743accf77630403cf903e067a0be69ae",
+  "branch": "feature/E11-verifier (local, not pushed)",
+  "headCommitDate": "2026-10-19T01:41:21-05:00",
+  "source": "git archive 2878b58 src/verifier (committed tree, extracted to a temp dir)",
+  "srcVerifierTracked": true,
+  "srcVerifierIgnoredBy": null,
+  "srcVerifierContentSha256": "2ebccaee1747cf3fd755820a8f4287bab5756b8279b4ee5d3ded06cc2d35d8d9",
+  "srcVerifierFileCount": 41,
+  "srcVerifierContentHashMethod": "sha256 of sorted 'sha256  relpath' lines of every file under src/verifier, excluding caches",
+  "worktreeStatusPorcelain": [],
+  "clean": true
+ }
+}

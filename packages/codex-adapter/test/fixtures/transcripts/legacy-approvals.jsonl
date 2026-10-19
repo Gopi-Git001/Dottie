@@ -1,0 +1,10 @@
+# Legacy approval requests (DEPRECATED; Dottie never uses the legacy turn APIs). Params are synthetic but schema-valid
+# (ExecCommandApprovalParams / ApplyPatchApprovalParams). Both must be denied with the schema-valid ReviewDecision.
+<< {"id":"srv-1","method":"execCommandApproval","params":{"conversationId":"00000000-0000-4000-8000-0000000000aa","callId":"call-1","approvalId":null,"command":["rm","-rf","/"],"cwd":"/redacted","reason":null,"parsedCmd":[]}}
+>> {"id":"srv-1","result":{"decision":{"denied":{"rejection":"Dottie does not use the legacy approval APIs"}}}}
+<< {"id":"srv-2","method":"applyPatchApproval","params":{"conversationId":"00000000-0000-4000-8000-0000000000aa","callId":"call-2","fileChanges":{},"reason":null,"grantRoot":null}}
+>> {"id":"srv-2","result":{"decision":{"denied":{"rejection":"Dottie does not use the legacy approval APIs"}}}}
+<< {"id":"srv-3","method":"account/chatgptAuthTokens/refresh","params":{"reason":"unauthorized","previousAccountId":null}}
+>> {"id":"srv-3","error":{"code":-32601,"message":"Method not found"}}
+<< {"id":"srv-4","method":"attestation/generate","params":{}}
+>> {"id":"srv-4","error":{"code":-32601,"message":"Method not found"}}

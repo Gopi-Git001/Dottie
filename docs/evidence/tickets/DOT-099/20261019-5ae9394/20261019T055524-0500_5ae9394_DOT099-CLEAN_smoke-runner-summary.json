@@ -1,0 +1,12 @@
+{"caseId":"DOT099-CLEAN","commit":"5ae93948e047bca3ce4efb606acd7ccce22509c1","dirtyTree":false,"build":null,"installerSha256":null,"startedAt":"2026-10-19T05:55:24.758-05:00","finishedAt":"2026-10-19T05:56:02.768-05:00","command":"node scripts/smoke-run.mjs --runs 5 --out /workspace/smoke-logs/5ae9394/clean-5 --timeout-ms 90000 --case-id DOT099-CLEAN","exitCode":0,"durationMs":38010,"result":"pass","runner":"linux-box"}
+{
+  "runs": 5,
+  "ok": 5,
+  "failed": 0,
+  "timedOut": 0,
+  "failedSteps": [],
+  "msMin": 7587,
+  "msMedian": 7597,
+  "msMax": 7627,
+  "logs": "/workspace/smoke-logs/5ae9394/clean-5"
+}

@@ -1,0 +1,12 @@
+{"caseId":"DOT099-FU1-FORCED-TIMEOUT","commit":"c5a9f3db36816eeef708e49cbc38a6a369aae3f0","dirtyTree":false,"dirtyTreeScope":"repo, excluding docs/evidence/","build":null,"installerSha256":null,"buildNote":"n/a: unpackaged","startedAt":"2026-10-19T06:15:08.787-05:00","finishedAt":"2026-10-19T06:15:11.839-05:00","command":"node scripts/smoke-run.mjs --runs 1 --timeout-ms 3000 --out /workspace/smoke-logs/c5a9f3d/forced-timeout --case-id DOT099-FU1-FORCED-TIMEOUT","exitCode":1,"durationMs":3052,"result":"fail","runner":"linux-box"}
+{
+  "runs": 1,
+  "ok": 0,
+  "failed": 1,
+  "timedOut": 1,
+  "failedSteps": [],
+  "msMin": 3051,
+  "msMedian": 3051,
+  "msMax": 3051,
+  "logs": "/workspace/smoke-logs/c5a9f3d/forced-timeout"
+}

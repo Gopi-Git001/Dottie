@@ -1,0 +1,7 @@
+# {"caseId": "DOT-061-s2.1-mutation", "commit": "138f39e", "build": null, "installerSha256": null, "startedAt": "2026-10-19T01:18:00-05:00", "finishedAt": "2026-10-19T01:18:00-05:00", "runner": "named host: grok-box (linux)", "command": "temporary src mutation, npx tsc, node --test --test-timeout=8000 dist/test/*.test.js; src restored after each (diff-verified)", "exitCode": 0, "durationMs": null, "result": "pass", "platform": "Linux box (Node v20.19.2); NOT Windows evidence", "tree": "pre-commit working copy in worktree /workspace/dottie-e03 (tests only; src identical to b26e41b); committed as 138f39e"}
+# note: fail>0 = caught. The batch was interrupted during M23 (sources restored from backup and verified); M23 was rerun alone.
+M19 mid-run auth error always blocked_auth (ignores the ledger) => # pass 97 # fail 2 # cancelled 0 
+M20 mid-run auth error after commit carries no reason => # pass 97 # fail 2 # cancelled 0 
+M21 possible side effects treated as none for the mid-run auth outcome => # pass 98 # fail 1 # cancelled 0 
+M22 validator accepts any string as TaskFinished.reason => # pass 97 # fail 2 # cancelled 0 
+M23 validator pairing rejects a valid set reason with failed_after_side_effects => # pass 98 # fail 1 # cancelled 0 

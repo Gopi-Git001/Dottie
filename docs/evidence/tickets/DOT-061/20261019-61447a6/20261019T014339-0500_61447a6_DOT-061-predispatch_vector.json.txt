@@ -1,0 +1,21 @@
+# {"caseId": "DOT-061-predispatch-vector", "commit": "61447a6", "build": null, "installerSha256": null, "startedAt": "null", "finishedAt": "null", "runner": "named host: grok-box (linux)", "command": "node vec2.mjs (E02 computeActionId from a /tmp copy of the UNCOMMITTED /workspace/dottie-e02/packages/contracts/src/canonical.ts; read-only)", "exitCode": 0, "durationMs": null, "result": "pass", "platform": "Linux box (Node v20.19.2); NOT Windows evidence", "tree": "value pinned in test/actionId.test.ts PRE_DISPATCH_VECTOR_HASH; FakeActionIdPort reproduces it (test passes in red, green and final runs)"}
+{
+  "name": "pre_dispatch_confirmation",
+  "input": {
+    "purpose": "dottie.actionId.v1",
+    "method": "dottie.pre_dispatch_confirmation",
+    "args": {
+      "summary": "Delete old.log in Downloads",
+      "risk": "high",
+      "category": "delete"
+    },
+    "targets": null,
+    "taskId": "task_1",
+    "threadId": null,
+    "turnId": "task_1.t1",
+    "itemId": null,
+    "requestId": "req_conf"
+  },
+  "canonical": "{\"args\":{\"category\":\"delete\",\"risk\":\"high\",\"summary\":\"Delete old.log in Downloads\"},\"itemId\":null,\"method\":\"dottie.pre_dispatch_confirmation\",\"purpose\":\"dottie.actionId.v1\",\"requestId\":\"req_conf\",\"targets\":null,\"taskId\":\"task_1\",\"threadId\":null,\"turnId\":\"task_1.t1\"}",
+  "actionId": "3c60c777e48823b10a38fda55067b9040be84e66de145386d95f3aa4d6b8230c"
+}

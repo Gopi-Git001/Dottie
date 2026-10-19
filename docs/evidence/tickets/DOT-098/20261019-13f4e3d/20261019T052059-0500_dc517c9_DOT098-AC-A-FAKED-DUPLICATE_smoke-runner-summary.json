@@ -1,0 +1,17 @@
+{"caseId":"DOT098-AC-A-FAKED-DUPLICATE","commit":"dc517c9297cd2ee93ba9b643c7d87f3555068fba","dirtyTree":true,"build":null,"installerSha256":null,"startedAt":"2026-10-19T05:20:59.248-05:00","finishedAt":"2026-10-19T05:21:05.781-05:00","command":"node scripts/smoke-run.mjs --runs 1 --case-id DOT098-AC-A-FAKED-DUPLICATE --out /workspace/smoke-logs/dot098-faked-duplicate","exitCode":1,"durationMs":6533,"result":"fail","runner":"linux-box"}
+{
+  "runs": 1,
+  "ok": 0,
+  "failed": 1,
+  "timedOut": 0,
+  "failedSteps": [
+    {
+      "run": 1,
+      "step": "bound.decline"
+    }
+  ],
+  "msMin": 6532,
+  "msMedian": 6532,
+  "msMax": 6532,
+  "logs": "/workspace/smoke-logs/dot098-faked-duplicate"
+}

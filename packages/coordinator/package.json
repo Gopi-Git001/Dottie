@@ -1,0 +1,19 @@
+{
+  "name": "@dottie/coordinator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Dottie task coordinator: state machine, event contract v1, dispatch, approvals, retries, cancellation (E03)",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "check": "tsc --noEmit",
+    "test": "npm run build && node --test dist/test/*.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "typescript": "^6.0.3"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "errorPath": "payload.workspaceScope.scopes[0]",
+  "event": {
+    "schema": "dottie.event",
+    "version": 2,
+    "type": "TaskRequested",
+    "eventId": "evt-taskrequested",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-18T14:03:00.123-05:00",
+    "payload": {
+      "taskId": "task-1",
+      "requestId": "req-1",
+      "text": "create a folder called invoices",
+      "workspaceScope": {
+        "scopes": [
+          "files.browse"
+        ],
+        "paths": [
+          "%USERPROFILE%\\Documents\\Dottie"
+        ]
+      }
+    },
+    "taskId": "task-1"
+  }
+}

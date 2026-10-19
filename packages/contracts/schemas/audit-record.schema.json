@@ -1,0 +1,1485 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:dottie:contracts:audit-record:v1",
+  "title": "dottie.audit v1 record (CONTRACTS §3.2), or the fail-closed redactor.fallback record",
+  "$comment": "TS-only rules (validateAuditRecord): at most 16384 UTF-8 bytes per record; no string anywhere matches the K8 token pattern; timestamps are real dates (Date.parse); argsHash equals actionId when both are present; joinedTo differs from the record's own eventId; env name lists are sorted; env.keptCount = keptNames.length and env.removedCount = removedSensitiveNames.length + removedOtherCount. Codex-side approval.* and other pre-existing kinds: per-kind id presence is OPEN in CONTRACTS and not enforced.",
+  "if": {
+    "type": "object",
+    "required": [
+      "kind"
+    ],
+    "properties": {
+      "kind": {
+        "const": "redactor.fallback"
+      }
+    }
+  },
+  "then": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "kind",
+      "eventId",
+      "error"
+    ],
+    "properties": {
+      "kind": {
+        "const": "redactor.fallback"
+      },
+      "eventId": {
+        "type": "string",
+        "minLength": 1
+      },
+      "error": {
+        "type": "string",
+        "pattern": "^[A-Za-z_$][A-Za-z0-9_$]{0,63}$",
+        "not": {
+          "pattern": "\\n"
+        }
+      }
+    }
+  },
+  "else": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "schema",
+      "version",
+      "eventId",
+      "correlationId",
+      "timestamp",
+      "kind"
+    ],
+    "properties": {
+      "schema": {
+        "const": "dottie.audit"
+      },
+      "version": {
+        "const": 1
+      },
+      "eventId": {
+        "type": "string",
+        "minLength": 1
+      },
+      "correlationId": {
+        "type": "string",
+        "minLength": 1
+      },
+      "causationId": {
+        "type": "string",
+        "minLength": 1
+      },
+      "taskId": {
+        "type": "string",
+        "minLength": 1
+      },
+      "timestamp": {
+        "$ref": "#/$defs/isoTimestamp"
+      },
+      "kind": {
+        "enum": [
+          "approval.requested",
+          "approval.resolved",
+          "approval.expired",
+          "approval.revoked",
+          "policy.denied",
+          "auth.url_check",
+          "auth.login_started",
+          "auth.login_completed",
+          "auth.logout",
+          "env.scrub",
+          "server_request.unknown",
+          "tool.denied_path",
+          "recovery_token.minted",
+          "recovery_token.used",
+          "recovery_token.rejected",
+          "tool_token.minted",
+          "tool_token.consumed",
+          "tool_token.rejected",
+          "tool_token.revoked",
+          "toolhost.peer_rejected",
+          "toolhost.pipe_squatted",
+          "tool_call.host_refused",
+          "input.field_stripped"
+        ]
+      },
+      "actionId": {
+        "if": {
+          "type": "string"
+        },
+        "then": {
+          "$ref": "#/$defs/sha256Hex"
+        },
+        "else": {
+          "type": "null"
+        }
+      },
+      "toolId": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9]*(_[a-z0-9]+)*\\.[a-z][a-z0-9]*(_[a-z0-9]+)*$",
+        "not": {
+          "pattern": "\\n"
+        }
+      },
+      "field": {
+        "enum": [
+          "retryOfTaskId",
+          "possibleRepeat"
+        ]
+      },
+      "source": {
+        "const": "host"
+      },
+      "parentActionId": {
+        "$ref": "#/$defs/sha256Hex"
+      },
+      "recoveryAction": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9]*(_[a-z0-9]+)*$",
+        "not": {
+          "pattern": "\\n"
+        }
+      },
+      "targetHash": {
+        "$ref": "#/$defs/sha256Hex"
+      },
+      "argsHash": {
+        "$ref": "#/$defs/sha256Hex"
+      },
+      "displayHash": {
+        "$ref": "#/$defs/sha256Hex"
+      },
+      "joinedTo": {
+        "type": "string",
+        "minLength": 1
+      },
+      "category": {
+        "enum": [
+          "read",
+          "navigate",
+          "local_change",
+          "delete",
+          "overwrite",
+          "external_send",
+          "external_upload",
+          "purchase",
+          "install_or_elevate",
+          "security_setting",
+          "credential_access"
+        ]
+      },
+      "risk": {
+        "enum": [
+          "low",
+          "medium",
+          "high",
+          "critical"
+        ]
+      },
+      "decision": {
+        "enum": [
+          "approved",
+          "declined",
+          "cancelled",
+          "denied_by_policy",
+          "expired",
+          "revoked"
+        ]
+      },
+      "wireReply": {
+        "enum": [
+          "accept",
+          "decline",
+          "cancel",
+          "error_32601",
+          "none"
+        ]
+      },
+      "requestedAt": {
+        "$ref": "#/$defs/isoTimestamp"
+      },
+      "expiresAt": {
+        "$ref": "#/$defs/isoTimestamp"
+      },
+      "resolvedAt": {
+        "$ref": "#/$defs/isoTimestamp"
+      },
+      "channel": {
+        "enum": [
+          "secure_ui",
+          "tray",
+          "voice"
+        ]
+      },
+      "sourceChannel": {
+        "enum": [
+          "voice_worker",
+          "tray_ipc",
+          "renderer_ipc",
+          "model",
+          "codex",
+          "tool_host"
+        ]
+      },
+      "reason": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9]*(_[a-z0-9]+)*$",
+        "not": {
+          "pattern": "\\n"
+        }
+      },
+      "outcome": {
+        "type": "string"
+      },
+      "env": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "keptNames",
+          "removedSensitiveNames",
+          "removedOtherCount",
+          "keptCount",
+          "removedCount",
+          "canary"
+        ],
+        "properties": {
+          "keptNames": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "removedSensitiveNames": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^([Oo][Pp][Ee][Nn][Aa][Ii]_|[Aa][Zz][Uu][Rr][Ee]_[Oo][Pp][Ee][Nn][Aa][Ii]_|[Cc][Oo][Dd][Ee][Xx]_).*$|^.*_([Kk][Ee][Yy]|[Tt][Oo][Kk][Ee][Nn]|[Ss][Ee][Cc][Rr][Ee][Tt]|[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd])$",
+              "not": {
+                "pattern": "\\n"
+              }
+            }
+          },
+          "removedOtherCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "keptCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "removedCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "canary": {
+            "enum": [
+              "absent",
+              "present",
+              "not_run"
+            ]
+          }
+        }
+      }
+    },
+    "allOf": [
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "approval.requested"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "displayed",
+                "not_displayed"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "approval.resolved"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "reply_sent",
+                "reply_failed",
+                "already_executed"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "approval.expired"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "reply_sent",
+                "reply_failed",
+                "already_executed"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "approval.revoked"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "reply_sent",
+                "reply_failed",
+                "already_executed"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "policy.denied"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "denied"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "auth.url_check"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "opened",
+                "rejected"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "auth.login_started"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "started",
+                "unavailable",
+                "already_in_progress"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "auth.login_completed"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "success",
+                "failure",
+                "cancelled",
+                "timeout"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "auth.logout"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "signed_out",
+                "failed"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "env.scrub"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "ok",
+                "canary_detected"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "server_request.unknown"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "rejected"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "tool.denied_path"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "denied"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "recovery_token.minted"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "minted",
+                "refused"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "recovery_token.used"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "executed",
+                "postcondition_failed",
+                "postcondition_unknown"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "recovery_token.rejected"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "denied"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "tool_token.minted"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "minted",
+                "refused"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "tool_token.consumed"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "consumed",
+                "consumed_not_dispatched",
+                "postcondition_unknown"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "tool_token.rejected"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "denied"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "tool_token.revoked"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": false
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "toolhost.peer_rejected"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "denied"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "toolhost.pipe_squatted"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": {
+              "enum": [
+                "refused_start"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "tool_call.host_refused"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": false
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "input.field_stripped"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "outcome": false
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "actionId"
+          ],
+          "properties": {
+            "actionId": {
+              "type": "null"
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "kind",
+            "reason"
+          ],
+          "properties": {
+            "kind": {
+              "const": "policy.denied"
+            },
+            "reason": {
+              "const": "schema_invalid"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "toolhost.peer_rejected",
+                "toolhost.pipe_squatted"
+              ]
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "actionId": false,
+            "taskId": false,
+            "toolId": false
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool_token.minted",
+                "tool_token.consumed",
+                "tool_token.rejected",
+                "tool_token.revoked",
+                "tool_call.host_refused"
+              ]
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "actionId",
+            "taskId",
+            "toolId"
+          ]
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "tool_call.host_refused"
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "source",
+            "reason"
+          ],
+          "properties": {
+            "reason": {
+              "enum": [
+                "known_folder_redirected",
+                "locked",
+                "schema_invalid",
+                "catalog_mismatch",
+                "precondition_failed",
+                "host_reported_other"
+              ]
+            }
+          }
+        },
+        "else": {
+          "properties": {
+            "source": false
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "tool_token.revoked"
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "decision",
+            "reason",
+            "requestedAt",
+            "expiresAt",
+            "resolvedAt"
+          ],
+          "properties": {
+            "decision": {
+              "const": "revoked"
+            },
+            "reason": {
+              "enum": [
+                "superseded",
+                "turn_end",
+                "end_task",
+                "task_cancel",
+                "stop",
+                "panic_stop",
+                "mute",
+                "locked",
+                "app_server_restart",
+                "ipc_disconnect",
+                "main_restart",
+                "quit"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "recovery_token.minted",
+                "recovery_token.used",
+                "recovery_token.rejected"
+              ]
+            }
+          }
+        },
+        "then": {},
+        "else": {
+          "properties": {
+            "parentActionId": false,
+            "recoveryAction": false
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "recovery_token.minted",
+                "recovery_token.used"
+              ]
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "recoveryAction": {
+              "enum": [
+                "restore",
+                "focus",
+                "move_to_monitor"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "server_request.unknown"
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "wireReply"
+          ],
+          "properties": {
+            "wireReply": {
+              "const": "error_32601"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "env.scrub"
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "env"
+          ]
+        },
+        "else": {
+          "properties": {
+            "env": false
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "approval.requested",
+                "approval.resolved",
+                "approval.expired",
+                "approval.revoked"
+              ]
+            }
+          }
+        },
+        "then": {},
+        "else": {
+          "properties": {
+            "displayHash": false,
+            "joinedTo": false
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "input.field_stripped"
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "decision",
+            "field",
+            "sourceChannel",
+            "reason"
+          ],
+          "properties": {
+            "reason": {
+              "const": "untrusted_origin"
+            }
+          },
+          "propertyNames": {
+            "enum": [
+              "schema",
+              "version",
+              "eventId",
+              "correlationId",
+              "causationId",
+              "timestamp",
+              "kind",
+              "decision",
+              "field",
+              "sourceChannel",
+              "reason",
+              "taskId"
+            ]
+          }
+        },
+        "else": {
+          "properties": {
+            "field": false,
+            "sourceChannel": false
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "tool_token.consumed"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "decision": {
+              "const": "approved"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "tool_token.rejected"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "decision": {
+              "const": "denied_by_policy"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "tool_token.revoked"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "decision": {
+              "const": "revoked"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "toolhost.peer_rejected"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "decision": {
+              "const": "denied_by_policy"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "toolhost.pipe_squatted"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "decision": {
+              "const": "denied_by_policy"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "tool_call.host_refused"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "decision": {
+              "const": "denied_by_policy"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "input.field_stripped"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "decision": {
+              "const": "denied_by_policy"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "policy.denied"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "decision": {
+              "const": "denied_by_policy"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "tool_token.minted",
+                "tool_token.consumed",
+                "tool_token.rejected",
+                "tool_token.revoked",
+                "toolhost.peer_rejected",
+                "toolhost.pipe_squatted",
+                "tool_call.host_refused"
+              ]
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "decision"
+          ]
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "tool_token.minted"
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "outcome"
+          ],
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "outcome": {
+                    "const": "minted"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "decision"
+                ],
+                "properties": {
+                  "decision": {
+                    "const": "approved"
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "outcome": {
+                    "const": "refused"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "decision"
+                ],
+                "properties": {
+                  "decision": {
+                    "not": {
+                      "const": "approved"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind",
+            "toolId"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "approval.requested",
+                "approval.resolved",
+                "approval.expired",
+                "approval.revoked",
+                "policy.denied"
+              ]
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "actionId",
+            "taskId"
+          ]
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind",
+            "reason"
+          ],
+          "properties": {
+            "kind": {
+              "const": "policy.denied"
+            },
+            "reason": {
+              "const": "schema_invalid"
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "taskId",
+            "toolId",
+            "actionId"
+          ],
+          "properties": {
+            "actionId": {
+              "type": "null"
+            }
+          },
+          "propertyNames": {
+            "enum": [
+              "schema",
+              "version",
+              "eventId",
+              "correlationId",
+              "causationId",
+              "timestamp",
+              "kind",
+              "taskId",
+              "toolId",
+              "actionId",
+              "reason",
+              "decision",
+              "outcome",
+              "requestedAt",
+              "expiresAt",
+              "resolvedAt"
+            ]
+          }
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "recovery_token.minted",
+                "recovery_token.used",
+                "recovery_token.rejected"
+              ]
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "actionId",
+            "parentActionId",
+            "recoveryAction",
+            "taskId",
+            "decision",
+            "targetHash"
+          ]
+        }
+      },
+      {
+        "if": {
+          "required": [
+            "env"
+          ],
+          "properties": {
+            "env": {
+              "required": [
+                "canary"
+              ],
+              "properties": {
+                "canary": {
+                  "const": "present"
+                }
+              }
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "outcome"
+          ],
+          "properties": {
+            "outcome": {
+              "const": "canary_detected"
+            }
+          }
+        },
+        "else": {
+          "properties": {
+            "outcome": {
+              "not": {
+                "const": "canary_detected"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "$defs": {
+    "sha256Hex": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "not": {
+        "pattern": "\\n"
+      }
+    },
+    "isoTimestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?(Z|[+-][0-9]{2}:[0-9]{2})$",
+      "not": {
+        "pattern": "\\n"
+      }
+    }
+  }
+}

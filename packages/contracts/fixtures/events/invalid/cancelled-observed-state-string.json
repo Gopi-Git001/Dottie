@@ -1,0 +1,26 @@
+{
+  "errorPath": "payload.committedActions[0].observedState",
+  "event": {
+    "schema": "dottie.event",
+    "version": 2,
+    "type": "TaskCancelled",
+    "eventId": "evt-taskcancelled",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-18T14:03:00.123-05:00",
+    "payload": {
+      "taskId": "task-1",
+      "stopStatus": "stopped_after_side_effects",
+      "sideEffects": "committed",
+      "sideEffectsCommitted": true,
+      "committedActions": [
+        {
+          "toolId": "files.mkdir",
+          "observedState": "created folder invoices",
+          "certainty": "committed"
+        }
+      ],
+      "report": "Stopped. The folder was already created."
+    },
+    "taskId": "task-1"
+  }
+}

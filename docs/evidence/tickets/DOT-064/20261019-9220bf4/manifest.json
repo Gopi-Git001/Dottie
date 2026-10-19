@@ -1,0 +1,114 @@
+{
+ "schema": "dottie.evidence.manifest",
+ "version": 1,
+ "ticket": "DOT-064",
+ "caseIds": [
+  "DOT-064-pytest",
+  "DOT-064-lint",
+  "DOT-064-env",
+  "DOT-064-baseline",
+  "DOT-064-sweep"
+ ],
+ "commit": "9220bf4",
+ "build": null,
+ "installerSha256": null,
+ "runner": "named host: grok-box (linux)",
+ "platform": "Linux box (Linux fakes only, no Windows build); NOT Windows evidence",
+ "createdAt": "2026-10-19T01:33:50-05:00",
+ "owner": "E11",
+ "tree": {
+  "head": "9220bf4",
+  "commit": "9220bf42305f94b739929eb9f48e321fee4777bf",
+  "branch": "feature/E11-verifier (local, not pushed)",
+  "headCommitDate": "2026-10-19T01:33:12-05:00",
+  "source": "git archive 9220bf4 src/verifier (committed tree, extracted to a temp dir)",
+  "srcVerifierTracked": true,
+  "srcVerifierIgnoredBy": null,
+  "srcVerifierContentSha256": "e68e4f3e8bc10d13f046c35a29b58fa1ab71eed6453e9a58601ad7499866ab1b",
+  "srcVerifierFileCount": 40,
+  "srcVerifierContentHashMethod": "sha256 of sorted 'sha256  relpath' lines of every file under src/verifier, excluding caches",
+  "worktreeStatusPorcelain": [],
+  "clean": true
+ },
+ "verdict": "pass",
+ "results": {
+  "pytest": {
+   "result": "pass",
+   "passed": 455,
+   "failed": 0,
+   "exitCode": 0
+  },
+  "ruff": {
+   "result": "pass",
+   "version": "ruff 0.17.1",
+   "exitCode": 0
+  },
+  "secretSweep": "clean"
+ },
+ "supersedes": {
+  "pack": "docs/evidence/tickets/DOT-064/20261019-6c05524",
+  "note": "previous pack left sealed and unchanged (addendum rule: never edit a sealed file)"
+ },
+ "baselineRatchet": {
+  "metric": "pytest passed (src/verifier)",
+  "from": 400,
+  "to": 455,
+  "allowed": true
+ },
+ "files": [
+  {
+   "path": "20261019T013349-0500_9220bf4_DOT-064-lint_ruff-log.txt",
+   "sha256": "1ad14afc8a3b902458582d39417f77cf88a2b1f62ca6702a71899696ee35c3c5",
+   "size": 715,
+   "producedBy": "cd src/verifier && uvx ruff@0.17.1 --version && uvx ruff@0.17.1 check ."
+  },
+  {
+   "path": "20261019T013349-0500_9220bf4_DOT-064-pytest_junit.xml",
+   "sha256": "ee48b7c23a614dae250db2a11af63058be019d7b381c81abc10fd2a7ed5eaedd",
+   "size": 79458,
+   "producedBy": "cd src/verifier && python3 -m pytest -q -p no:cacheprovider --junitxml=<tmp>; hostname attribute redacted"
+  },
+  {
+   "path": "20261019T013349-0500_9220bf4_DOT-064-pytest_log.txt",
+   "sha256": "4adeb382e59690a6494a8081402a3f63e22aedc9529dcccd24734ef9178532a8",
+   "size": 1223,
+   "producedBy": "cd src/verifier && python3 -m pytest -q -p no:cacheprovider (fresh env -i bash --noprofile --norc)"
+  },
+  {
+   "path": "20261019T013349-0500_9220bf4_DOT-064-pytest_results.json",
+   "sha256": "53e3ec398eeb632964d6bc16bd9d0b419ed91c5e170661cb2da3c2f1637d1800",
+   "size": 99476,
+   "producedBy": "derived from the JUnit XML by the pack script"
+  },
+  {
+   "path": "20261019T013349-0500_9220bf4_DOT-064_baseline-ratchet.json",
+   "sha256": "faab8c475470735fd3ad98c289a4d6519aa544048743cb42359e8ed518b25d69",
+   "size": 1495,
+   "producedBy": "pack script"
+  },
+  {
+   "path": "20261019T013349-0500_9220bf4_DOT-064_environment.json",
+   "sha256": "8518e11e65c49c2901e5ce4c17d94d8900929020f9400a2ac4f43d23b9003f9b",
+   "size": 1850,
+   "producedBy": "pack script (os-release, uname -srm, tool --version, git)"
+  },
+  {
+   "path": "20261019T013349-0500_9220bf4_DOT-064_secret-sweep.txt",
+   "sha256": "85938e0d4002abc0686bd9920d7a53a6236b9ca0b9377526d29f11858dfaed02",
+   "size": 1047,
+   "producedBy": "skill step 5 rg sweep + host/user-path patterns"
+  },
+  {
+   "path": "README.md",
+   "sha256": "a6a8236712d3d2fb9f95d1a391f643829563fd68e4a0bdf22da413dd0bc3df8b",
+   "size": 2008,
+   "producedBy": "pack script (hand-reviewed summary)"
+  }
+ ],
+ "generator": {
+  "name": "make_dot064_pack.py (E11 scratch on the box, not in the repo)",
+  "sha256": "4dc192f21038956dcd3080055109dc95d78e848274e4d4687626c9f9a41cea72"
+ },
+ "sealMethod": "sha256 of json.dumps({k: manifest[k] for k != 'seal'}, sort_keys=True, separators=(',', ':')) encoded UTF-8",
+ "seal": "5e113388b5a57055cfcb1cdb6fb200f247f61d0df40a93cc97ef54ad65a5483e"
+}

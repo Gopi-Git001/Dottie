@@ -1,0 +1,3086 @@
+{
+ "_readme": [
+  "Differential fixtures for src/records.ts and schemas/*.schema.json (E01 2026-10-19 addition 3).",
+  "valid: both the TS validator and the JSON Schema accept. Invalid with schemaRejects:true: both reject.",
+  "Invalid with schemaRejects:false: only the TS validator rejects (a rule JSON Schema can't express; see the schema $comment).",
+  "Python consumers: scripts/check_records_schemas.py (needs the jsonschema package)."
+ ],
+ "cases": [
+  {
+   "type": "WindowIdentity",
+   "name": "base",
+   "valid": true,
+   "value": {
+    "hwnd": "132456",
+    "pid": "4242",
+    "windowClass": "CabinetWClass",
+    "processStartTime": "133700000000000000"
+   }
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "maximum values",
+   "valid": true,
+   "value": {
+    "hwnd": "18446744073709551615",
+    "pid": "4294967295",
+    "windowClass": "CabinetWClass",
+    "processStartTime": "9223372036854775807"
+   }
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "256-unit class",
+   "valid": true,
+   "value": {
+    "hwnd": "132456",
+    "pid": "4242",
+    "windowClass": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "processStartTime": "133700000000000000"
+   }
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "class with surrogate pairs, 256 units",
+   "valid": true,
+   "value": {
+    "hwnd": "132456",
+    "pid": "4242",
+    "windowClass": "\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00",
+    "processStartTime": "133700000000000000"
+   }
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "hwnd \"0\"",
+   "valid": false,
+   "value": {
+    "hwnd": "0",
+    "pid": "4242",
+    "windowClass": "CabinetWClass",
+    "processStartTime": "133700000000000000"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "zero-padded pid",
+   "valid": false,
+   "value": {
+    "hwnd": "132456",
+    "pid": "007",
+    "windowClass": "CabinetWClass",
+    "processStartTime": "133700000000000000"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "hwnd as a number",
+   "valid": false,
+   "value": {
+    "hwnd": 132456,
+    "pid": "4242",
+    "windowClass": "CabinetWClass",
+    "processStartTime": "133700000000000000"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "processStartTime as ISO",
+   "valid": false,
+   "value": {
+    "hwnd": "132456",
+    "pid": "4242",
+    "windowClass": "CabinetWClass",
+    "processStartTime": "2026-10-19T01:00:00Z"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "signed processStartTime",
+   "valid": false,
+   "value": {
+    "hwnd": "132456",
+    "pid": "4242",
+    "windowClass": "CabinetWClass",
+    "processStartTime": "-1"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "pid with a space",
+   "valid": false,
+   "value": {
+    "hwnd": "132456",
+    "pid": " 42",
+    "windowClass": "CabinetWClass",
+    "processStartTime": "133700000000000000"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "hwnd with a trailing newline",
+   "valid": false,
+   "value": {
+    "hwnd": "12\n",
+    "pid": "4242",
+    "windowClass": "CabinetWClass",
+    "processStartTime": "133700000000000000"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "empty class",
+   "valid": false,
+   "value": {
+    "hwnd": "132456",
+    "pid": "4242",
+    "windowClass": "",
+    "processStartTime": "133700000000000000"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "missing pid",
+   "valid": false,
+   "value": {
+    "hwnd": "132456",
+    "windowClass": "CabinetWClass",
+    "processStartTime": "133700000000000000"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "extra title key",
+   "valid": false,
+   "value": {
+    "hwnd": "132456",
+    "pid": "4242",
+    "windowClass": "CabinetWClass",
+    "processStartTime": "133700000000000000",
+    "title": "Documents"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "257-unit class",
+   "valid": false,
+   "value": {
+    "hwnd": "132456",
+    "pid": "4242",
+    "windowClass": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "processStartTime": "133700000000000000"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "null",
+   "valid": false,
+   "value": null,
+   "schemaRejects": true
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "pid over 2^32-1",
+   "valid": false,
+   "value": {
+    "hwnd": "132456",
+    "pid": "4294967296",
+    "windowClass": "CabinetWClass",
+    "processStartTime": "133700000000000000"
+   },
+   "schemaRejects": false
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "hwnd over 2^64-1",
+   "valid": false,
+   "value": {
+    "hwnd": "18446744073709551616",
+    "pid": "4242",
+    "windowClass": "CabinetWClass",
+    "processStartTime": "133700000000000000"
+   },
+   "schemaRejects": false
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "processStartTime over 2^63-1",
+   "valid": false,
+   "value": {
+    "hwnd": "132456",
+    "pid": "4242",
+    "windowClass": "CabinetWClass",
+    "processStartTime": "9223372036854775808"
+   },
+   "schemaRejects": false
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "258 UTF-16 units in 129 code points",
+   "valid": false,
+   "value": {
+    "hwnd": "132456",
+    "pid": "4242",
+    "windowClass": "\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00",
+    "processStartTime": "133700000000000000"
+   },
+   "schemaRejects": false
+  },
+  {
+   "type": "WindowIdentity",
+   "name": "lone surrogate in class",
+   "valid": false,
+   "value": {
+    "hwnd": "132456",
+    "pid": "4242",
+    "windowClass": "\ud800abc",
+    "processStartTime": "133700000000000000"
+   },
+   "schemaRejects": false
+  },
+  {
+   "type": "RecoveryToken",
+   "name": "base",
+   "valid": true,
+   "value": {
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "parentActionId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "recoveryAction": "focus",
+    "taskId": "task-1",
+    "windowIdentity": {
+     "hwnd": "132456",
+     "pid": "4242",
+     "windowClass": "CabinetWClass",
+     "processStartTime": "133700000000000000"
+    },
+    "nonce": "AAECAwQFBgcICQoLDA0ODw",
+    "mac": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8"
+   }
+  },
+  {
+   "type": "RecoveryToken",
+   "name": "move_to_monitor",
+   "valid": true,
+   "value": {
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "parentActionId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "recoveryAction": "move_to_monitor",
+    "taskId": "task-1",
+    "windowIdentity": {
+     "hwnd": "132456",
+     "pid": "4242",
+     "windowClass": "CabinetWClass",
+     "processStartTime": "133700000000000000"
+    },
+    "nonce": "AAECAwQFBgcICQoLDA0ODw",
+    "mac": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8"
+   }
+  },
+  {
+   "type": "RecoveryToken",
+   "name": "close_window action",
+   "valid": false,
+   "value": {
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "parentActionId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "recoveryAction": "close_window",
+    "taskId": "task-1",
+    "windowIdentity": {
+     "hwnd": "132456",
+     "pid": "4242",
+     "windowClass": "CabinetWClass",
+     "processStartTime": "133700000000000000"
+    },
+    "nonce": "AAECAwQFBgcICQoLDA0ODw",
+    "mac": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "RecoveryToken",
+   "name": "padded nonce",
+   "valid": false,
+   "value": {
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "parentActionId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "recoveryAction": "focus",
+    "taskId": "task-1",
+    "windowIdentity": {
+     "hwnd": "132456",
+     "pid": "4242",
+     "windowClass": "CabinetWClass",
+     "processStartTime": "133700000000000000"
+    },
+    "nonce": "AAECAwQFBgcICQoLDA0ODw==",
+    "mac": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "RecoveryToken",
+   "name": "non-canonical nonce tail",
+   "valid": false,
+   "value": {
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "parentActionId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "recoveryAction": "focus",
+    "taskId": "task-1",
+    "windowIdentity": {
+     "hwnd": "132456",
+     "pid": "4242",
+     "windowClass": "CabinetWClass",
+     "processStartTime": "133700000000000000"
+    },
+    "nonce": "AAECAwQFBgcICQoLDA0ODB",
+    "mac": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "RecoveryToken",
+   "name": "hex mac",
+   "valid": false,
+   "value": {
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "parentActionId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "recoveryAction": "focus",
+    "taskId": "task-1",
+    "windowIdentity": {
+     "hwnd": "132456",
+     "pid": "4242",
+     "windowClass": "CabinetWClass",
+     "processStartTime": "133700000000000000"
+    },
+    "nonce": "AAECAwQFBgcICQoLDA0ODw",
+    "mac": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "RecoveryToken",
+   "name": "extra purpose key",
+   "valid": false,
+   "value": {
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "parentActionId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "recoveryAction": "focus",
+    "taskId": "task-1",
+    "windowIdentity": {
+     "hwnd": "132456",
+     "pid": "4242",
+     "windowClass": "CabinetWClass",
+     "processStartTime": "133700000000000000"
+    },
+    "nonce": "AAECAwQFBgcICQoLDA0ODw",
+    "mac": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8",
+    "purpose": "dottie.recoveryToken.v1"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "RecoveryToken",
+   "name": "missing mac",
+   "valid": false,
+   "value": {
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "parentActionId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "recoveryAction": "focus",
+    "taskId": "task-1",
+    "windowIdentity": {
+     "hwnd": "132456",
+     "pid": "4242",
+     "windowClass": "CabinetWClass",
+     "processStartTime": "133700000000000000"
+    },
+    "nonce": "AAECAwQFBgcICQoLDA0ODw"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "RecoveryToken",
+   "name": "identity hwnd \"0\"",
+   "valid": false,
+   "value": {
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "parentActionId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "recoveryAction": "focus",
+    "taskId": "task-1",
+    "windowIdentity": {
+     "hwnd": "0",
+     "pid": "4242",
+     "windowClass": "CabinetWClass",
+     "processStartTime": "133700000000000000"
+    },
+    "nonce": "AAECAwQFBgcICQoLDA0ODw",
+    "mac": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "RecoveryToken",
+   "name": "uppercase actionId",
+   "valid": false,
+   "value": {
+    "actionId": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "parentActionId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "recoveryAction": "focus",
+    "taskId": "task-1",
+    "windowIdentity": {
+     "hwnd": "132456",
+     "pid": "4242",
+     "windowClass": "CabinetWClass",
+     "processStartTime": "133700000000000000"
+    },
+    "nonce": "AAECAwQFBgcICQoLDA0ODw",
+    "mac": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "RecoveryToken",
+   "name": "empty taskId",
+   "valid": false,
+   "value": {
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "parentActionId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "recoveryAction": "focus",
+    "taskId": "",
+    "windowIdentity": {
+     "hwnd": "132456",
+     "pid": "4242",
+     "windowClass": "CabinetWClass",
+     "processStartTime": "133700000000000000"
+    },
+    "nonce": "AAECAwQFBgcICQoLDA0ODw",
+    "mac": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "RecoveryToken",
+   "name": "standard-base64 mac",
+   "valid": false,
+   "value": {
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "parentActionId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "recoveryAction": "focus",
+    "taskId": "task-1",
+    "windowIdentity": {
+     "hwnd": "132456",
+     "pid": "4242",
+     "windowClass": "CabinetWClass",
+     "processStartTime": "133700000000000000"
+    },
+    "nonce": "AAECAwQFBgcICQoLDA0ODw",
+    "mac": "+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/s"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "RecoveryToken",
+   "name": "actionId equals parentActionId",
+   "valid": false,
+   "value": {
+    "actionId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "parentActionId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "recoveryAction": "focus",
+    "taskId": "task-1",
+    "windowIdentity": {
+     "hwnd": "132456",
+     "pid": "4242",
+     "windowClass": "CabinetWClass",
+     "processStartTime": "133700000000000000"
+    },
+    "nonce": "AAECAwQFBgcICQoLDA0ODw",
+    "mac": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8"
+   },
+   "schemaRejects": false
+  },
+  {
+   "type": "RecoveryToken",
+   "name": "identity pid overflow",
+   "valid": false,
+   "value": {
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "parentActionId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "recoveryAction": "focus",
+    "taskId": "task-1",
+    "windowIdentity": {
+     "hwnd": "132456",
+     "pid": "4294967296",
+     "windowClass": "CabinetWClass",
+     "processStartTime": "133700000000000000"
+    },
+    "nonce": "AAECAwQFBgcICQoLDA0ODw",
+    "mac": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8"
+   },
+   "schemaRejects": false
+  },
+  {
+   "type": "AuditRecord",
+   "name": "bridge approval.resolved",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "approval.requested with displayHash",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.requested",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "displayHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "category": "delete",
+    "risk": "high",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "displayed"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "joined approval.resolved expired (ruling 1k/1m)",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "evt-join-2",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "expired",
+    "reason": "timeout",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent",
+    "joinedTo": "evt-first",
+    "displayHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "approval.resolved declined display_unavailable (join (f))",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "display_unavailable",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent",
+    "displayHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "input.field_stripped retryOfTaskId from the model",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "input.field_stripped",
+    "taskId": "task-1",
+    "decision": "denied_by_policy",
+    "field": "retryOfTaskId",
+    "sourceChannel": "model",
+    "reason": "untrusted_origin"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "input.field_stripped retryOfTaskId from renderer_ipc (ruling 1w)",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "input.field_stripped",
+    "taskId": "task-1",
+    "decision": "denied_by_policy",
+    "field": "retryOfTaskId",
+    "sourceChannel": "renderer_ipc",
+    "reason": "untrusted_origin"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "input.field_stripped possibleRepeat from codex, no taskId",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "input.field_stripped",
+    "decision": "denied_by_policy",
+    "field": "possibleRepeat",
+    "sourceChannel": "codex",
+    "reason": "untrusted_origin"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool_token.minted minted",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_token.minted",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "approved",
+    "outcome": "minted"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool_token.minted refused expired",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_token.minted",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "expired",
+    "reason": "expired",
+    "outcome": "refused"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool_token.rejected",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_token.rejected",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "denied_by_policy",
+    "reason": "wrong_action",
+    "outcome": "denied"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "policy.denied navigate tool-host call",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "policy.denied",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "denied_by_policy",
+    "reason": "locked",
+    "outcome": "denied",
+    "category": "navigate"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "approval.requested not_displayed locked, no actionId (per-kind ids OPEN)",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.requested",
+    "taskId": "task-1",
+    "category": "delete",
+    "risk": "high",
+    "decision": "denied_by_policy",
+    "reason": "locked",
+    "outcome": "not_displayed"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "policy.denied credential_access",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "policy.denied",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "credential_access",
+    "risk": "critical",
+    "decision": "denied_by_policy",
+    "reason": "credential_access",
+    "wireReply": "decline",
+    "outcome": "denied"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "approval.revoked already_executed",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.revoked",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "decision": "revoked",
+    "reason": "panic_stop",
+    "wireReply": "none",
+    "outcome": "already_executed",
+    "channel": "secure_ui"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool_token.revoked",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_token.revoked",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "revoked",
+    "reason": "superseded",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:50:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool_token.consumed postcondition_unknown",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_token.consumed",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "approved",
+    "reason": "app_server_restart",
+    "outcome": "postcondition_unknown"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "toolhost.peer_rejected without ids",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "toolhost.peer_rejected",
+    "decision": "denied_by_policy",
+    "reason": "catalog_mismatch",
+    "outcome": "denied"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "toolhost.pipe_squatted",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "toolhost.pipe_squatted",
+    "decision": "denied_by_policy",
+    "reason": "name_exists",
+    "outcome": "refused_start"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool_call.host_refused other",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_call.host_refused",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "denied_by_policy",
+    "source": "host",
+    "reason": "host_reported_other"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "recovery_token.used",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "recovery_token.used",
+    "actionId": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "parentActionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "recoveryAction": "restore",
+    "taskId": "task-1",
+    "decision": "approved",
+    "targetHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "outcome": "executed"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "recovery_token.rejected any action name",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "recovery_token.rejected",
+    "actionId": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "parentActionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "recoveryAction": "close_window",
+    "taskId": "task-1",
+    "decision": "denied_by_policy",
+    "reason": "recovery_action_forbidden",
+    "targetHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "outcome": "denied"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "env.scrub ok",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "env.scrub",
+    "env": {
+     "keptNames": [
+      "PATH",
+      "SystemRoot"
+     ],
+     "removedSensitiveNames": [
+      "OPENAI_API_KEY",
+      "github_token"
+     ],
+     "removedOtherCount": 3,
+     "keptCount": 2,
+     "removedCount": 5,
+     "canary": "not_run"
+    },
+    "outcome": "ok"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "env.scrub canary present",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "env.scrub",
+    "env": {
+     "keptNames": [
+      "PATH",
+      "SystemRoot"
+     ],
+     "removedSensitiveNames": [
+      "OPENAI_API_KEY",
+      "github_token"
+     ],
+     "removedOtherCount": 3,
+     "keptCount": 2,
+     "removedCount": 5,
+     "canary": "present"
+    },
+    "outcome": "canary_detected"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "server_request.unknown",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "server_request.unknown",
+    "wireReply": "error_32601",
+    "outcome": "rejected",
+    "reason": "unknown_method"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "auth.url_check rejected",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "auth.url_check",
+    "reason": "host",
+    "outcome": "rejected"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "policy.denied schema_invalid with actionId null (ruling 1e)",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "policy.denied",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "actionId": null,
+    "decision": "denied_by_policy",
+    "reason": "schema_invalid",
+    "outcome": "denied"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "policy.denied schema_invalid minimal",
+   "valid": true,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "policy.denied",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "actionId": null,
+    "reason": "schema_invalid"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "redactor.fallback",
+   "valid": true,
+   "value": {
+    "kind": "redactor.fallback",
+    "eventId": "ev-9",
+    "error": "TypeError"
+   }
+  },
+  {
+   "type": "AuditRecord",
+   "name": "version 2",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 2,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "event schema",
+   "valid": false,
+   "value": {
+    "schema": "dottie.event",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "unknown kind",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.granted"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "raw args key",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent",
+    "args": {
+     "command": "rm"
+    }
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "token key",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent",
+    "token": "x"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "policy.denied with reply_sent",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "policy.denied",
+    "decision": "denied_by_policy",
+    "reason": "locked",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool_token.revoked with an outcome",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_token.revoked",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "revoked",
+    "reason": "superseded",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:50:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "denied"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool_token.revoked reason lock",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_token.revoked",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "revoked",
+    "reason": "lock",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:50:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool_token.revoked without resolvedAt",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_token.revoked",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "revoked",
+    "reason": "superseded",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:50:00.000-05:00"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool_token.revoked decision cancelled",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_token.revoked",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "cancelled",
+    "reason": "superseded",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:50:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "toolhost taskId null",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "toolhost.peer_rejected",
+    "taskId": null,
+    "decision": "denied_by_policy",
+    "reason": "sid_mismatch",
+    "outcome": "denied"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "toolhost with taskId",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "toolhost.peer_rejected",
+    "taskId": "task-1",
+    "decision": "denied_by_policy",
+    "reason": "sid_mismatch",
+    "outcome": "denied"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "toolhost with actionId",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "toolhost.pipe_squatted",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "decision": "denied_by_policy",
+    "reason": "name_exists",
+    "outcome": "refused_start"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool_token.minted without toolId",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_token.minted",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "decision": "approved",
+    "outcome": "minted"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "host_refused without source",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_call.host_refused",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "denied_by_policy",
+    "reason": "locked"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "host_refused without reason",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_call.host_refused",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "denied_by_policy",
+    "source": "host"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "host_refused unvalidated reason",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_call.host_refused",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "denied_by_policy",
+    "source": "host",
+    "reason": "window_was_gone"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "source on approval.resolved",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent",
+    "source": "host"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "parentActionId on approval.resolved",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent",
+    "parentActionId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "recovery_token.used close_window",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "recovery_token.used",
+    "actionId": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "parentActionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "recoveryAction": "close_window",
+    "taskId": "task-1",
+    "decision": "approved",
+    "targetHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "outcome": "executed"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "server_request.unknown decline",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "server_request.unknown",
+    "wireReply": "decline",
+    "outcome": "rejected"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "env on approval.resolved",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent",
+    "env": {
+     "keptNames": [
+      "PATH",
+      "SystemRoot"
+     ],
+     "removedSensitiveNames": [
+      "OPENAI_API_KEY",
+      "github_token"
+     ],
+     "removedOtherCount": 3,
+     "keptCount": 2,
+     "removedCount": 5,
+     "canary": "not_run"
+    }
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "env.scrub without env",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "env.scrub",
+    "outcome": "ok"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "canary present, outcome ok",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "env.scrub",
+    "env": {
+     "keptNames": [
+      "PATH",
+      "SystemRoot"
+     ],
+     "removedSensitiveNames": [
+      "OPENAI_API_KEY",
+      "github_token"
+     ],
+     "removedOtherCount": 3,
+     "keptCount": 2,
+     "removedCount": 5,
+     "canary": "present"
+    },
+    "outcome": "ok"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "canary absent, outcome canary_detected",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "env.scrub",
+    "env": {
+     "keptNames": [
+      "PATH",
+      "SystemRoot"
+     ],
+     "removedSensitiveNames": [
+      "OPENAI_API_KEY",
+      "github_token"
+     ],
+     "removedOtherCount": 3,
+     "keptCount": 2,
+     "removedCount": 5,
+     "canary": "absent"
+    },
+    "outcome": "canary_detected"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "PATH listed as sensitive",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "env.scrub",
+    "env": {
+     "keptNames": [
+      "PATH",
+      "SystemRoot"
+     ],
+     "removedSensitiveNames": [
+      "OPENAI_API_KEY",
+      "PATH"
+     ],
+     "removedOtherCount": 3,
+     "keptCount": 2,
+     "removedCount": 5,
+     "canary": "not_run"
+    },
+    "outcome": "ok"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "env without canary",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "env.scrub",
+    "env": {
+     "keptNames": [
+      "PATH",
+      "SystemRoot"
+     ],
+     "removedSensitiveNames": [
+      "OPENAI_API_KEY",
+      "github_token"
+     ],
+     "removedOtherCount": 3,
+     "keptCount": 2,
+     "removedCount": 5
+    },
+    "outcome": "ok"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "env values leaked",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "env.scrub",
+    "env": {
+     "keptNames": [
+      "PATH",
+      "SystemRoot"
+     ],
+     "removedSensitiveNames": [
+      "OPENAI_API_KEY",
+      "github_token"
+     ],
+     "removedOtherCount": 3,
+     "keptCount": 2,
+     "removedCount": 5,
+     "canary": "not_run",
+     "values": {
+      "PATH": "C:\\x"
+     }
+    },
+    "outcome": "ok"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "displayHash on policy.denied",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "policy.denied",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "denied_by_policy",
+    "reason": "display_unavailable",
+    "outcome": "denied",
+    "displayHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "joinedTo on tool_token.rejected",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_token.rejected",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "denied_by_policy",
+    "reason": "duplicate_request",
+    "outcome": "denied",
+    "joinedTo": "evt-first"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "displayHash uppercase",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent",
+    "displayHash": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "joinedTo empty",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent",
+    "joinedTo": ""
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "reason not snake_case",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "UserDeclined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "decision denied",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "denied",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "wireReply acceptForSession",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "acceptForSession",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "timestamp without offset",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "act- actionId",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "act-1",
+    "argsHash": "act-1",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "toolId without area",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_token.minted",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "open_known_folder",
+    "decision": "approved",
+    "outcome": "minted"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "fallback with message",
+   "valid": false,
+   "value": {
+    "kind": "redactor.fallback",
+    "eventId": "ev-9",
+    "error": "TypeError",
+    "message": "secret"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "fallback error with text",
+   "valid": false,
+   "value": {
+    "kind": "redactor.fallback",
+    "eventId": "ev-9",
+    "error": "TypeError: C:\\Users\\gopi"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "fallback without eventId",
+   "valid": false,
+   "value": {
+    "kind": "redactor.fallback",
+    "error": "TypeError"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "missing correlationId",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "unknown category",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "delete_everything",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "unknown channel",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent",
+    "channel": "email"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "reason with a trailing newline",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined\n",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "array",
+   "valid": false,
+   "value": [
+    {
+     "schema": "dottie.audit",
+     "version": 1,
+     "eventId": "ev-1",
+     "correlationId": "corr-1",
+     "timestamp": "2026-10-19T01:50:00.000-05:00",
+     "kind": "approval.resolved",
+     "taskId": "task-1",
+     "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "category": "local_change",
+     "risk": "medium",
+     "decision": "declined",
+     "reason": "user_declined",
+     "wireReply": "decline",
+     "requestedAt": "2026-10-19T01:50:00.000-05:00",
+     "expiresAt": "2026-10-19T01:51:00.000-05:00",
+     "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+     "outcome": "reply_sent"
+    }
+   ],
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "field_stripped with channel",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "input.field_stripped",
+    "taskId": "task-1",
+    "decision": "denied_by_policy",
+    "field": "retryOfTaskId",
+    "sourceChannel": "model",
+    "reason": "untrusted_origin",
+    "channel": "voice"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "field_stripped with actionId",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "input.field_stripped",
+    "taskId": "task-1",
+    "decision": "denied_by_policy",
+    "field": "retryOfTaskId",
+    "sourceChannel": "model",
+    "reason": "untrusted_origin",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "field_stripped with toolId",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "input.field_stripped",
+    "taskId": "task-1",
+    "decision": "denied_by_policy",
+    "field": "retryOfTaskId",
+    "sourceChannel": "model",
+    "reason": "untrusted_origin",
+    "toolId": "explorer.open_known_folder"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "field_stripped with outcome",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "input.field_stripped",
+    "taskId": "task-1",
+    "decision": "denied_by_policy",
+    "field": "retryOfTaskId",
+    "sourceChannel": "model",
+    "reason": "untrusted_origin",
+    "outcome": "denied"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "field_stripped with the injected value",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "input.field_stripped",
+    "taskId": "task-1",
+    "decision": "denied_by_policy",
+    "field": "retryOfTaskId",
+    "sourceChannel": "model",
+    "reason": "untrusted_origin",
+    "value": "task_0"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "field_stripped with argsHash",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "input.field_stripped",
+    "taskId": "task-1",
+    "decision": "denied_by_policy",
+    "field": "retryOfTaskId",
+    "sourceChannel": "model",
+    "reason": "untrusted_origin",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "field_stripped without sourceChannel",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "input.field_stripped",
+    "taskId": "task-1",
+    "decision": "denied_by_policy",
+    "field": "retryOfTaskId",
+    "reason": "untrusted_origin"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "field_stripped without field",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "input.field_stripped",
+    "taskId": "task-1",
+    "decision": "denied_by_policy",
+    "sourceChannel": "model",
+    "reason": "untrusted_origin"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "field_stripped field text",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "input.field_stripped",
+    "taskId": "task-1",
+    "decision": "denied_by_policy",
+    "field": "text",
+    "sourceChannel": "model",
+    "reason": "untrusted_origin"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "field_stripped sourceChannel renderer",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "input.field_stripped",
+    "taskId": "task-1",
+    "decision": "denied_by_policy",
+    "field": "retryOfTaskId",
+    "sourceChannel": "renderer",
+    "reason": "untrusted_origin"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "field_stripped reason injected",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "input.field_stripped",
+    "taskId": "task-1",
+    "decision": "denied_by_policy",
+    "field": "retryOfTaskId",
+    "sourceChannel": "model",
+    "reason": "injected"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "field_stripped without decision",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "input.field_stripped",
+    "taskId": "task-1",
+    "field": "retryOfTaskId",
+    "sourceChannel": "model",
+    "reason": "untrusted_origin"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "field_stripped decision declined",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "input.field_stripped",
+    "taskId": "task-1",
+    "decision": "declined",
+    "field": "retryOfTaskId",
+    "sourceChannel": "model",
+    "reason": "untrusted_origin"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "field on approval.resolved",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent",
+    "field": "retryOfTaskId"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "sourceChannel on approval.resolved",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent",
+    "sourceChannel": "voice_worker"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool_token.minted refused approved",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_token.minted",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "approved",
+    "outcome": "refused"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool_token.minted minted denied",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_token.minted",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "denied_by_policy",
+    "outcome": "minted"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool_token.minted without outcome",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_token.minted",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "approved"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool_token.minted refused without decision",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_token.minted",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "outcome": "refused"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool_token.consumed denied_by_policy",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_token.consumed",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "denied_by_policy",
+    "outcome": "consumed"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "toolhost without decision",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "toolhost.peer_rejected",
+    "reason": "sid_mismatch",
+    "outcome": "denied"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "host_refused approved",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "tool_call.host_refused",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "approved",
+    "source": "host",
+    "reason": "locked"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "decision allowed",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "allowed",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool-host policy.denied without actionId",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "policy.denied",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "decision": "denied_by_policy",
+    "reason": "locked",
+    "outcome": "denied"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "tool-host approval.requested without taskId",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.requested",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "toolId": "explorer.open_known_folder",
+    "outcome": "displayed"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "schema_invalid with a hash actionId",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "policy.denied",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "reason": "schema_invalid"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "schema_invalid without actionId",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "policy.denied",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "reason": "schema_invalid"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "schema_invalid without toolId",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "policy.denied",
+    "taskId": "task-1",
+    "actionId": null,
+    "reason": "schema_invalid"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "schema_invalid with argsHash",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "policy.denied",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "actionId": null,
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "reason": "schema_invalid"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "schema_invalid with category",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "policy.denied",
+    "taskId": "task-1",
+    "toolId": "explorer.open_known_folder",
+    "actionId": null,
+    "category": "navigate",
+    "reason": "schema_invalid"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "policy.denied approved",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "policy.denied",
+    "decision": "approved",
+    "reason": "locked",
+    "outcome": "denied"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "recovery_token.used without targetHash",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "recovery_token.used",
+    "actionId": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "parentActionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "recoveryAction": "restore",
+    "taskId": "task-1",
+    "decision": "approved",
+    "outcome": "executed"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "duplicate kept names",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "env.scrub",
+    "env": {
+     "keptNames": [
+      "PATH",
+      "PATH"
+     ],
+     "removedSensitiveNames": [
+      "OPENAI_API_KEY",
+      "github_token"
+     ],
+     "removedOtherCount": 3,
+     "keptCount": 2,
+     "removedCount": 5,
+     "canary": "not_run"
+    },
+    "outcome": "ok"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "actionId null on approval.resolved",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": null,
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "actionId null on policy.denied locked",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "policy.denied",
+    "taskId": "task-1",
+    "actionId": null,
+    "decision": "denied_by_policy",
+    "reason": "locked",
+    "outcome": "denied"
+   },
+   "schemaRejects": true
+  },
+  {
+   "type": "AuditRecord",
+   "name": "argsHash differs from actionId",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": false
+  },
+  {
+   "type": "AuditRecord",
+   "name": "impossible date",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-13-40T01:50:00Z",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": false
+  },
+  {
+   "type": "AuditRecord",
+   "name": "keptNames unsorted",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "env.scrub",
+    "env": {
+     "keptNames": [
+      "SystemRoot",
+      "PATH"
+     ],
+     "removedSensitiveNames": [
+      "OPENAI_API_KEY",
+      "github_token"
+     ],
+     "removedOtherCount": 3,
+     "keptCount": 2,
+     "removedCount": 5,
+     "canary": "not_run"
+    },
+    "outcome": "ok"
+   },
+   "schemaRejects": false
+  },
+  {
+   "type": "AuditRecord",
+   "name": "keptCount mismatch",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "env.scrub",
+    "env": {
+     "keptNames": [
+      "PATH",
+      "SystemRoot"
+     ],
+     "removedSensitiveNames": [
+      "OPENAI_API_KEY",
+      "github_token"
+     ],
+     "removedOtherCount": 3,
+     "keptCount": 5,
+     "removedCount": 5,
+     "canary": "not_run"
+    },
+    "outcome": "ok"
+   },
+   "schemaRejects": false
+  },
+  {
+   "type": "AuditRecord",
+   "name": "removedCount mismatch",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "env.scrub",
+    "env": {
+     "keptNames": [
+      "PATH",
+      "SystemRoot"
+     ],
+     "removedSensitiveNames": [
+      "OPENAI_API_KEY",
+      "github_token"
+     ],
+     "removedOtherCount": 3,
+     "keptCount": 2,
+     "removedCount": 2,
+     "canary": "not_run"
+    },
+    "outcome": "ok"
+   },
+   "schemaRejects": false
+  },
+  {
+   "type": "AuditRecord",
+   "name": "approval token value in a field",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "k8t1.AAAAAAAAAAAAAAAAAAAAAA.BBBB",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": false
+  },
+  {
+   "type": "AuditRecord",
+   "name": "recovery token value in a field",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "see k8r1.abc.def",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": false
+  },
+  {
+   "type": "AuditRecord",
+   "name": "over 16 KB",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent"
+   },
+   "schemaRejects": false
+  },
+  {
+   "type": "AuditRecord",
+   "name": "joinedTo names itself",
+   "valid": false,
+   "value": {
+    "schema": "dottie.audit",
+    "version": 1,
+    "eventId": "ev-1",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-19T01:50:00.000-05:00",
+    "kind": "approval.resolved",
+    "taskId": "task-1",
+    "actionId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "argsHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "category": "local_change",
+    "risk": "medium",
+    "decision": "declined",
+    "reason": "user_declined",
+    "wireReply": "decline",
+    "requestedAt": "2026-10-19T01:50:00.000-05:00",
+    "expiresAt": "2026-10-19T01:51:00.000-05:00",
+    "resolvedAt": "2026-10-19T01:50:00.000-05:00",
+    "outcome": "reply_sent",
+    "joinedTo": "ev-1"
+   },
+   "schemaRejects": false
+  }
+ ]
+}

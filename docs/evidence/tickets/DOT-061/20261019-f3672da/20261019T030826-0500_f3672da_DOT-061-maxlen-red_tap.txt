@@ -1,0 +1,1148 @@
+# {"caseId": "DOT-061-maxlen-red", "commit": "28aa152", "build": null, "installerSha256": null, "startedAt": "2026-10-19T03:06:22-05:00", "finishedAt": "2026-10-19T03:06:25-05:00", "runner": "named host: grok-box (linux)", "command": "npx tsc -p . (exit 2: TS2339 DISPLAY_MAX_LENGTH/DISPLAY_ELLIPSIS; JS emitted); node --test dist/test/*.test.js", "exitCode": 1, "durationMs": null, "result": "fail (expected red)", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "tree": "src == 3029c7b + three new tests in test/approvalBinding.test.ts"}
+test/approvalBinding.test.ts(523,25): error TS2339: Property 'DISPLAY_MAX_LENGTH' does not exist on type 'typeof import("/workspace/dottie-e03/packages/coordinator/src/display", { with: { "resolution-mode": "import" } })'.
+test/approvalBinding.test.ts(523,45): error TS2339: Property 'DISPLAY_ELLIPSIS' does not exist on type 'typeof import("/workspace/dottie-e03/packages/coordinator/src/display", { with: { "resolution-mode": "import" } })'.
+test/approvalBinding.test.ts(562,28): error TS2339: Property 'DISPLAY_MAX_LENGTH' does not exist on type 'typeof import("/workspace/dottie-e03/packages/coordinator/src/display", { with: { "resolution-mode": "import" } })'.
+TAP version 13
+# Subtest: actionId: the CONFIRMING path gets its id from the ActionIdPort with the CR2 binding; IdSource is never asked for one
+ok 1 - actionId: the CONFIRMING path gets its id from the ActionIdPort with the CR2 binding; IdSource is never asked for one
+  ---
+  duration_ms: 12.583853
+  ...
+# Subtest: actionId (CONTRACTS §2.1 pre-dispatch preimage): the same summary under a different turnId or task gives a different actionId
+ok 2 - actionId (CONTRACTS §2.1 pre-dispatch preimage): the same summary under a different turnId or task gives a different actionId
+  ---
+  duration_ms: 4.390177
+  ...
+# Subtest: actionId: pre-dispatch vector for E02 fixtures (fake == sorted-key canonical JSON + SHA-256)
+ok 3 - actionId: pre-dispatch vector for E02 fixtures (fake == sorted-key canonical JSON + SHA-256)
+  ---
+  duration_ms: 0.353115
+  ...
+# Subtest: actionId: a valid hex id flows end to end: approve → dispatched; deny → declined; expiry → declined
+ok 4 - actionId: a valid hex id flows end to end: approve → dispatched; deny → declined; expiry → declined
+  ---
+  duration_ms: 5.46891
+  ...
+# Subtest: actionId: no ActionIdPort wired (default until DOT-090) → fail closed: no ApprovalRequested, declined, warning without args
+ok 5 - actionId: no ActionIdPort wired (default until DOT-090) → fail closed: no ApprovalRequested, declined, warning without args
+  ---
+  duration_ms: 6.324086
+  ...
+# Subtest: actionId: bad port output → fail closed (act_ id, uppercase hex, wrong length, non-string, throw, rejected promise)
+ok 6 - actionId: bad port output → fail closed (act_ id, uppercase hex, wrong length, non-string, throw, rejected promise)
+  ---
+  duration_ms: 12.368483
+  ...
+# Subtest: actionId: an adapter-supplied Codex approval actionId must be 64 lowercase hex; otherwise no ApprovalRequested and Codex gets a decline
+ok 7 - actionId: an adapter-supplied Codex approval actionId must be 64 lowercase hex; otherwise no ApprovalRequested and Codex gets a decline
+  ---
+  duration_ms: 5.980781
+  ...
+# Subtest: actionId: validateEvent rejects act_ ids, uppercase hex and wrong lengths on ApprovalRequested and ApprovalResolved
+ok 8 - actionId: validateEvent rejects act_ ids, uppercase hex and wrong lengths on ApprovalRequested and ApprovalResolved
+  ---
+  duration_ms: 0.769074
+  ...
+# Subtest: binding (§2.1, 1q): a non-retry confirmation binds possibleRepeat null and retryOfTaskId null; args.displayHash == top-level displayHash == hash of the emitted display
+ok 9 - binding (§2.1, 1q): a non-retry confirmation binds possibleRepeat null and retryOfTaskId null; args.displayHash == top-level displayHash == hash of the emitted display
+  ---
+  duration_ms: 13.351983
+  ...
+# Subtest: binding (§2.1): a clean-failure retry with a policy-required approval binds retryOfTaskId with possibleRepeat null
+ok 10 - binding (§2.1): a clean-failure retry with a policy-required approval binds retryOfTaskId with possibleRepeat null
+  ---
+  duration_ms: 2.502557
+  ...
+# Subtest: binding (§2.1): a possible-repeat retry binds possibleRepeat = priorSideEffect and retryOfTaskId = the prior task, in args and display
+ok 11 - binding (§2.1): a possible-repeat retry binds possibleRepeat = priorSideEffect and retryOfTaskId = the prior task, in args and display
+  ---
+  duration_ms: 2.71199
+  ...
+# Subtest: binding (§2.1 required tests): changing possibleRepeat, retryOfTaskId or the displayed summary between display and approval invalidates the approval; nothing is dispatched
+ok 12 - binding (§2.1 required tests): changing possibleRepeat, retryOfTaskId or the displayed summary between display and approval invalidates the approval; nothing is dispatched
+  ---
+  duration_ms: 9.808863
+  ...
+# Subtest: binding (X5 fail closed): displayHash no displayHash method → no ApprovalRequested, declined approval_unavailable, nothing dispatched, copy never says the user declined
+ok 13 - binding (X5 fail closed): displayHash no displayHash method → no ApprovalRequested, declined approval_unavailable, nothing dispatched, copy never says the user declined
+  ---
+  duration_ms: 1.173591
+  ...
+# Subtest: binding (X5 fail closed): displayHash throws → no ApprovalRequested, declined approval_unavailable, nothing dispatched, copy never says the user declined
+ok 14 - binding (X5 fail closed): displayHash throws → no ApprovalRequested, declined approval_unavailable, nothing dispatched, copy never says the user declined
+  ---
+  duration_ms: 1.07615
+  ...
+# Subtest: binding (X5 fail closed): displayHash malformed output → no ApprovalRequested, declined approval_unavailable, nothing dispatched, copy never says the user declined
+ok 15 - binding (X5 fail closed): displayHash malformed output → no ApprovalRequested, declined approval_unavailable, nothing dispatched, copy never says the user declined
+  ---
+  duration_ms: 4.809608
+  ...
+# Subtest: Codex display (1o): no adapter params → declined display_unavailable, no ApprovalRequested, warning without values, nothing approved
+ok 16 - Codex display (1o): no adapter params → declined display_unavailable, no ApprovalRequested, warning without values, nothing approved
+  ---
+  duration_ms: 4.067676
+  ...
+# Subtest: Codex display (1o): a command shows the full command line (no ellipsis), cwd, network flag, the escalation as its own field, Codex reason only in the untrusted slot
+ok 17 - Codex display (1o): a command shows the full command line (no ellipsis), cwd, network flag, the escalation as its own field, Codex reason only in the untrusted slot
+  ---
+  duration_ms: 5.190138
+  ...
+# Subtest: Codex display (1o): a file change shows every full path and the count; 500 paths ok; 501 paths or a command over 8 KB → display_unavailable
+ok 18 - Codex display (1o): a file change shows every full path and the count; 500 paths ok; 501 paths or a command over 8 KB → display_unavailable
+  ---
+  duration_ms: 11.14241
+  ...
+# Subtest: Codex display (1o): a display port plugs in (E02 params) and its output is what is shown; a throwing port → display_unavailable
+ok 19 - Codex display (1o): a display port plugs in (E02 params) and its output is what is shown; a throwing port → display_unavailable
+  ---
+  duration_ms: 5.086315
+  ...
+# Subtest: Codex join (1o c / 1p): a joined request is declined at once with duplicate_request; only the first can be approved; each request answered exactly once; joinedTo logged; no "you declined" copy
+ok 20 - Codex join (1o c / 1p): a joined request is declined at once with duplicate_request; only the first can be approved; each request answered exactly once; joinedTo logged; no "you declined" copy
+  ---
+  duration_ms: 1.950755
+  ...
+# Subtest: Codex join (1o): on the C-08 timeout the dialog expires once (one ApprovalResolved{expired}, before TaskFinished) and the joined request had already been declined
+ok 21 - Codex join (1o): on the C-08 timeout the dialog expires once (one ApprovalResolved{expired}, before TaskFinished) and the joined request had already been declined
+  ---
+  duration_ms: 1.654688
+  ...
+# Subtest: validateEvent (X5, 1l/1m/1o): display is required and must follow its kind rule
+ok 22 - validateEvent (X5, 1l/1m/1o): display is required and must follow its kind rule
+  ---
+  duration_ms: 2.511339
+  ...
+# Subtest: validateEvent (1o/1q): TaskProgress awaitingClarification boolean, turnsSoFar number; awaitingClarification:true only in LISTENING
+ok 23 - validateEvent (1o/1q): TaskProgress awaitingClarification boolean, turnsSoFar number; awaitingClarification:true only in LISTENING
+  ---
+  duration_ms: 0.290906
+  ...
+# Subtest: 1q: every coordinator TaskProgress with awaitingClarification:true is emitted in LISTENING (both emit sites), and carries turnsSoFar
+ok 24 - 1q: every coordinator TaskProgress with awaitingClarification:true is emitted in LISTENING (both emit sites), and carries turnsSoFar
+  ---
+  duration_ms: 1.758376
+  ...
+# Subtest: 1r: requestSource is set from coordinator state (coordinator for pre-dispatch, codex for Codex approvals) and bound in CR2; an adapter-supplied one is ignored
+ok 25 - 1r: requestSource is set from coordinator state (coordinator for pre-dispatch, codex for Codex approvals) and bound in CR2; an adapter-supplied one is ignored
+  ---
+  duration_ms: 3.787641
+  ...
+# Subtest: 1r validateEvent: requestSource required (codex | tool_host | coordinator); every wrong kind/source pairing rejected; UI-action methods only as ui_action
+ok 26 - 1r validateEvent: requestSource required (codex | tool_host | coordinator); every wrong kind/source pairing rejected; UI-action methods only as ui_action
+  ---
+  duration_ms: 1.318846
+  ...
+# Subtest: 1r validateEvent: each pre_dispatch mismatch is rejected (possibleRepeat, retryOfTaskId vs priorTaskId, category, risk)
+ok 27 - 1r validateEvent: each pre_dispatch mismatch is rejected (possibleRepeat, retryOfTaskId vs priorTaskId, category, risk)
+  ---
+  duration_ms: 0.473612
+  ...
+# Subtest: DOT-060 AC 11 (1r follow-up): a clean-failure retry (possibleRepeat null) whose display.retryOfTaskId differs from the utterance retryOfTaskId emits no ApprovalRequested and dispatches nothing
+ok 28 - DOT-060 AC 11 (1r follow-up): a clean-failure retry (possibleRepeat null) whose display.retryOfTaskId differs from the utterance retryOfTaskId emits no ApprovalRequested and dispatches nothing
+  ---
+  duration_ms: 1.81777
+  ...
+# Subtest: DOT-060 AC 11 (control): the same clean-failure retry without the bug emits the approval with display.retryOfTaskId = the utterance retryOfTaskId
+ok 29 - DOT-060 AC 11 (control): the same clean-failure retry without the bug emits the approval with display.retryOfTaskId = the utterance retryOfTaskId
+  ---
+  duration_ms: 1.513995
+  ...
+# Subtest: 1r: one builder per kind; each builder output validates only with its own requestSource; builders fail closed on missing fields
+ok 30 - 1r: one builder per kind; each builder output validates only with its own requestSource; builders fail closed on missing fields
+  ---
+  duration_ms: 1.1773
+  ...
+# Subtest: 1t codex_command: a multi-line command shows its lines and line count; CRLF normalised for display only; the bound (hashed) command is the raw bytes
+ok 31 - 1t codex_command: a multi-line command shows its lines and line count; CRLF normalised for display only; the bound (hashed) command is the raw bytes
+  ---
+  duration_ms: 3.692492
+  ...
+# Subtest: 1t codex_command: ESC, a lone CR, U+202E, zero-width, BOM and soft hyphen render as visible escapes with the badge; tab and trailing spaces are visible; nothing is stripped from the bound value
+ok 32 - 1t codex_command: ESC, a lone CR, U+202E, zero-width, BOM and soft hyphen render as visible escapes with the badge; tab and trailing spaces are visible; nothing is stripped from the bound value
+  ---
+  duration_ms: 0.573842
+  ...
+# Subtest: 1t: bound paths and the window title keep hidden characters (rendered, not stripped); only the untrusted summary/reason slots are stripped
+ok 33 - 1t: bound paths and the window title keep hidden characters (rendered, not stripped); only the untrusted summary/reason slots are stripped
+  ---
+  duration_ms: 0.448015
+  ...
+# Subtest: untrusted max length: reasonUntrusted (codex_command, codex_file_change) unchanged at the limit, one over cut to the limit ending in an ellipsis; command and paths never cut
+not ok 34 - untrusted max length: reasonUntrusted (codex_command, codex_file_change) unchanged at the limit, one over cut to the limit ending in an ellipsis; command and paths never cut
+  ---
+  duration_ms: 0.622632
+  location: '/workspace/dottie-e03/packages/coordinator/dist/test/approvalBinding.test.js:498:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'reasonUntrusted')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/dottie-e03/packages/coordinator/dist/test/approvalBinding.test.js:500:36)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: untrusted max length: summaryUntrusted (pre_dispatch) and app.windowTitle (ui_action) follow the same rule; the coordinator emits the cut summary and the hash covers what is shown
+not ok 35 - untrusted max length: summaryUntrusted (pre_dispatch) and app.windowTitle (ui_action) follow the same rule; the coordinator emits the cut summary and the hash covers what is shown
+  ---
+  duration_ms: 0.302871
+  location: '/workspace/dottie-e03/packages/coordinator/dist/test/approvalBinding.test.js:537:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'summaryUntrusted')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/dottie-e03/packages/coordinator/dist/test/approvalBinding.test.js:539:37)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: untrusted max length: validateEvent rejects an over-length untrusted slot (validator rejects, never repairs)
+not ok 36 - untrusted max length: validateEvent rejects an over-length untrusted slot (validator rejects, never repairs)
+  ---
+  duration_ms: 1.294781
+  location: '/workspace/dottie-e03/packages/coordinator/dist/test/approvalBinding.test.js:563:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/dottie-e03/packages/coordinator/dist/test/approvalBinding.test.js:566:12)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: DOT-060 AC 9 (E01 1m): POSSIBLE_REPEAT_SIDE_EFFECTS includes committed, and a committed prior ledger yields priorSideEffect committed
+ok 37 - DOT-060 AC 9 (E01 1m): POSSIBLE_REPEAT_SIDE_EFFECTS includes committed, and a committed prior ledger yields priorSideEffect committed
+  ---
+  duration_ms: 11.498609
+  ...
+# Subtest: DOT-060 AC 10 (E01 1m): the C-08 timeout emits ApprovalResolved{approved:false, decision:expired} exactly once per request, before TaskFinished (fake clock)
+ok 38 - DOT-060 AC 10 (E01 1m): the C-08 timeout emits ApprovalResolved{approved:false, decision:expired} exactly once per request, before TaskFinished (fake clock)
+  ---
+  duration_ms: 4.184693
+  ...
+# Subtest: DOT-060 AC 10 (E01 1m): a joined request (declined, 1o c) never extends the FIRST expiry; one ApprovalResolved{decision:expired} for the one dialog
+ok 39 - DOT-060 AC 10 (E01 1m): a joined request (declined, 1o c) never extends the FIRST expiry; one ApprovalResolved{decision:expired} for the one dialog
+  ---
+  duration_ms: 3.054501
+  ...
+# Subtest: E01 1m: a cancel-settled approval is announced without decision (only expiry carries decision:expired)
+ok 40 - E01 1m: a cancel-settled approval is announced without decision (only expiry carries decision:expired)
+  ---
+  duration_ms: 8.790269
+  ...
+# Subtest: E01 1m: the desktop never sends expiry: an inbound ApprovalResolved with decision:expired is rejected and the dialog stays open
+ok 41 - E01 1m: the desktop never sends expiry: an inbound ApprovalResolved with decision:expired is rejected and the dialog stays open
+  ---
+  duration_ms: 1.55147
+  ...
+# Subtest: E01 1n: a desktop ApprovalResolved{approved:false, reason:display_unavailable} declines (fail closed)
+ok 42 - E01 1n: a desktop ApprovalResolved{approved:false, reason:display_unavailable} declines (fail closed)
+  ---
+  duration_ms: 1.092984
+  ...
+# Subtest: E01 1n: validateEvent on ApprovalResolved: decision only expired, reason only display_unavailable; rejects expired+approved:true, reason+approved:true, decision+reason
+ok 43 - E01 1n: validateEvent on ApprovalResolved: decision only expired, reason only display_unavailable; rejects expired+approved:true, reason+approved:true, decision+reason
+  ---
+  duration_ms: 0.528976
+  ...
+# Subtest: DOT-061: signed_in dispatches exactly once
+ok 44 - DOT-061: signed_in dispatches exactly once
+  ---
+  duration_ms: 9.31123
+  ...
+# Subtest: DOT-061: auth state 'signed_out' blocks dispatch → AUTH_REQUIRED (0 run() calls, blocked_auth, sign-in prompt)
+ok 45 - DOT-061: auth state 'signed_out' blocks dispatch → AUTH_REQUIRED (0 run() calls, blocked_auth, sign-in prompt)
+  ---
+  duration_ms: 5.517856
+  ...
+# Subtest: DOT-061: auth state 'expired' blocks dispatch → AUTH_REQUIRED (0 run() calls, blocked_auth, sign-in prompt)
+ok 46 - DOT-061: auth state 'expired' blocks dispatch → AUTH_REQUIRED (0 run() calls, blocked_auth, sign-in prompt)
+  ---
+  duration_ms: 1.069025
+  ...
+# Subtest: DOT-061: auth state 'signing_in' blocks dispatch → AUTH_REQUIRED (0 run() calls, blocked_auth, sign-in prompt)
+ok 47 - DOT-061: auth state 'signing_in' blocks dispatch → AUTH_REQUIRED (0 run() calls, blocked_auth, sign-in prompt)
+  ---
+  duration_ms: 6.200058
+  ...
+# Subtest: DOT-061: auth state 'unsupported' blocks dispatch → AUTH_REQUIRED (0 run() calls, blocked_auth, sign-in prompt)
+ok 48 - DOT-061: auth state 'unsupported' blocks dispatch → AUTH_REQUIRED (0 run() calls, blocked_auth, sign-in prompt)
+  ---
+  duration_ms: 1.434259
+  ...
+# Subtest: DOT-061: auth state 'unavailable' blocks dispatch as codex_unavailable (STANDBY, no sign-in prompt)
+ok 49 - DOT-061: auth state 'unavailable' blocks dispatch as codex_unavailable (STANDBY, no sign-in prompt)
+  ---
+  duration_ms: 1.296746
+  ...
+# Subtest: DOT-061: auth state 'unknown' blocks dispatch as codex_unavailable (STANDBY, no sign-in prompt)
+ok 50 - DOT-061: auth state 'unknown' blocks dispatch as codex_unavailable (STANDBY, no sign-in prompt)
+  ---
+  duration_ms: 1.379534
+  ...
+# Subtest: DOT-061: an auth read that throws synchronously blocks dispatch as codex_unavailable
+ok 51 - DOT-061: an auth read that throws synchronously blocks dispatch as codex_unavailable
+  ---
+  duration_ms: 1.693484
+  ...
+# Subtest: DOT-061: an auth read that rejects blocks dispatch as codex_unavailable
+ok 52 - DOT-061: an auth read that rejects blocks dispatch as codex_unavailable
+  ---
+  duration_ms: 1.241297
+  ...
+# Subtest: DOT-061: a hung auth read blocks as codex_unavailable after authReadTimeoutMs, and a late signed_in does not dispatch
+ok 53 - DOT-061: a hung auth read blocks as codex_unavailable after authReadTimeoutMs, and a late signed_in does not dispatch
+  ---
+  duration_ms: 3.137397
+  ...
+# Subtest: DOT-061: a slow read that answers signed_in inside the bound dispatches
+ok 54 - DOT-061: a slow read that answers signed_in inside the bound dispatches
+  ---
+  duration_ms: 2.81269
+  ...
+# Subtest: DOT-061: auth flipping during CONFIRMING (between check and dispatch) blocks dispatch
+ok 55 - DOT-061: auth flipping during CONFIRMING (between check and dispatch) blocks dispatch
+  ---
+  duration_ms: 2.521402
+  ...
+# Subtest: DOT-061: a sign-out notification that lands while the auth read is in flight wins
+ok 56 - DOT-061: a sign-out notification that lands while the auth read is in flight wins
+  ---
+  duration_ms: 0.853408
+  ...
+# Subtest: DOT-061: every retry re-checks auth; expiry during backoff stops the retry
+ok 57 - DOT-061: every retry re-checks auth; expiry during backoff stops the retry
+  ---
+  duration_ms: 1.12937
+  ...
+# Subtest: DOT-061: a queued task is gated at its own dispatch time
+ok 58 - DOT-061: a queued task is gated at its own dispatch time
+  ---
+  duration_ms: 3.641103
+  ...
+# Subtest: DOT-061: completing sign-in afterwards resumes nothing (user re-issues the command)
+ok 59 - DOT-061: completing sign-in afterwards resumes nothing (user re-issues the command)
+  ---
+  duration_ms: 0.801903
+  ...
+# Subtest: DOT-061: boot follows the split: sign-in states rest in AUTH_REQUIRED, Codex-down states rest in STANDBY (idle)
+ok 60 - DOT-061: boot follows the split: sign-in states rest in AUTH_REQUIRED, Codex-down states rest in STANDBY (idle)
+  ---
+  duration_ms: 0.937416
+  ...
+# Subtest: DOT-061: booting idle on Codex-down still never dispatches; the next task is gated and blocked as codex_unavailable
+ok 61 - DOT-061: booting idle on Codex-down still never dispatches; the next task is gated and blocked as codex_unavailable
+  ---
+  duration_ms: 0.725993
+  ...
+# Subtest: DOT-061: Codex recovering (a later signed_in read) admits the NEXT command only; the blocked task is not resumed
+ok 62 - DOT-061: Codex recovering (a later signed_in read) admits the NEXT command only; the blocked task is not resumed
+  ---
+  duration_ms: 1.070011
+  ...
+# Subtest: DOT-061: auth notifications follow the split (unavailable never moves to AUTH_REQUIRED; signed_out does)
+ok 63 - DOT-061: auth notifications follow the split (unavailable never moves to AUTH_REQUIRED; signed_out does)
+  ---
+  duration_ms: 0.203981
+  ...
+# Subtest: DOT-061: Codex going down during retry backoff blocks the retry as codex_unavailable (ledger empty)
+ok 64 - DOT-061: Codex going down during retry backoff blocks the retry as codex_unavailable (ledger empty)
+  ---
+  duration_ms: 1.253544
+  ...
+# Subtest: DOT-061: plan_limit is never retried: one run, no RECOVERING, outcome failed, no API-key fallback
+ok 65 - DOT-061: plan_limit is never retried: one run, no RECOVERING, outcome failed, no API-key fallback
+  ---
+  duration_ms: 0.88578
+  ...
+# Subtest: DOT-061: account_unsupported never becomes a reconnect loop (repeat notifications and commands stay calm and honest)
+ok 66 - DOT-061: account_unsupported never becomes a reconnect loop (repeat notifications and commands stay calm and honest)
+  ---
+  duration_ms: 1.148
+  ...
+# Subtest: §2.1 mid-run: a Codex auth error with nothing committed ends blocked_auth, reason auth_required (no retry)
+ok 67 - §2.1 mid-run: a Codex auth error with nothing committed ends blocked_auth, reason auth_required (no retry)
+  ---
+  duration_ms: 1.077831
+  ...
+# Subtest: §2.1 after-commit: a Codex auth error after a committed action ends failed_after_side_effects, reason auth_required
+ok 68 - §2.1 after-commit: a Codex auth error after a committed action ends failed_after_side_effects, reason auth_required
+  ---
+  duration_ms: 1.58382
+  ...
+# Subtest: §2.1 after-commit: a possible (in-flight, unconfirmed) side effect also counts as committed for the outcome
+ok 69 - §2.1 after-commit: a possible (in-flight, unconfirmed) side effect also counts as committed for the outcome
+  ---
+  duration_ms: 0.905498
+  ...
+# Subtest: report text never claims a clean stop when side effects exist (all combinations)
+ok 70 - report text never claims a clean stop when side effects exist (all combinations)
+  ---
+  duration_ms: 1.821965
+  ...
+# Subtest: cancel before any side effect: clean stop, propagated to Codex, reported as clean
+ok 71 - cancel before any side effect: clean stop, propagated to Codex, reported as clean
+  ---
+  duration_ms: 11.053128
+  ...
+# Subtest: cancel AFTER an external side effect is never reported as clean
+ok 72 - cancel AFTER an external side effect is never reported as clean
+  ---
+  duration_ms: 3.997702
+  ...
+# Subtest: cancel while a side-effecting tool is still in flight reports "possible", not clean and not committed
+ok 73 - cancel while a side-effecting tool is still in flight reports "possible", not clean and not committed
+  ---
+  duration_ms: 1.662052
+  ...
+# Subtest: unacknowledged cancel reports stop_unconfirmed; later side effects are surfaced, not swallowed
+ok 74 - unacknowledged cancel reports stop_unconfirmed; later side effects are surfaced, not swallowed
+  ---
+  duration_ms: 3.339762
+  ...
+# Subtest: cancel during VERIFYING reports that the task had already completed
+ok 75 - cancel during VERIFYING reports that the task had already completed
+  ---
+  duration_ms: 4.411242
+  ...
+# Subtest: cancel while an approval is pending denies the action and stops cleanly
+ok 76 - cancel while an approval is pending denies the action and stops cleanly
+  ---
+  duration_ms: 3.965379
+  ...
+# Subtest: cancel during backoff (RECOVERING) stops without another attempt
+ok 77 - cancel during backoff (RECOVERING) stops without another attempt
+  ---
+  duration_ms: 1.679793
+  ...
+# Subtest: stop speaking during execution halts TTS only; the task keeps running and finishes
+ok 78 - stop speaking during execution halts TTS only; the task keeps running and finishes
+  ---
+  duration_ms: 3.313969
+  ...
+# Subtest: stop speaking during the result response returns to standby without any cancel event
+ok 79 - stop speaking during the result response returns to standby without any cancel event
+  ---
+  duration_ms: 1.388036
+  ...
+# Subtest: new task during execution (queue policy): queued, not merged, runs after the first; overflow rejected
+ok 80 - new task during execution (queue policy): queued, not merged, runs after the first; overflow rejected
+  ---
+  duration_ms: 4.595553
+  ...
+# Subtest: new task during execution (cancel_then_start policy): first is cancelled honestly, then second runs
+ok 81 - new task during execution (cancel_then_start policy): first is cancelled honestly, then second runs
+  ---
+  duration_ms: 2.16652
+  ...
+# Subtest: shutdown during execution cancels first, records the stop, then reaches SHUTDOWN
+ok 82 - shutdown during execution cancels first, records the stop, then reaches SHUTDOWN
+  ---
+  duration_ms: 1.10613
+  ...
+# Subtest: Ruling 2: the answer continues the same taskId as a new turn on the same thread; targetIds survive
+ok 83 - Ruling 2: the answer continues the same taskId as a new turn on the same thread; targetIds survive
+  ---
+  duration_ms: 11.45366
+  ...
+# Subtest: Ruling 2: per-task targetIds are not valid in a different task
+ok 84 - Ruling 2: per-task targetIds are not valid in a different task
+  ---
+  duration_ms: 4.560048
+  ...
+# Subtest: Ruling 2: dedupe never swallows a clarification answer (repeated words), but a replayed requestId is still a duplicate
+ok 85 - Ruling 2: dedupe never swallows a clarification answer (repeated words), but a replayed requestId is still a duplicate
+  ---
+  duration_ms: 9.930417
+  ...
+# Subtest: Ruling 2: an answer does not poison the text-dedupe window for a later new command
+ok 86 - Ruling 2: an answer does not poison the text-dedupe window for a later new command
+  ---
+  duration_ms: 6.013443
+  ...
+# Subtest: Ruling 2: the clarification turn is auth-gated too (DOT-061)
+ok 87 - Ruling 2: the clarification turn is auth-gated too (DOT-061)
+  ---
+  duration_ms: 1.248282
+  ...
+# Subtest: Ruling 2: no answer within clarificationTimeoutMs ends the task honestly (no TaskCancelled, no extra turn)
+ok 88 - Ruling 2: no answer within clarificationTimeoutMs ends the task honestly (no TaskCancelled, no extra turn)
+  ---
+  duration_ms: 2.165323
+  ...
+# Subtest: Ruling 2: an unanswered clarification after a committed action ends failed_after_side_effects, reason clarification_timeout
+ok 89 - Ruling 2: an unanswered clarification after a committed action ends failed_after_side_effects, reason clarification_timeout
+  ---
+  duration_ms: 7.938116
+  ...
+# Subtest: Ruling 2: a capture abort while waiting for the answer: failed, reason clarification_cancelled (timeout is for silence only)
+ok 90 - Ruling 2: a capture abort while waiting for the answer: failed, reason clarification_cancelled (timeout is for silence only)
+  ---
+  duration_ms: 1.2929
+  ...
+# Subtest: Ruling 2: "stop the task" while waiting for the answer reports a truthful stop (dispatched, ledger-based)
+ok 91 - Ruling 2: "stop the task" while waiting for the answer reports a truthful stop (dispatched, ledger-based)
+  ---
+  duration_ms: 5.828424
+  ...
+# Subtest: Ruling 2: clarification rounds are bounded by maxClarificationTurns
+ok 92 - Ruling 2: clarification rounds are bounded by maxClarificationTurns
+  ---
+  duration_ms: 1.359799
+  ...
+# Subtest: Ruling 2: a capture abort after a committed action: failed_after_side_effects, reason clarification_cancelled
+ok 93 - Ruling 2: a capture abort after a committed action: failed_after_side_effects, reason clarification_cancelled
+  ---
+  duration_ms: 1.132534
+  ...
+# Subtest: every event the coordinator emits validates against contract v1 and carries ids + timestamps
+ok 94 - every event the coordinator emits validates against contract v1 and carries ids + timestamps
+  ---
+  duration_ms: 14.113155
+  ...
+# Subtest: inbound E05/E06 events validate too
+ok 95 - inbound E05/E06 events validate too
+  ---
+  duration_ms: 0.289528
+  ...
+# Subtest: validator rejects unknown versions, unknown types, missing fields, bad enums and bad timestamps
+ok 96 - validator rejects unknown versions, unknown types, missing fields, bad enums and bad timestamps
+  ---
+  duration_ms: 0.45261
+  ...
+# Subtest: v2 (DOT-060): ToolResult invariants, ApprovalResolved taskId, TaskFinished verified rule, category
+ok 97 - v2 (DOT-060): ToolResult invariants, ApprovalResolved taskId, TaskFinished verified rule, category
+  ---
+  duration_ms: 0.489838
+  ...
+# Subtest: v2 (DOT-060): verifier outcomes map per CONTRACTS §3.1, failed splits on the ledger
+ok 98 - v2 (DOT-060): verifier outcomes map per CONTRACTS §3.1, failed splits on the ledger
+  ---
+  duration_ms: 16.04914
+  ...
+# Subtest: v2 (DOT-060): adapter tool results that break §5 invariants are normalised fail-safe
+ok 99 - v2 (DOT-060): adapter tool results that break §5 invariants are normalised fail-safe
+  ---
+  duration_ms: 6.232978
+  ...
+# Subtest: E01 2026-10-19: TaskFinished.reason enum and its pairing with outcome (CONTRACTS §3, §2.1)
+ok 100 - E01 2026-10-19: TaskFinished.reason enum and its pairing with outcome (CONTRACTS §3, §2.1)
+  ---
+  duration_ms: 0.355855
+  ...
+# Subtest: E01 2026-10-19: confirmed defaults (5 s auth read, 30 s clarification, 3 rounds)
+ok 101 - E01 2026-10-19: confirmed defaults (5 s auth read, 30 s clarification, 3 rounds)
+  ---
+  duration_ms: 3.414789
+  ...
+# Subtest: CONTRACTS §2.1/§3 (E01 2026-10-19): any reason from the shared set is accepted with failed_after_side_effects; anything outside the set is rejected for every outcome
+ok 102 - CONTRACTS §2.1/§3 (E01 2026-10-19): any reason from the shared set is accepted with failed_after_side_effects; anything outside the set is rejected for every outcome
+  ---
+  duration_ms: 1.604608
+  ...
+# Subtest: CONTRACTS §3 TaskFinished (E01 2026-10-19): declined carries no reason or approval_unavailable only; approval_unavailable fits only declined (and failed_after_side_effects)
+ok 103 - CONTRACTS §3 TaskFinished (E01 2026-10-19): declined carries no reason or approval_unavailable only; approval_unavailable fits only declined (and failed_after_side_effects)
+  ---
+  duration_ms: 0.49207
+  ...
+# Subtest: CONTRACTS §3 ApprovalRequested.category: exactly the 11 CONTRACTS values in order; navigate accepted, unknown rejected
+ok 104 - CONTRACTS §3 ApprovalRequested.category: exactly the 11 CONTRACTS values in order; navigate accepted, unknown rejected
+  ---
+  duration_ms: 0.450377
+  ...
+# Subtest: happy path walks the spec state sequence and reports a verified outcome
+ok 105 - happy path walks the spec state sequence and reports a verified outcome
+  ---
+  duration_ms: 9.941657
+  ...
+# Subtest: tool-reported success without verification is not reported as success
+ok 106 - tool-reported success without verification is not reported as success
+  ---
+  duration_ms: 1.777871
+  ...
+# Subtest: injected verifier decides the postcondition
+ok 107 - injected verifier decides the postcondition
+  ---
+  duration_ms: 6.13055
+  ...
+# Subtest: invalid inputs are rejected and logged, never silently applied
+ok 108 - invalid inputs are rejected and logged, never silently applied
+  ---
+  duration_ms: 2.429653
+  ...
+# Subtest: mute blocks wake; mute during a task is deferred and applied when the task ends
+ok 109 - mute blocks wake; mute during a task is deferred and applied when the task ends
+  ---
+  duration_ms: 1.668485
+  ...
+# Subtest: expired sign-in: wake still works, dispatch is blocked truthfully, reconnect returns to STANDBY
+ok 110 - expired sign-in: wake still works, dispatch is blocked truthfully, reconnect returns to STANDBY
+  ---
+  duration_ms: 1.261226
+  ...
+# Subtest: auth expiring mid-task goes to AUTH_REQUIRED and is not retried
+ok 111 - auth expiring mid-task goes to AUTH_REQUIRED and is not retried
+  ---
+  duration_ms: 1.362806
+  ...
+# Subtest: transient failures retry with exponential backoff, resume the same thread, then succeed
+ok 112 - transient failures retry with exponential backoff, resume the same thread, then succeed
+  ---
+  duration_ms: 2.046348
+  ...
+# Subtest: retries are bounded by maxAttempts
+ok 113 - retries are bounded by maxAttempts
+  ---
+  duration_ms: 4.550125
+  ...
+# Subtest: never retries after a side effect was committed (or may have been)
+ok 114 - never retries after a side effect was committed (or may have been)
+  ---
+  duration_ms: 1.706528
+  ...
+# Subtest: fatal errors are not retried
+ok 115 - fatal errors are not retried
+  ---
+  duration_ms: 0.875308
+  ...
+# Subtest: approval: secure UI approves; voice cannot approve under the default fail-closed policy; single use
+ok 116 - approval: secure UI approves; voice cannot approve under the default fail-closed policy; single use
+  ---
+  duration_ms: 2.224438
+  ...
+# Subtest: approval: a spoken "no" is accepted as a denial; silence expires to denial
+ok 117 - approval: a spoken "no" is accepted as a denial; silence expires to denial
+  ---
+  duration_ms: 2.54641
+  ...
+# Subtest: pre-dispatch CONFIRMING: decline finishes as declined without contacting Codex
+ok 118 - pre-dispatch CONFIRMING: decline finishes as declined without contacting Codex
+  ---
+  duration_ms: 3.148744
+  ...
+# Subtest: idle faults: recoverable -> RECOVERING -> STANDBY; fatal -> ERROR -> RECOVERING -> STANDBY
+ok 119 - idle faults: recoverable -> RECOVERING -> STANDBY; fatal -> ERROR -> RECOVERING -> STANDBY
+  ---
+  duration_ms: 0.35021
+  ...
+# Subtest: empty transcription prompts and returns to standby without creating a task
+ok 120 - empty transcription prompts and returns to standby without creating a task
+  ---
+  duration_ms: 1.60239
+  ...
+# Subtest: normalisation ignores case, punctuation, spacing and a leading wake word
+ok 121 - normalisation ignores case, punctuation, spacing and a leading wake word
+  ---
+  duration_ms: 1.824256
+  ...
+# Subtest: guard: same requestId always duplicate; same text only within the window; allowRepeat bypasses text only
+ok 122 - guard: same requestId always duplicate; same text only within the window; allowRepeat bypasses text only
+  ---
+  duration_ms: 4.139294
+  ...
+# Subtest: coordinator: replayed UtteranceReady and double-wake resubmission produce exactly one Codex run
+ok 123 - coordinator: replayed UtteranceReady and double-wake resubmission produce exactly one Codex run
+  ---
+  duration_ms: 18.622251
+  ...
+# Subtest: C-25 (D14): a non-read retry after a sideEffect:unknown attempt opens a fresh approval with possibleRepeat {priorTaskId, unknown} before anything is dispatched
+ok 124 - C-25 (D14): a non-read retry after a sideEffect:unknown attempt opens a fresh approval with possibleRepeat {priorTaskId, unknown} before anything is dispatched
+  ---
+  duration_ms: 22.455892
+  ...
+# Subtest: C-25 (D14): the same after a ledger:possible attempt (catalogued side-effecting tool started, never reported) → priorSideEffect possible
+ok 125 - C-25 (D14): the same after a ledger:possible attempt (catalogued side-effecting tool started, never reported) → priorSideEffect possible
+  ---
+  duration_ms: 4.624835
+  ...
+# Subtest: ruling 1j (c): a CANCELLED prior is not retryable: nothing starts, TaskFinished{failed, retry_not_allowed}, silent
+ok 126 - ruling 1j (c): a CANCELLED prior is not retryable: nothing starts, TaskFinished{failed, retry_not_allowed}, silent
+  ---
+  duration_ms: 2.188747
+  ...
+# Subtest: C-25 (D14): a read-category retry gets no possibleRepeat (no warning), but still goes through approval
+ok 127 - C-25 (D14): a read-category retry gets no possibleRepeat (no warning), but still goes through approval
+  ---
+  duration_ms: 3.879908
+  ...
+# Subtest: C-25 (D14): a retry after a clean failure (ledger none) has no possibleRepeat and keeps the normal policy path
+ok 128 - C-25 (D14): a retry after a clean failure (ledger none) has no possibleRepeat and keeps the normal policy path
+  ---
+  duration_ms: 2.739809
+  ...
+# Subtest: C-25 (D14, E01 ruling 4): a prior with only committed side effects now gets possibleRepeat {committed} and a forced approval
+ok 129 - C-25 (D14, E01 ruling 4): a prior with only committed side effects now gets possibleRepeat {committed} and a forced approval
+  ---
+  duration_ms: 2.125085
+  ...
+# Subtest: C-25 (D14, E01) precedence committed > unknown > possible: anything that definitely happened wins
+ok 130 - C-25 (D14, E01) precedence committed > unknown > possible: anything that definitely happened wins
+  ---
+  duration_ms: 5.789657
+  ...
+# Subtest: validator (D14): possibleRepeat is accepted on a non-read ApprovalRequested and rejected on read, malformed, or the old priorOutcome shape
+ok 131 - validator (D14): possibleRepeat is accepted on a non-read ApprovalRequested and rejected on read, malformed, or the old priorOutcome shape
+  ---
+  duration_ms: 0.767656
+  ...
+# Subtest: validator (D14, accepted): UtteranceReady.retryOfTaskId is an optional non-empty string
+ok 132 - validator (D14, accepted): UtteranceReady.retryOfTaskId is an optional non-empty string
+  ---
+  duration_ms: 0.302153
+  ...
+# Subtest: C-25 (D14): a Codex/model auto-retry never happens: a side effect then a retryable turn failure → exactly one run, no approval, no possibleRepeat
+ok 133 - C-25 (D14): a Codex/model auto-retry never happens: a side effect then a retryable turn failure → exactly one run, no approval, no possibleRepeat
+  ---
+  duration_ms: 1.489379
+  ...
+# Subtest: C-25 (D14): only the user retry field marks a repeat: an adapter-supplied possibleRepeat is dropped, and a new task without retryOfTaskId is not flagged
+ok 134 - C-25 (D14): only the user retry field marks a repeat: an adapter-supplied possibleRepeat is dropped, and a new task without retryOfTaskId is not flagged
+  ---
+  duration_ms: 1.998442
+  ...
+# Subtest: C-25 (D14): the possible-repeat approval is never auto-approved: deny → declined, expiry → declined, non-secure_ui channel rejected; nothing dispatched
+ok 135 - C-25 (D14): the possible-repeat approval is never auto-approved: deny → declined, expiry → declined, non-secure_ui channel rejected; nothing dispatched
+  ---
+  duration_ms: 5.505064
+  ...
+# Subtest: C-25 (D14): a non-secure_ui channel cannot approve a possible-repeat Codex approval inside the retry either
+ok 136 - C-25 (D14): a non-secure_ui channel cannot approve a possible-repeat Codex approval inside the retry either
+  ---
+  duration_ms: 1.759552
+  ...
+# Subtest: C-25 (D14): dedupe/idempotency: a retry with the same text inside the dedupe window is NOT deduped against the prior task; a replayed retry requestId is
+ok 137 - C-25 (D14): dedupe/idempotency: a retry with the same text inside the dedupe window is NOT deduped against the prior task; a replayed retry requestId is
+  ---
+  duration_ms: 4.024837
+  ...
+# Subtest: C-25 (D14): a retry naming a task the coordinator has no record of fails closed: treated as unknown, forced approval with the warning
+ok 138 - C-25 (D14): a retry naming a task the coordinator has no record of fails closed: treated as unknown, forced approval with the warning
+  ---
+  duration_ms: 0.786656
+  ...
+# Subtest: C-25 (D14, E01 trigger categories): a prior whose side effects were only navigate/read gets no possibleRepeat and no forced approval
+ok 139 - C-25 (D14, E01 trigger categories): a prior whose side effects were only navigate/read gets no possibleRepeat and no forced approval
+  ---
+  duration_ms: 1.5228
+  ...
+# Subtest: C-25 (D14, E01 trigger categories): mixed navigate + delete counts only the delete (signal and category from the delete)
+ok 140 - C-25 (D14, E01 trigger categories): mixed navigate + delete counts only the delete (signal and category from the delete)
+  ---
+  duration_ms: 1.230278
+  ...
+# Subtest: C-25 (D14, E01 1j h): a tool missing from the catalog counts, as class unknown (fail closed)
+ok 141 - C-25 (D14, E01 1j h): a tool missing from the catalog counts, as class unknown (fail closed)
+  ---
+  duration_ms: 1.27826
+  ...
+# Subtest: C-25 (D14, E01 1f b): the forced category skips navigate and read: last approval navigate → the earlier delete; only navigate/read → local_change/high
+ok 142 - C-25 (D14, E01 1f b): the forced category skips navigate and read: last approval navigate → the earlier delete; only navigate/read → local_change/high
+  ---
+  duration_ms: 3.567876
+  ...
+# Subtest: C-25 (D14, E01 1f a): possibleRepeat.priorTaskId is the task the user named, not the most recent one (coordinator invariant)
+ok 143 - C-25 (D14, E01 1f a): possibleRepeat.priorTaskId is the task the user named, not the most recent one (coordinator invariant)
+  ---
+  duration_ms: 3.701635
+  ...
+# Subtest: C-25 (D14, E01 rule 1): a clean-failure retry gets no forced approval; a policy-produced approval for it carries no possibleRepeat
+ok 144 - C-25 (D14, E01 rule 1): a clean-failure retry gets no forced approval; a policy-produced approval for it carries no possibleRepeat
+  ---
+  duration_ms: 1.406939
+  ...
+# Subtest: C-25 (D14, E01 1g): a navigate approval inside a possible-repeat retry carries no possibleRepeat (like read)
+ok 145 - C-25 (D14, E01 1g): a navigate approval inside a possible-repeat retry carries no possibleRepeat (like read)
+  ---
+  duration_ms: 1.86451
+  ...
+# Subtest: catalog (E01): the coordinator catalog reads the pinned tool-catalog.json bytes and verifies the P27 SHA-256
+ok 146 - catalog (E01): the coordinator catalog reads the pinned tool-catalog.json bytes and verifies the P27 SHA-256
+  ---
+  duration_ms: 0.69903
+  ...
+# Subtest: catalog (E01): a hash mismatch makes every tool count for D14 (navigate-only prior now triggers), like no catalog
+ok 147 - catalog (E01): a hash mismatch makes every tool count for D14 (navigate-only prior now triggers), like no catalog
+  ---
+  duration_ms: 6.121671
+  ...
+# Subtest: ruling 1j (a): a tray retry ("Retry the last task." + retryOfTaskId) starts the new task on the prior task's threadId
+ok 148 - ruling 1j (a): a tray retry ("Retry the last task." + retryOfTaskId) starts the new task on the prior task's threadId
+  ---
+  duration_ms: 1.119633
+  ...
+# Subtest: ruling 1j (a): a retry of a prior that never got a thread starts without threadId
+ok 149 - ruling 1j (a): a retry of a prior that never got a thread starts without threadId
+  ---
+  duration_ms: 0.665491
+  ...
+# Subtest: ruling 1j (b): a partial prior (verifier partially_verified after a committed effect) is retryable and gets possibleRepeat committed
+ok 150 - ruling 1j (b): a partial prior (verifier partially_verified after a committed effect) is retryable and gets possibleRepeat committed
+  ---
+  duration_ms: 1.183935
+  ...
+# Subtest: ruling 1j (c)(d): endReason tray validates; failed_after_side_effects + approval_unavailable is a valid TaskFinished pair
+ok 151 - ruling 1j (c)(d): endReason tray validates; failed_after_side_effects + approval_unavailable is a valid TaskFinished pair
+  ---
+  duration_ms: 0.192724
+  ...
+# Subtest: E01 retry set: a 'succeeded' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+ok 152 - E01 retry set: a 'succeeded' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+  ---
+  duration_ms: 1.324366
+  ...
+# Subtest: E01 retry set: a 'answered' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+ok 153 - E01 retry set: a 'answered' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+  ---
+  duration_ms: 0.736786
+  ...
+# Subtest: E01 retry set: a 'declined' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+ok 154 - E01 retry set: a 'declined' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+  ---
+  duration_ms: 0.738131
+  ...
+# Subtest: E01 retry set: a 'blocked_auth' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+ok 155 - E01 retry set: a 'blocked_auth' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+  ---
+  duration_ms: 0.698428
+  ...
+# Subtest: E01 retry set: a 'clarification' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+ok 156 - E01 retry set: a 'clarification' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+  ---
+  duration_ms: 1.563651
+  ...
+# Subtest: E01 retry set: a 'failed' prior is retryable (a task starts)
+ok 157 - E01 retry set: a 'failed' prior is retryable (a task starts)
+  ---
+  duration_ms: 1.153739
+  ...
+# Subtest: E01 retry set: a 'failed_after_side_effects' prior is retryable (a task starts)
+ok 158 - E01 retry set: a 'failed_after_side_effects' prior is retryable (a task starts)
+  ---
+  duration_ms: 1.318474
+  ...
+# Subtest: E01 retry set: a 'unverified' prior is retryable (a task starts)
+ok 159 - E01 retry set: a 'unverified' prior is retryable (a task starts)
+  ---
+  duration_ms: 1.190777
+  ...
+# Subtest: E01 retry set: a 'partial' prior is retryable (a task starts)
+ok 160 - E01 retry set: a 'partial' prior is retryable (a task starts)
+  ---
+  duration_ms: 0.986804
+  ...
+# Subtest: E01 retry set: a 'blocked_unavailable' prior is retryable (a task starts)
+ok 161 - E01 retry set: a 'blocked_unavailable' prior is retryable (a task starts)
+  ---
+  duration_ms: 0.790985
+  ...
+# Subtest: E01 retry set: retry_not_allowed pairs only with failed in validateEvent
+ok 162 - E01 retry set: retry_not_allowed pairs only with failed in validateEvent
+  ---
+  duration_ms: 0.24823
+  ...
+# Subtest: E01 retry set: a ToolCatalogPort lookup that throws counts as unknown
+ok 163 - E01 retry set: a ToolCatalogPort lookup that throws counts as unknown
+  ---
+  duration_ms: 4.201451
+  ...
+# Subtest: E01 (1j/1o): a joined (duplicate) Codex approval keeps the FIRST expiry and one ApprovalRequested; the joined request itself is declined duplicate_request (1o c)
+ok 164 - E01 (1j/1o): a joined (duplicate) Codex approval keeps the FIRST expiry and one ApprovalRequested; the joined request itself is declined duplicate_request (1o c)
+  ---
+  duration_ms: 1.587204
+  ...
+# Subtest: E01 (old "partial" semantics must not leak): side effects then a failure classifies as failed_after_side_effects, never partial, signal committed/possible
+ok 165 - E01 (old "partial" semantics must not leak): side effects then a failure classifies as failed_after_side_effects, never partial, signal committed/possible
+  ---
+  duration_ms: 1.886676
+  ...
+# Subtest: E01 1l (2): retry of an UNVERIFIED prior with an empty ledger follows normal policy (no possibleRepeat, no forced approval)
+ok 166 - E01 1l (2): retry of an UNVERIFIED prior with an empty ledger follows normal policy (no possibleRepeat, no forced approval)
+  ---
+  duration_ms: 1.154314
+  ...
+# Subtest: E01 1l (1): a failed categoryOf lookup never supplies the forced category → local_change / high
+ok 167 - E01 1l (1): a failed categoryOf lookup never supplies the forced category → local_change / high
+  ---
+  duration_ms: 2.099945
+  ...
+# Subtest: E01 1o (c) (supersedes 1k c for Codex): a join after an approved or expired answer is declined duplicate_request (never replayed) and never reopens the dialog
+ok 168 - E01 1o (c) (supersedes 1k c for Codex): a join after an approved or expired answer is declined duplicate_request (never replayed) and never reopens the dialog
+  ---
+  duration_ms: 1.654712
+  ...
+# Subtest: E01 1m (2): the C-08 timeout emits ApprovalResolved{approved:false} exactly once, before TaskFinished; a late approve has no effect
+ok 169 - E01 1m (2): the C-08 timeout emits ApprovalResolved{approved:false} exactly once, before TaskFinished; a late approve has no effect
+  ---
+  duration_ms: 1.312939
+  ...
+# Subtest: §1.5 shouldRetry: only turn_failed rate_limited/transient with an empty turn ledger and attempt < max
+ok 170 - §1.5 shouldRetry: only turn_failed rate_limited/transient with an empty turn ledger and attempt < max
+  ---
+  duration_ms: 1.077629
+  ...
+# Subtest: §1.5: a rejected turn/start (JSON-RPC -32600, no data) is fatal and never retried, even if mislabelled transient
+ok 171 - §1.5: a rejected turn/start (JSON-RPC -32600, no data) is fatal and never retried, even if mislabelled transient
+  ---
+  duration_ms: 12.872605
+  ...
+# Subtest: §1.5: adapter-side failures (run() throws, run aborted without a cancel) are not wire turn failures: no retry
+ok 172 - §1.5: adapter-side failures (run() throws, run aborted without a cancel) are not wire turn failures: no retry
+  ---
+  duration_ms: 3.751314
+  ...
+# Subtest: §1.5: a failed turn whose ledger is not empty is never retried (committed, unknown, or a side-effecting item merely started)
+ok 173 - §1.5: a failed turn whose ledger is not empty is never retried (committed, unknown, or a side-effecting item merely started)
+  ---
+  duration_ms: 5.562251
+  ...
+# Subtest: §1.5: a read-only tool in the failed turn does not block the retry (ledger empty)
+ok 174 - §1.5: a read-only tool in the failed turn does not block the retry (ledger empty)
+  ---
+  duration_ms: 2.057078
+  ...
+# Subtest: §1.5: attempts are capped at maxAttempts; every retry has its own turnId and clientUserMessageId
+ok 175 - §1.5: attempts are capped at maxAttempts; every retry has its own turnId and clientUserMessageId
+  ---
+  duration_ms: 10.158044
+  ...
+# Subtest: §1.5: a 401 (willRetry notifications, then turn/completed failed → auth) is never retried; only "Reconnecting…" is shown
+ok 176 - §1.5: a 401 (willRetry notifications, then turn/completed failed → auth) is never retried; only "Reconnecting…" is shown
+  ---
+  duration_ms: 1.384484
+  ...
+# Subtest: §1.5: a 401 after a committed action ends failed_after_side_effects with reason auth_required, no retry
+ok 177 - §1.5: a 401 after a committed action ends failed_after_side_effects with reason auth_required, no retry
+  ---
+  duration_ms: 1.124465
+  ...
+# Subtest: §1.5: plan_limit is never retried, whatever the origin
+ok 178 - §1.5: plan_limit is never retried, whatever the origin
+  ---
+  duration_ms: 4.477078
+  ...
+# Subtest: §1.5: willRetry shows only "Reconnecting…" (state RECOVERING), once per burst; the task keeps running in EXECUTING and nothing is spoken
+ok 179 - §1.5: willRetry shows only "Reconnecting…" (state RECOVERING), once per burst; the task keeps running in EXECUTING and nothing is spoken
+  ---
+  duration_ms: 1.893162
+  ...
+# Subtest: §1.3/§1.5: no server dedupe is assumed: at most one run() in flight across retries, queueing and duplicate submits
+ok 180 - §1.3/§1.5: no server dedupe is assumed: at most one run() in flight across retries, queueing and duplicate submits
+  ---
+  duration_ms: 1.836745
+  ...
+# Subtest: ruling 3: turn 1 committed, turn 2 fails transient with an empty TURN ledger → retried to the cap, then failed_after_side_effects reporting the turn-1 action
+ok 181 - ruling 3: turn 1 committed, turn 2 fails transient with an empty TURN ledger → retried to the cap, then failed_after_side_effects reporting the turn-1 action
+  ---
+  duration_ms: 2.206163
+  ...
+# Subtest: ruling 3: turn 1 committed, then the clarification goes unanswered → failed_after_side_effects, reason clarification_timeout, action reported
+ok 182 - ruling 3: turn 1 committed, then the clarification goes unanswered → failed_after_side_effects, reason clarification_timeout, action reported
+  ---
+  duration_ms: 2.414069
+  ...
+# Subtest: ruling 3: turn 1 committed, turn 2 hits a Codex auth error (401) with an empty turn ledger → failed_after_side_effects, reason auth_required, no retry
+ok 183 - ruling 3: turn 1 committed, turn 2 hits a Codex auth error (401) with an empty turn ledger → failed_after_side_effects, reason auth_required, no retry
+  ---
+  duration_ms: 1.271535
+  ...
+# Subtest: ruling 2 (strict ledger): a started, possibly side-effecting tool blocks the retry even when it later reports sideEffect none; one with no result also makes the outcome failed_after_side_effects
+ok 184 - ruling 2 (strict ledger): a started, possibly side-effecting tool blocks the retry even when it later reports sideEffect none; one with no result also makes the outcome failed_after_side_effects
+  ---
+  duration_ms: 1.224
+  ...
+# Subtest: transition table covers every state and only targets known states
+ok 185 - transition table covers every state and only targets known states
+  ---
+  duration_ms: 2.079654
+  ...
+# Subtest: spec happy path (with and without CONFIRMING) is valid
+ok 186 - spec happy path (with and without CONFIRMING) is valid
+  ---
+  duration_ms: 0.14458
+  ...
+# Subtest: every additional state is reachable from the main loop and can leave (except SHUTDOWN)
+ok 187 - every additional state is reachable from the main loop and can leave (except SHUTDOWN)
+  ---
+  duration_ms: 0.285512
+  ...
+# Subtest: a running task can never be silently abandoned
+ok 188 - a running task can never be silently abandoned
+  ---
+  duration_ms: 0.131466
+  ...
+# Subtest: StateMachine applies exactly the table: exhaustive pairwise check
+ok 189 - StateMachine applies exactly the table: exhaustive pairwise check
+  ---
+  duration_ms: 0.885708
+  ...
+# Subtest: invalid transitions are rejected, logged, recorded and not applied
+ok 190 - invalid transitions are rejected, logged, recorded and not applied
+  ---
+  duration_ms: 0.268356
+  ...
+# Subtest: ruling 1d: a navigate call with the host-computed actionId is authorized with the coordinator context and args unchanged
+ok 191 - ruling 1d: a navigate call with the host-computed actionId is authorized with the coordinator context and args unchanged
+  ---
+  duration_ms: 10.87125
+  ...
+# Subtest: ruling 1d: a MISSING actionId → DENIED_BY_POLICY, sideEffect none, the tool never runs
+ok 192 - ruling 1d: a MISSING actionId → DENIED_BY_POLICY, sideEffect none, the tool never runs
+  ---
+  duration_ms: 2.953587
+  ...
+# Subtest: ruling 1d: a malformed actionId (uppercase hex) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+ok 193 - ruling 1d: a malformed actionId (uppercase hex) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+  ---
+  duration_ms: 1.444863
+  ...
+# Subtest: ruling 1d: a malformed actionId (63 chars) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+ok 194 - ruling 1d: a malformed actionId (63 chars) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+  ---
+  duration_ms: 1.740291
+  ...
+# Subtest: ruling 1d: a malformed actionId (65 chars) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+ok 195 - ruling 1d: a malformed actionId (65 chars) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+  ---
+  duration_ms: 1.216861
+  ...
+# Subtest: ruling 1d: a malformed actionId (legacy act_ id) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+ok 196 - ruling 1d: a malformed actionId (legacy act_ id) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+  ---
+  duration_ms: 1.31517
+  ...
+# Subtest: ruling 1d: a malformed actionId (empty string) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+ok 197 - ruling 1d: a malformed actionId (empty string) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+  ---
+  duration_ms: 0.982447
+  ...
+# Subtest: ruling 1d: a malformed actionId (null) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+ok 198 - ruling 1d: a malformed actionId (null) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+  ---
+  duration_ms: 1.105782
+  ...
+# Subtest: ruling 1d: a malformed actionId (number) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+ok 199 - ruling 1d: a malformed actionId (number) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+  ---
+  duration_ms: 5.885949
+  ...
+# Subtest: ruling 1d: a malformed actionId (object) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+ok 200 - ruling 1d: a malformed actionId (object) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+  ---
+  duration_ms: 1.43384
+  ...
+# Subtest: ruling 1d: a malformed actionId (hex with whitespace) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+ok 201 - ruling 1d: a malformed actionId (hex with whitespace) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+  ---
+  duration_ms: 1.261711
+  ...
+# Subtest: ruling 1d: the rejection log carries ids and key names only, never the actionId value or arg values
+ok 202 - ruling 1d: the rejection log carries ids and key names only, never the actionId value or arg values
+  ---
+  duration_ms: 1.234246
+  ...
+# Subtest: ruling 1d order: a reserved key wins over a bad actionId (INVALID_ARGUMENT), with or without a live turn
+ok 203 - ruling 1d order: a reserved key wins over a bad actionId (INVALID_ARGUMENT), with or without a live turn
+  ---
+  duration_ms: 1.464792
+  ...
+# Subtest: ruling 1d order: no active turn wins over a bad or missing actionId (PRECONDITION_FAILED), idle and after a stop
+ok 204 - ruling 1d order: no active turn wins over a bad or missing actionId (PRECONDITION_FAILED), idle and after a stop
+  ---
+  duration_ms: 1.3071
+  ...
+# Subtest: ruling 1g: an approval-gated call sends the approval's own actionId; the coordinator accepts it by format (K8 recomputes with targets)
+ok 205 - ruling 1g: an approval-gated call sends the approval's own actionId; the coordinator accepts it by format (K8 recomputes with targets)
+  ---
+  duration_ms: 5.126457
+  ...
+# Subtest: Ruling 1 (E01 r6 + E04): a top-level reserved key 'taskId' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+ok 206 - Ruling 1 (E01 r6 + E04): a top-level reserved key 'taskId' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+  ---
+  duration_ms: 9.956905
+  ...
+# Subtest: Ruling 1 (E01 r6 + E04): a top-level reserved key 'turnId' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+ok 207 - Ruling 1 (E01 r6 + E04): a top-level reserved key 'turnId' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+  ---
+  duration_ms: 1.661517
+  ...
+# Subtest: Ruling 1 (E01 r6 + E04): a top-level reserved key 'threadId' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+ok 208 - Ruling 1 (E01 r6 + E04): a top-level reserved key 'threadId' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+  ---
+  duration_ms: 2.656899
+  ...
+# Subtest: Ruling 1 (E01 r6 + E04): a top-level reserved key 'hwnd' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+ok 209 - Ruling 1 (E01 r6 + E04): a top-level reserved key 'hwnd' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+  ---
+  duration_ms: 1.033219
+  ...
+# Subtest: Ruling 1 (E01 r6 + E04): a top-level reserved key 'pid' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+ok 210 - Ruling 1 (E01 r6 + E04): a top-level reserved key 'pid' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+  ---
+  duration_ms: 1.365485
+  ...
+# Subtest: Ruling 1 (E01 r6 + E04): a top-level reserved key 'task_id' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+ok 211 - Ruling 1 (E01 r6 + E04): a top-level reserved key 'task_id' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+  ---
+  duration_ms: 1.161085
+  ...
+# Subtest: Ruling 1 (E01 r6 + E04): a top-level reserved key 'TURN-ID' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+ok 212 - Ruling 1 (E01 r6 + E04): a top-level reserved key 'TURN-ID' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+  ---
+  duration_ms: 0.974393
+  ...
+# Subtest: Ruling 1 (E01 r6 + E04): a top-level reserved key 'ThreadID' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+ok 213 - Ruling 1 (E01 r6 + E04): a top-level reserved key 'ThreadID' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+  ---
+  duration_ms: 0.877268
+  ...
+# Subtest: Ruling 1 (E01 r6 + E04): a top-level reserved key 'HWND' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+ok 214 - Ruling 1 (E01 r6 + E04): a top-level reserved key 'HWND' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+  ---
+  duration_ms: 1.175388
+  ...
+# Subtest: Ruling 1 (E01 r6 + E04): a top-level reserved key 'PID' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+ok 215 - Ruling 1 (E01 r6 + E04): a top-level reserved key 'PID' in model args is REJECTED with INVALID_ARGUMENT; the tool never runs
+  ---
+  duration_ms: 1.112591
+  ...
+# Subtest: Ruling 1: all reserved keys are listed together, and the rejection is a valid ToolError (not retryable)
+ok 216 - Ruling 1: all reserved keys are listed together, and the rejection is a valid ToolError (not retryable)
+  ---
+  duration_ms: 1.255614
+  ...
+# Subtest: Ruling 1: clean args pass through unchanged with the coordinator-sourced context; nested lookalikes are not reserved
+ok 217 - Ruling 1: clean args pass through unchanged with the coordinator-sourced context; nested lookalikes are not reserved
+  ---
+  duration_ms: 1.37709
+  ...
+# Subtest: Ruling 1: a forged taskId inside an adapter tool result is overwritten by the coordinator
+ok 218 - Ruling 1: a forged taskId inside an adapter tool result is overwritten by the coordinator
+  ---
+  duration_ms: 2.28066
+  ...
+# Subtest: Ruling 1: the host is told the active turn at every turn start (incl. retries) and cleared between turns
+ok 219 - Ruling 1: the host is told the active turn at every turn start (incl. retries) and cleared between turns
+  ---
+  duration_ms: 1.620828
+  ...
+# Subtest: Ruling 1: no tool call is authorised without an active turn, or once a stop was requested
+ok 220 - Ruling 1: no tool call is authorised without an active turn, or once a stop was requested
+  ---
+  duration_ms: 1.928554
+  ...
+1..220
+# tests 220
+# suites 0
+# pass 217
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 437.192644

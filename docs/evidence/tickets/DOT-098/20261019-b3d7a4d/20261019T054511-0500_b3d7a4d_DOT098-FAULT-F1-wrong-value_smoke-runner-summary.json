@@ -1,0 +1,17 @@
+{"caseId":"DOT098-FAULT-F1-wrong-value","commit":"b3d7a4d01d955da38f213ba93c633d9076cc10fe","dirtyTree":true,"build":null,"installerSha256":null,"startedAt":"2026-10-19T05:45:11.839-05:00","finishedAt":"2026-10-19T05:45:18.369-05:00","command":"node scripts/smoke-run.mjs --runs 1 --out /workspace/smoke-logs/b3d7a4d/fault-F1-wrong-value --timeout-ms 90000 --case-id DOT098-FAULT-F1-wrong-value","exitCode":1,"durationMs":6530,"result":"fail","runner":"linux-box"}
+{
+  "runs": 1,
+  "ok": 0,
+  "failed": 1,
+  "timedOut": 0,
+  "failedSteps": [
+    {
+      "run": 1,
+      "step": "final.replySequence"
+    }
+  ],
+  "msMin": 6529,
+  "msMedian": 6529,
+  "msMax": 6529,
+  "logs": "/workspace/smoke-logs/b3d7a4d/fault-F1-wrong-value"
+}

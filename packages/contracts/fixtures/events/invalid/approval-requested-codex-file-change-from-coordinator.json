@@ -1,0 +1,31 @@
+{
+  "errorPath": "payload.requestSource",
+  "event": {
+    "schema": "dottie.event",
+    "version": 2,
+    "type": "ApprovalRequested",
+    "eventId": "evt-approvalrequested",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-18T14:03:00.123-05:00",
+    "payload": {
+      "taskId": "task-1",
+      "actionId": "3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f",
+      "summary": "Codex approval",
+      "risk": "high",
+      "expiry": "2026-10-18T14:05:00-05:00",
+      "category": "overwrite",
+      "display": {
+        "kind": "codex_file_change",
+        "category": "overwrite",
+        "paths": [
+          "C:\\TMP\\A.TXT",
+          "C:\\TMP\\B.TXT"
+        ],
+        "reasonUntrusted": null,
+        "fileCount": "2"
+      },
+      "requestSource": "coordinator"
+    },
+    "taskId": "task-1"
+  }
+}

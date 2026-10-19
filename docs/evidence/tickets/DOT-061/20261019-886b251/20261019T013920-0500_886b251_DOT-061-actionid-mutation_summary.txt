@@ -1,0 +1,19 @@
+# {"caseId": "DOT-061-actionid-mutations", "commit": "886b251", "build": null, "installerSha256": null, "startedAt": null, "finishedAt": null, "runner": "named host: grok-box (linux)", "command": "python3 mut.py (per mutant: npx tsc; node --test dist/test/*.test.js; source restored + diff-verified)", "exitCode": 0, "durationMs": null, "result": "pass", "platform": "Linux box (Node v20.19.2); NOT Windows evidence", "tree": "pre-commit working copy, src == 886b251", "timing": "exact times not recorded; ran between 2026-10-19T01:38:46-05:00 (green run end) and 2026-10-19T01:40:15-05:00 (clean run start); filename time is approximate"}
+M1 validator accepts any string on ApprovalRequested: KILLED (1 failing)
+    not ok 6 - actionId: validateEvent rejects act_ ids, uppercase hex and wrong lengths on ApprovalRequested and ApprovalResolved
+M2 validator accepts any string on ApprovalResolved: KILLED (1 failing)
+    not ok 6 - actionId: validateEvent rejects act_ ids, uppercase hex and wrong lengths on ApprovalRequested and ApprovalResolved
+M3 port output not checked: KILLED (1 failing)
+    not ok 4 - actionId: bad port output → fail closed (act_ id, uppercase hex, wrong length, non-string, throw, rejected promise)
+M4 unwired port falls back to an IdSource-style id: KILLED (1 failing)
+    not ok 3 - actionId: no ActionIdPort wired (default until DOT-090) → fail closed: no ApprovalRequested, declined, warning without args
+M5 throw not caught (escapes): KILLED (1 failing)
+    not ok 4 - actionId: bad port output → fail closed (act_ id, uppercase hex, wrong length, non-string, throw, rejected promise)
+M6 adapter-supplied id not validated: KILLED (1 failing)
+    not ok 5 - actionId: an adapter-supplied Codex approval actionId must be 64 lowercase hex; otherwise no ApprovalRequested and Codex gets a decline
+M7 binding omits null threadId: KILLED (1 failing)
+    not ok 1 - actionId: the CONFIRMING path gets its id from the ActionIdPort with the CR2 binding; IdSource is never asked for one
+M8 not-approvable copy claims the user declined: KILLED (2 failing)
+    not ok 3 - actionId: no ActionIdPort wired (default until DOT-090) → fail closed: no ApprovalRequested, declined, warning without args
+    not ok 4 - actionId: bad port output → fail closed (act_ id, uppercase hex, wrong length, non-string, throw, rejected promise)
+sources restored: diff vs backups clean (RESTORED)

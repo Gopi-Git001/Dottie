@@ -1,0 +1,38 @@
+{
+ "header": {
+  "caseId": "DOT-064-baseline",
+  "commit": "2878b58",
+  "build": null,
+  "installerSha256": null,
+  "startedAt": "2026-10-19T01:41:52-05:00",
+  "finishedAt": "2026-10-19T01:41:53-05:00",
+  "runner": "named host: grok-box (linux)",
+  "command": "cd src/verifier && python3 -m pytest -q -p no:cacheprovider",
+  "exitCode": 0,
+  "durationMs": 1072,
+  "result": "pass",
+  "platform": "Linux box (Linux fakes only, no Windows build); NOT Windows evidence",
+  "tree": "committed tree 2878b58 (src/verifier tracked); run from git archive, so no uncommitted change can be in it",
+  "srcVerifierContentSha256": "2ebccaee1747cf3fd755820a8f4287bab5756b8279b4ee5d3ded06cc2d35d8d9"
+ },
+ "ticket": "DOT-064",
+ "metric": "pytest passed, src/verifier (Linux fakes)",
+ "acceptance": "arch/BACKLOG.md DOT-064 acceptance 4: green with >= baseline passed; the count must never drop below the recorded baseline",
+ "previousBaseline": {
+  "passed": 455,
+  "source": "docs/evidence/tickets/DOT-064/20261019-9220bf4 (sealed pack, commit 9220bf4, seal 5e113388b5a57055cfcb1cdb6fb200f247f61d0df40a93cc97ef54ad65a5483e; seal re-verified before this run)"
+ },
+ "ratchetRule": "dottie-evidence-pack SKILL.md step 8: a floor ratchets only from a sealed pack, and the ticket cites that pack's path",
+ "newBaseline": {
+  "passed": 485,
+  "failed": 0,
+  "evidence": "20261019T014152-0500_2878b58_DOT-064-pytest_log.txt"
+ },
+ "direction": "up",
+ "allowed": true,
+ "lintBaseline": {
+  "findings": 0,
+  "ruff": "0.17.1"
+ },
+ "notRecordedIn": "arch/BACKLOG.md (DOT-064 acceptance 4) is owned by E01; arch/ is not edited by E11. E01 raises the floor citing this pack."
+}

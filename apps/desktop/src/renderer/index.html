@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dottie</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand"><span id="status-dot" class="dot"></span> Dottie <span id="status-label" class="muted"></span> <span id="runtime-note" class="warn"></span></div>
+      <nav>
+        <a href="#settings" data-view="settings">Settings</a>
+        <a href="#activity" data-view="activity">Activity</a>
+      </nav>
+    </header>
+    <div id="banner" class="banner" hidden></div>
+    <main id="app"></main>
+    <script src="renderer.js"></script>
+  </body>
+</html>

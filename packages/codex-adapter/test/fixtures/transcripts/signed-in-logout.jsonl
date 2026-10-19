@@ -1,0 +1,15 @@
+# Signed in at startup, then logout. Signed-in read shape UNVERIFIED (hand-written from the schema).
+# logout result + account/updated{authMode:null}: V-run L39-41.
+>> {"method":"initialize","params":{"clientInfo":{"name":"dottie"},"capabilities":{"experimentalApi":false}}}
+<< {"id":"$","result":{"userAgent":"dottie/0.163.0","codexHome":"/redacted/codex-home","platformFamily":"windows","platformOs":"windows"}}
+>> {"method":"initialized"}
+>> {"method":"account/read","params":{"refreshToken":false}}
+<< {"id":"$","result":{"account":{"type":"chatgpt","email":"person@example.com","planType":"pro"},"requiresOpenaiAuth":true}}
+## wait user-logs-out
+>> {"method":"account/logout"}
+<< {"id":"$","result":{}}
+>> {"method":"account/read","id":"$r1","params":{"refreshToken":false}}
+<< {"method":"account/updated","params":{"authMode":null,"planType":null},"emittedAtMs":1792330248694}
+>> {"method":"account/read","id":"$r2","params":{"refreshToken":false}}
+<< {"id":"$r1","result":{"account":null,"requiresOpenaiAuth":true,"workspaceRouting":null}}
+<< {"id":"$r2","result":{"account":null,"requiresOpenaiAuth":true,"workspaceRouting":null}}

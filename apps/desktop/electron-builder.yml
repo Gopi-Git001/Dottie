@@ -1,0 +1,88 @@
+# electron-builder config for Dottie (Windows 11 x64 first; spec §13).
+# Secrets: NONE in this file. Signing reads env only (see README "Signing").
+appId: com.dottie.desktop
+productName: Dottie
+copyright: Copyright © 2026 Dottie team
+artifactName: ${productName}-${version}-${arch}.${ext}
+
+directories:
+  output: release
+  # NOT `build/`: that conventional name was wiped twice by out-of-repo cleanups. packaging/ is never
+  # cleaned (scripts/build.mjs removes only dist/); scripts/check-packaging.mjs fails the build if
+  # packaging/installer.nsh is missing.
+  buildResources: packaging
+
+files:
+  - dist/**/*
+  - "!dist/**/*.map"
+  - assets/**/*
+  - package.json
+
+asar: true
+compression: normal
+
+# Harden the packaged binary (Electron fuses). Review with E08 before release.
+electronFuses:
+  runAsNode: false
+  enableCookieEncryption: true
+  enableNodeOptionsEnvironmentVariable: false
+  enableNodeCliInspectArguments: false
+  enableEmbeddedAsarIntegrityValidation: true
+  onlyLoadAppFromAsar: true
+  grantFileProtocolExtraPrivileges: false
+
+win:
+  target:
+    - target: appx   # MSIX package (primary; see ADR-desktop-001)
+      arch: [x64]
+    - target: nsis   # per-user EXE installer (fallback / sideload / dev)
+      arch: [x64]
+  icon: assets/icons/app.ico
+  requestedExecutionLevel: asInvoker   # never elevate
+  # Signing is driven entirely by environment variables in secure CI:
+  #   CSC_LINK / WIN_CSC_LINK (+ CSC_KEY_PASSWORD / WIN_CSC_KEY_PASSWORD)  -> PFX signing
+  #   or Azure Trusted Signing via AZURE_* env + win.azureSignOptions added in CI only.
+  # Unsigned local builds are allowed; release CI sets forceCodeSigning via CLI:
+  #   electron-builder --win -c.forceCodeSigning=true
+  signtoolOptions:
+    signingHashAlgorithms: [sha256]
+    rfc3161TimeStampServer: http://timestamp.digicert.com
+
+appx:
+  # Publisher MUST equal the signing certificate subject; supplied by CI env, never hard-coded.
+  identityName: ${env.DOTTIE_APPX_IDENTITY_NAME}
+  publisher: ${env.DOTTIE_APPX_PUBLISHER}
+  publisherDisplayName: Dottie
+  displayName: Dottie
+  applicationId: Dottie
+  backgroundColor: "#2563eb"
+  languages: [en-US]
+  # Start-at-sign-in for MSIX needs the StartupTask extension + runtime API; deferred (ADR-desktop-001).
+  addAutoLaunchExtension: false
+  # runFullTrust is required for Electron (listing capabilities replaces the default, so keep it);
+  # microphone is declared so Windows privacy settings govern the (future) voice worker's mic access.
+  capabilities: [runFullTrust, microphone]
+
+nsis:
+  oneClick: true
+  perMachine: false            # per-user install into %LOCALAPPDATA%\Programs\Dottie, no UAC
+  allowElevation: false
+  packElevateHelper: false
+  selectPerMachineByDefault: false
+  createDesktopShortcut: false
+  createStartMenuShortcut: true
+  shortcutName: Dottie
+  uninstallDisplayName: Dottie
+  runAfterFinish: true
+  # Keep AppData by default; packaging/installer.nsh asks the user on interactive uninstall.
+  deleteAppDataOnUninstall: false
+  include: packaging/installer.nsh
+  installerIcon: assets/icons/app.ico
+  uninstallerIcon: assets/icons/app.ico
+
+# Linux dir target for inspecting the unpacked asar. Smoke mode does not run in a packaged build.
+linux:
+  target: dir
+  executableName: dottie
+
+publish: null

@@ -1,0 +1,15 @@
+{
+  "schema": "dottie.event",
+  "version": 2,
+  "type": "TaskFinished",
+  "eventId": "evt-taskfinished",
+  "correlationId": "corr-1",
+  "timestamp": "2026-10-18T14:03:00.123-05:00",
+  "payload": {
+    "taskId": "task-1",
+    "outcome": "succeeded",
+    "verified": true,
+    "summary": "Created the invoices folder"
+  },
+  "taskId": "task-1"
+}

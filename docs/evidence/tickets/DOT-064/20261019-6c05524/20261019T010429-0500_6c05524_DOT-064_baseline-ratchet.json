@@ -1,0 +1,37 @@
+{
+ "header": {
+  "caseId": "DOT-064-baseline",
+  "commit": "6c05524",
+  "build": null,
+  "installerSha256": null,
+  "startedAt": "2026-10-19T01:04:29-05:00",
+  "finishedAt": "2026-10-19T01:04:30-05:00",
+  "runner": "named host: grok-box (linux)",
+  "command": "cd src/verifier && python3 -m pytest -q -p no:cacheprovider",
+  "exitCode": 0,
+  "durationMs": 939,
+  "result": "pass",
+  "platform": "Linux box (Linux fakes only, no Windows build); NOT Windows evidence",
+  "tree": "dirty; src/ is git-ignored, so HEAD 6c05524 does not contain the verifier; bound by srcVerifierContentSha256 instead",
+  "srcVerifierContentSha256": "3a8181bc425948b00c7db7199c409699bc49c34f12609be80da5d0b33e477abb"
+ },
+ "ticket": "DOT-064",
+ "metric": "pytest passed, src/verifier (Linux fakes)",
+ "acceptance": "arch/BACKLOG.md DOT-064 acceptance 4: green with >= baseline passed; the count must never drop below the recorded baseline",
+ "previousBaseline": {
+  "passed": 230,
+  "source": "E11 fresh-shell run 2026-10-19T00:53:54-05:00 (reported to E01; no pack was written for it)"
+ },
+ "newBaseline": {
+  "passed": 400,
+  "failed": 0,
+  "evidence": "20261019T010429-0500_6c05524_DOT-064-pytest_log.txt"
+ },
+ "direction": "up",
+ "allowed": true,
+ "lintBaseline": {
+  "findings": 0,
+  "ruff": "0.17.1"
+ },
+ "notRecordedIn": "arch/BACKLOG.md still states '>= 230 passed'. arch/ is not edited by E11; E01 updates the floor to 400 citing this pack."
+}

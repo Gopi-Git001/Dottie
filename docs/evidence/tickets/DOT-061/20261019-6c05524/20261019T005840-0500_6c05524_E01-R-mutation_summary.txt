@@ -1,0 +1,8 @@
+# {"caseId": "E01-R1+E01-R2-mutation", "commit": "6c05524", "build": null, "installerSha256": null, "startedAt": "2026-10-19T00:58:40-05:00", "finishedAt": "2026-10-19T00:59:08-05:00", "runner": "named host: grok-box (linux)", "command": "temporary src mutation, npx tsc, node --test --test-timeout=8000 dist/test/*.test.js; src restored after each", "exitCode": 0, "durationMs": null, "result": "pass", "platform": "Linux box (Node v20.19.2); NOT Windows evidence", "tree": "dirty: packages/coordinator untracked on branch owned by E06; HEAD 6c05524 does not contain this code"}
+# note: Ruling 1/2 tests were written after their implementation, so their red phase is shown by mutation: each line reintroduces a forbidden behaviour; a non-zero fail/cancelled count = the suite catches it. M6 rerun: 65 pass, 0 fail, 9 cancelled (hung read).
+M1 gate admits anything but signed_out/expired (old fail-open) => # pass 66 # fail 8 
+M2 tool context taken from model args when present => # pass 72 # fail 2 
+M3 clarification answer treated as a new task => # pass 69 # fail 5 
+M4 text dedupe applied to clarification answers => # pass 72 # fail 2 
+M5 tool host endTask called between turns (targetIds dropped) => # pass 71 # fail 3 
+M6 no timeout on auth read => # pass 65 # fail 0 

@@ -1,0 +1,16 @@
+{
+  "name": "dottie-monorepo",
+  "private": true,
+  "description": "Root task names required by brief \u00a723. Each one delegates to the package that owns it; packages keep their own lockfiles.",
+  "scripts": {
+    "bootstrap": "npm ci --prefix packages/contracts && npm ci --prefix packages/codex-adapter && npm ci --prefix packages/coordinator && npm ci --prefix apps/desktop && python3 -m pip install -e \"packages/verifier[dev]\" && python3 -m pip install \"pytest>=8.0\"",
+    "typecheck": "npm run check --prefix packages/contracts && npm run check --prefix packages/codex-adapter && npm run check --prefix packages/coordinator && npm run typecheck --prefix apps/desktop",
+    "lint": "npm run lint --prefix apps/desktop && cd packages/verifier && python3 -m ruff check . && cd ../.. && python3 -m ruff check scripts docs",
+    "unit-test": "npm test --prefix packages/contracts && npm test --prefix packages/codex-adapter && npm test --prefix packages/coordinator && npm test --prefix apps/desktop && (cd packages/tools && python3 -m pytest -q) && (cd packages/verifier && python3 -m pytest -q)",
+    "integration-test": "echo 'not implemented (DOT-084)' && exit 1",
+    "windows-e2e": "echo 'not implemented (DOT-040; needs Gopi PC)' && exit 1",
+    "package": "echo 'not implemented (DOT-050); see apps/desktop package:win' && exit 1",
+    "verify-signature": "echo 'not implemented (DOT-080)' && exit 1",
+    "secret-scan": "bash scripts/secret-scan.sh ."
+  }
+}

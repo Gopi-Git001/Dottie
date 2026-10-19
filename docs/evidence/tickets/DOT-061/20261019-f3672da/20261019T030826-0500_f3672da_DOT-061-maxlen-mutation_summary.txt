@@ -1,0 +1,33 @@
+# {"caseId": "DOT-061-maxlen-mutation", "commit": "f3672da", "build": null, "installerSha256": null, "startedAt": null, "finishedAt": null, "runner": "named host: grok-box (linux)", "command": "python3 mut6.py (M1-M12) + mut6b.py (M11 rerun as a test-visible mutant); source restored and asserted equal after each", "exitCode": 0, "durationMs": null, "result": "12/12 killed", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "tree": "working copy == f3672da"}
+M1 reason not truncated: KILLED (1 failing)
+    not ok 34 - untrusted max length: reasonUntrusted (codex_command, codex_file_change) unchanged at the limit, one over cut to the limit ending in an ellipsis; command and paths never cut
+M2 summary not truncated: KILLED (1 failing)
+    not ok 35 - untrusted max length: summaryUntrusted (pre_dispatch) and app.windowTitle (ui_action) follow the same rule; the coordinator emits the cut summary and the hash covers what is shown
+M3 windowTitle not truncated: KILLED (1 failing)
+    not ok 35 - untrusted max length: summaryUntrusted (pre_dispatch) and app.windowTitle (ui_action) follow the same rule; the coordinator emits the cut summary and the hash covers what is shown
+M4 off-by-one: cut keeps max chars + ellipsis: KILLED (2 failing)
+    not ok 34 - untrusted max length: reasonUntrusted (codex_command, codex_file_change) unchanged at the limit, one over cut to the limit ending in an ellipsis; command and paths never cut
+    not ok 35 - untrusted max length: summaryUntrusted (pre_dispatch) and app.windowTitle (ui_action) follow the same rule; the coordinator emits the cut summary and the hash covers what is shown
+M5 cut at limit (<= -> <): KILLED (2 failing)
+    not ok 34 - untrusted max length: reasonUntrusted (codex_command, codex_file_change) unchanged at the limit, one over cut to the limit ending in an ellipsis; command and paths never cut
+    not ok 35 - untrusted max length: summaryUntrusted (pre_dispatch) and app.windowTitle (ui_action) follow the same rule; the coordinator emits the cut summary and the hash covers what is shown
+M6 UTF-16 units instead of code points: KILLED (1 failing)
+    not ok 34 - untrusted max length: reasonUntrusted (codex_command, codex_file_change) unchanged at the limit, one over cut to the limit ending in an ellipsis; command and paths never cut
+M7 no ellipsis (silent cut): KILLED (2 failing)
+    not ok 34 - untrusted max length: reasonUntrusted (codex_command, codex_file_change) unchanged at the limit, one over cut to the limit ending in an ellipsis; command and paths never cut
+    not ok 35 - untrusted max length: summaryUntrusted (pre_dispatch) and app.windowTitle (ui_action) follow the same rule; the coordinator emits the cut summary and the hash covers what is shown
+M8 truncate before strip: KILLED (1 failing)
+    not ok 34 - untrusted max length: reasonUntrusted (codex_command, codex_file_change) unchanged at the limit, one over cut to the limit ending in an ellipsis; command and paths never cut
+M9 command truncated too: KILLED (2 failing)
+    not ok 17 - Codex display (1o): a command shows the full command line (no ellipsis), cwd, network flag, the escalation as its own field, Codex reason only in the untrusted slot
+    not ok 34 - untrusted max length: reasonUntrusted (codex_command, codex_file_change) unchanged at the limit, one over cut to the limit ending in an ellipsis; command and paths never cut
+M10 paths truncated too: KILLED (1 failing)
+    not ok 34 - untrusted max length: reasonUntrusted (codex_command, codex_file_change) unchanged at the limit, one over cut to the limit ending in an ellipsis; command and paths never cut
+M11 validator: no maxLen check: KILLED (0 failing, tsc error)
+M12 validator: windowTitle maxLen dropped: KILLED (1 failing)
+    not ok 36 - untrusted max length: validateEvent rejects an over-length untrusted slot (validator rejects, never repairs)
+TOTAL 12/12 killed
+## M11 first run was killed only by a tsc error (not a valid kill); rerun with a type-clean mutant:
+M11 validator: no maxLen check: KILLED (1 failing)
+    not ok 36 - untrusted max length: validateEvent rejects an over-length untrusted slot (validator rejects, never repairs)
+TOTAL 1/1 killed

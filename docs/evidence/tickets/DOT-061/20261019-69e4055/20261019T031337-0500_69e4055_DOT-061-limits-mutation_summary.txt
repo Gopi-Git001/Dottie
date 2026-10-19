@@ -1,0 +1,67 @@
+# {"caseId": "DOT-061-limits-mutation", "commit": "69e4055", "build": null, "installerSha256": null, "startedAt": null, "finishedAt": null, "runner": "named host: grok-box (linux)", "command": "python3 mut7.py (V1-V25); source restored and asserted equal after each", "exitCode": 0, "durationMs": null, "result": "24/25 killed; V12 survived (equivalent mutant, see README)", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "tree": "working copy == 69e4055"}
+V1 method cut dropped (tool): KILLED (1 failing)
+    not ok 37 - 1v final limits (CUT): max-1 / max / max+1 for every cut field; at or under unchanged, over cut to max-1 + ellipsis; the cut display validates
+V2 targetLabel cut dropped: KILLED (1 failing)
+    not ok 37 - 1v final limits (CUT): max-1 / max / max+1 for every cut field; at or under unchanged, over cut to max-1 + ellipsis; the cut display validates
+V3 method cut dropped (ui_action): KILLED (1 failing)
+    not ok 37 - 1v final limits (CUT): max-1 / max / max+1 for every cut field; at or under unchanged, over cut to max-1 + ellipsis; the cut display validates
+V4 appName cut dropped: KILLED (1 failing)
+    not ok 37 - 1v final limits (CUT): max-1 / max / max+1 for every cut field; at or under unchanged, over cut to max-1 + ellipsis; the cut display validates
+V5 processImage cut dropped: KILLED (1 failing)
+    not ok 37 - 1v final limits (CUT): max-1 / max / max+1 for every cut field; at or under unchanged, over cut to max-1 + ellipsis; the cut display validates
+V6 wrong limit method 64->65: KILLED (2 failing)
+    not ok 37 - 1v final limits (CUT): max-1 / max / max+1 for every cut field; at or under unchanged, over cut to max-1 + ellipsis; the cut display validates
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+V7 wrong limit processImage 260->256: KILLED (2 failing)
+    not ok 37 - 1v final limits (CUT): max-1 / max / max+1 for every cut field; at or under unchanged, over cut to max-1 + ellipsis; the cut display validates
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+V8 cwd byte bound dropped (builder): KILLED (3 failing)
+    not ok 38 - 1v final limits (NEVER cut): limit passes unchanged, limit+1 → null (display_unavailable) for command bytes, path count, path bytes, cwd bytes, escalation count and entry length
+    not ok 39 - 1v final limits (NEVER cut, end to end): an over-limit cwd, path or escalation → declined display_unavailable, no dialog, nothing approved
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+V9 cwd counted in chars not bytes: KILLED (1 failing)
+    not ok 38 - 1v final limits (NEVER cut): limit passes unchanged, limit+1 → null (display_unavailable) for command bytes, path count, path bytes, cwd bytes, escalation count and entry length
+V10 escalation count bound dropped: KILLED (3 failing)
+    not ok 38 - 1v final limits (NEVER cut): limit passes unchanged, limit+1 → null (display_unavailable) for command bytes, path count, path bytes, cwd bytes, escalation count and entry length
+    not ok 39 - 1v final limits (NEVER cut, end to end): an over-limit cwd, path or escalation → declined display_unavailable, no dialog, nothing approved
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+V11 escalation entry bound dropped: KILLED (3 failing)
+    not ok 38 - 1v final limits (NEVER cut): limit passes unchanged, limit+1 → null (display_unavailable) for command bytes, path count, path bytes, cwd bytes, escalation count and entry length
+    not ok 39 - 1v final limits (NEVER cut, end to end): an over-limit cwd, path or escalation → declined display_unavailable, no dialog, nothing approved
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+V12 escalation entry cut instead of declined: SURVIVED (0 failing)
+V13 codex path byte bound dropped: KILLED (3 failing)
+    not ok 38 - 1v final limits (NEVER cut): limit passes unchanged, limit+1 → null (display_unavailable) for command bytes, path count, path bytes, cwd bytes, escalation count and entry length
+    not ok 39 - 1v final limits (NEVER cut, end to end): an over-limit cwd, path or escalation → declined display_unavailable, no dialog, nothing approved
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+V14 tool path byte bound dropped: KILLED (1 failing)
+    not ok 38 - 1v final limits (NEVER cut): limit passes unchanged, limit+1 → null (display_unavailable) for command bytes, path count, path bytes, cwd bytes, escalation count and entry length
+V15 path limit 4096->4097: KILLED (3 failing)
+    not ok 38 - 1v final limits (NEVER cut): limit passes unchanged, limit+1 → null (display_unavailable) for command bytes, path count, path bytes, cwd bytes, escalation count and entry length
+    not ok 39 - 1v final limits (NEVER cut, end to end): an over-limit cwd, path or escalation → declined display_unavailable, no dialog, nothing approved
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+V16 escalation entries 32->33: KILLED (3 failing)
+    not ok 38 - 1v final limits (NEVER cut): limit passes unchanged, limit+1 → null (display_unavailable) for command bytes, path count, path bytes, cwd bytes, escalation count and entry length
+    not ok 39 - 1v final limits (NEVER cut, end to end): an over-limit cwd, path or escalation → declined display_unavailable, no dialog, nothing approved
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+V17 validator: cwd bytes dropped: KILLED (1 failing)
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+V18 validator: escalation count dropped: KILLED (1 failing)
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+V19 validator: escalation entry chars dropped: KILLED (1 failing)
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+V20 validator: path bytes dropped (both kinds): KILLED (1 failing)
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+V21 validator: tool method/targetLabel maxLen dropped: KILLED (1 failing)
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+V22 validator: ui method maxLen dropped: KILLED (1 failing)
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+V23 validator: appName/processImage maxLen dropped: KILLED (1 failing)
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+V24 validator: command bytes counted as chars: KILLED (1 failing)
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+V25 builder: command bytes counted as chars: KILLED (23 failing)
+    not ok 18 - Codex display (1o): a file change shows every full path and the count; 500 paths ok; 501 paths or a command over 8 KB → display_unavailable
+    not ok 19 - Codex display (1o): a display port plugs in (E02 params) and its output is what is shown; a throwing port → display_unavailable
+    not ok 20 - Codex join (1o c / 1p): a joined request is declined at once with duplicate_request; only the first can be approved; each request answered exactly once; joinedTo logged; no "you declined" copy
+TOTAL 24/25 killed

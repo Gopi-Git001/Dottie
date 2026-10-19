@@ -1,0 +1,17 @@
+{"caseId":"DOT099-FAULT-F2-stray-dup-d-800ms","commit":"5ae93948e047bca3ce4efb606acd7ccce22509c1","dirtyTree":true,"build":null,"installerSha256":null,"startedAt":"2026-10-19T05:56:41.739-05:00","finishedAt":"2026-10-19T05:56:47.145-05:00","command":"node scripts/smoke-run.mjs --runs 1 --out /workspace/smoke-logs/5ae9394/fault-F2-stray-dup-d-800ms --timeout-ms 90000 --case-id DOT099-FAULT-F2-stray-dup-d-800ms","exitCode":1,"durationMs":5406,"result":"fail","runner":"linux-box"}
+{
+  "runs": 1,
+  "ok": 0,
+  "failed": 1,
+  "timedOut": 0,
+  "failedSteps": [
+    {
+      "run": 1,
+      "step": "after:timer.decline"
+    }
+  ],
+  "msMin": 5404,
+  "msMedian": 5404,
+  "msMax": 5404,
+  "logs": "/workspace/smoke-logs/5ae9394/fault-F2-stray-dup-d-800ms"
+}

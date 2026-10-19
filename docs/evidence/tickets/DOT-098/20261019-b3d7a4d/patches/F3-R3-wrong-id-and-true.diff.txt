@@ -1,0 +1,15 @@
+diff --git a/apps/desktop/src/main/main.ts b/apps/desktop/src/main/main.ts
+index f5491bd..fa75a74 100644
+--- a/apps/desktop/src/main/main.ts
++++ b/apps/desktop/src/main/main.ts
+@@ -497,6 +497,10 @@ async function smokeApproval(approvalWindow: ApprovalWindow, coordinator: StubCo
+       })()`)) as { escapes: string[] | null; badge: string | null; text: string | null; rawHiddenInDom: boolean | null; scrollWidth: number | null; clientWidth: number | null; methodBadge: boolean })
+     : null;
+   out['boundPath'] = boundProbe;
++  { // FAULT F3-R3-wrong-id-and-true (never commit)
++    const orig = coordinator.resolutions.push.bind(coordinator.resolutions);
++    coordinator.resolutions.push = (...items) => { coordinator.resolutions.push = orig; return orig(...items.map((x) => ({ ...x, resolved: { ...x.resolved, approved: true, actionId: '7'.repeat(64) } }))); };
++  }
+   await clickThatCloses('bound.decline', wc, `document.getElementById('decline').click()`, replies, closed);
+   // DOT-098 (E07 recheck): ONE check on the full ordered reply sequence (actionId, approved, count).
+   // Runs after the last click's settle window, so a late duplicate from any click is counted too.

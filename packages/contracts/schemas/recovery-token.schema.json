@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:dottie:contracts:recovery-token:v1",
+  "title": "RecoveryToken (CONTRACTS §3.3, ADR-0017): shape only; the MAC is verified by K8 (E08)",
+  "$comment": "TS-only rules (validateRecoveryToken): actionId differs from parentActionId; the WindowIdentity TS-only rules.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "actionId",
+    "parentActionId",
+    "recoveryAction",
+    "taskId",
+    "windowIdentity",
+    "nonce",
+    "mac"
+  ],
+  "properties": {
+    "actionId": {
+      "$ref": "#/$defs/sha256Hex"
+    },
+    "parentActionId": {
+      "$ref": "#/$defs/sha256Hex"
+    },
+    "recoveryAction": {
+      "enum": [
+        "restore",
+        "focus",
+        "move_to_monitor"
+      ]
+    },
+    "taskId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "windowIdentity": {
+      "$ref": "#/$defs/windowIdentity"
+    },
+    "nonce": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{21}[AQgw]$",
+      "not": {
+        "pattern": "\\n"
+      }
+    },
+    "mac": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$",
+      "not": {
+        "pattern": "\\n"
+      }
+    }
+  },
+  "$defs": {
+    "sha256Hex": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "not": {
+        "pattern": "\\n"
+      }
+    },
+    "windowIdentity": {
+      "title": "WindowIdentity (CONTRACTS §3.3)",
+      "$comment": "TS-only rules (validateWindowIdentity): hwnd <= 2^64-1, pid <= 2^32-1, processStartTime <= 2^63-1; windowClass is 1-256 UTF-16 code units (JSON Schema counts code points) with no lone surrogate. Any failure = the window has no identity.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hwnd",
+        "pid",
+        "windowClass",
+        "processStartTime"
+      ],
+      "properties": {
+        "hwnd": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "not": {
+            "pattern": "\\n"
+          },
+          "maxLength": 20
+        },
+        "pid": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "not": {
+            "pattern": "\\n"
+          },
+          "maxLength": 10
+        },
+        "windowClass": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "processStartTime": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "not": {
+            "pattern": "\\n"
+          },
+          "maxLength": 19
+        }
+      }
+    }
+  }
+}

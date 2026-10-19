@@ -1,0 +1,12 @@
+{"caseId":"DOT099-FU1-RUNNER-SIGTERM","commit":"c5a9f3db36816eeef708e49cbc38a6a369aae3f0","dirtyTree":false,"dirtyTreeScope":"repo, excluding docs/evidence/","build":null,"installerSha256":null,"buildNote":"n/a: unpackaged","startedAt":"2026-10-19T06:14:41.879-05:00","finishedAt":"2026-10-19T06:14:44.946-05:00","command":"node scripts/smoke-run.mjs --runs 1 --timeout-ms 90000 --out /workspace/smoke-logs/c5a9f3d/runner-sigTERM --case-id DOT099-FU1-RUNNER-SIGTERM","exitCode":1,"durationMs":3067,"result":"fail","runner":"linux-box"}
+{
+  "runs": 1,
+  "ok": 0,
+  "failed": 1,
+  "timedOut": 0,
+  "failedSteps": [],
+  "msMin": 3066,
+  "msMedian": 3066,
+  "msMax": 3066,
+  "logs": "/workspace/smoke-logs/c5a9f3d/runner-sigTERM"
+}

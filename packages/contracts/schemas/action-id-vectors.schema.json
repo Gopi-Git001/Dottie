@@ -1,0 +1,333 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:dottie:contracts:action-id-vectors:v1",
+  "title": "actionId / canonical JSON test vectors (ADR-0009 CR2, CONTRACTS §3.3): fixtures/action-id/vectors.json",
+  "$comment": "Numbers that JSON cannot carry are written as {\"$number\": \"<text>\"} or {\"$bigint\": \"<digits>\"} inside an input.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "_readme",
+    "purpose",
+    "canonicalJson",
+    "canonicalJsonInvalid",
+    "displays",
+    "displaysInvalid",
+    "displayCuts",
+    "actionId",
+    "actionIdInvalid",
+    "shortNames",
+    "paths",
+    "pathBindings"
+  ],
+  "properties": {
+    "_readme": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "purpose": {
+      "const": "dottie.actionId.v1"
+    },
+    "canonicalJson": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "input",
+          "canonical"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "input": {
+            "type": "object"
+          },
+          "canonical": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "canonicalJsonInvalid": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "input",
+          "error"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "input": {
+            "type": "object"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "displays": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "display",
+          "canonical",
+          "displayHash"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "display": {
+            "type": "object"
+          },
+          "canonical": {
+            "type": "string"
+          },
+          "displayHash": {
+            "$ref": "#/$defs/sha256Hex"
+          }
+        }
+      }
+    },
+    "displaysInvalid": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "display",
+          "error"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "display": {
+            "type": "object"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "displayCuts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "field",
+          "max",
+          "input",
+          "inputCodePoints",
+          "output",
+          "outputCodePoints",
+          "cut",
+          "display",
+          "displayHash"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "field": {
+            "enum": [
+              "summaryUntrusted",
+              "windowTitle"
+            ]
+          },
+          "max": {
+            "type": "integer"
+          },
+          "input": {
+            "type": "string"
+          },
+          "inputCodePoints": {
+            "type": "integer"
+          },
+          "output": {
+            "type": "string"
+          },
+          "outputCodePoints": {
+            "type": "integer"
+          },
+          "cut": {
+            "type": "boolean"
+          },
+          "display": {
+            "type": "object"
+          },
+          "displayHash": {
+            "$ref": "#/$defs/sha256Hex"
+          }
+        }
+      }
+    },
+    "actionId": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "input",
+          "display",
+          "canonical",
+          "actionId"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "input": {
+            "type": "object"
+          },
+          "display": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "canonical": {
+            "type": "string"
+          },
+          "actionId": {
+            "$ref": "#/$defs/sha256Hex"
+          }
+        }
+      }
+    },
+    "actionIdInvalid": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "input",
+          "error"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "input": {
+            "type": "object"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "shortNames": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "paths": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "platform",
+          "raw"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "platform": {
+            "enum": [
+              "win32",
+              "posix"
+            ]
+          },
+          "raw": {
+            "type": "string"
+          },
+          "canonical": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "pathBindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "platform",
+          "raws",
+          "actionIds",
+          "same"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "platform": {
+            "enum": [
+              "win32",
+              "posix"
+            ]
+          },
+          "raws": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "actionIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/sha256Hex"
+            }
+          },
+          "same": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256Hex": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "not": {
+        "pattern": "\\n"
+      }
+    }
+  }
+}

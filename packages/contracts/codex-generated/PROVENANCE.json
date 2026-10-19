@@ -1,0 +1,13 @@
+{
+  "generatedBy": "packages/contracts/scripts/codex-codegen.mjs",
+  "codexVersion": "codex-cli 0.163.0",
+  "tag": "rust-v0.163.0",
+  "commit": "83086188ae0614bd882818ff1aa23f3194962012",
+  "platform": "linux-x64",
+  "binarySha256": "399ff69c431c066e40de318fba45c2b07f45a76b19939d247ee4828fc70c4215",
+  "commands": [
+    "codex app-server generate-ts --out ts",
+    "codex app-server generate-json-schema --out json-schema"
+  ],
+  "experimental": false
+}

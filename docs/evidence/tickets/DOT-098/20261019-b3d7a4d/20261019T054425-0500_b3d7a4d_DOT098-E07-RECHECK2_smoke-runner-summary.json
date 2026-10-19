@@ -1,0 +1,12 @@
+{"caseId":"DOT098-E07-RECHECK2","commit":"b3d7a4d01d955da38f213ba93c633d9076cc10fe","dirtyTree":false,"build":null,"installerSha256":null,"startedAt":"2026-10-19T05:44:25.706-05:00","finishedAt":"2026-10-19T05:44:58.572-05:00","command":"node scripts/smoke-run.mjs --runs 5 --out /workspace/smoke-logs/b3d7a4d/clean-5 --timeout-ms 90000 --case-id DOT098-E07-RECHECK2","exitCode":0,"durationMs":32866,"result":"pass","runner":"linux-box"}
+{
+  "runs": 5,
+  "ok": 5,
+  "failed": 0,
+  "timedOut": 0,
+  "failedSteps": [],
+  "msMin": 6531,
+  "msMedian": 6580,
+  "msMax": 6595,
+  "logs": "/workspace/smoke-logs/b3d7a4d/clean-5"
+}

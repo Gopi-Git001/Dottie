@@ -1,0 +1,12 @@
+diff --git a/apps/desktop/src/main/main.ts b/apps/desktop/src/main/main.ts
+index 74ddc74..bd8b977 100644
+--- a/apps/desktop/src/main/main.ts
++++ b/apps/desktop/src/main/main.ts
+@@ -421,6 +421,7 @@ async function smokeApproval(approvalWindow: ApprovalWindow, coordinator: StubCo
+   }
+   out['timer'] = timer;
+   await clickThatCloses('timer.decline', 'd'.repeat(64), wc, `document.getElementById('decline').click()`, replies, closed);
++  { const d = coordinator.resolutions[coordinator.resolutions.length - 1]; setTimeout(() => { if (d) coordinator.resolutions.push(d); }, 500); } // FAULT F2 (never commit): dup of d's own reply ~800 ms after the timer window closed
+   // Codex approval display (CONTRACTS L221/L231): full command in a read-only box (no ellipsis)
+   // that wraps with no horizontal scroll, CRLF as one break, line count, visible escapes + badge,
+   // tab marker, visible trailing spaces; escalation on its own; reason only in the untrusted slot.

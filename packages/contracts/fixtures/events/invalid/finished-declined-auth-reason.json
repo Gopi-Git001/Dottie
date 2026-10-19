@@ -1,0 +1,19 @@
+{
+  "errorPath": "payload.reason",
+  "event": {
+    "schema": "dottie.event",
+    "version": 2,
+    "type": "TaskFinished",
+    "eventId": "evt-taskfinished",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-18T14:03:00.123-05:00",
+    "payload": {
+      "taskId": "task-2",
+      "verified": false,
+      "outcome": "declined",
+      "reason": "auth_required",
+      "summary": "x"
+    },
+    "taskId": "task-2"
+  }
+}

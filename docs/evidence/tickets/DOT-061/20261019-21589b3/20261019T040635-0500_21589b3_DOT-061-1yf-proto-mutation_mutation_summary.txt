@@ -1,0 +1,26 @@
+# {"caseId": "DOT-061-1yf-proto-mutation", "commit": "21589b3", "build": null, "installerSha256": null, "startedAt": null, "finishedAt": null, "runner": "named host: grok-box (linux)", "command": "python3 /tmp/d14/mutp.py (P1-P10 minus P6) plus a combined P5+P9 run", "exitCode": 0, "result": "6/9 single mutants killed; P5+P9 combined killed; P4 equivalent", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "tree": "21589b3 src (restored and cmp-checked after each run)"}
+P1 1y follow-up: hasUiActionPrefix case-sensitive again (the bug): KILLED (1 failing)
+    not ok 188 - 1y follow-up: kind tool rejects every ui./window. method in ANY case (builder and validateEvent); uix.click / file.read are tools
+P2 1y: our prefix guard removed (vendored only): KILLED (1 failing)
+    not ok 188 - 1y follow-up: kind tool rejects every ui./window. method in ANY case (builder and validateEvent); uix.click / file.read are tools
+P3 proto: toolDisplay category lookup not own-only: KILLED (1 failing)
+    not ok 189 - prototype keys: every builder given a prototype-name category returns null or a display validateEvent rejects; never throws, never valid
+P4 proto: countOf lookup not own-only: SURVIVED (0 failing)
+P5 proto: plainOwnDisplay check removed from validateEvent: SURVIVED (0 failing)
+P7 proto: plainOwnDisplay not recursive (app): KILLED (1 failing)
+    not ok 195 - prototype keys: plainOwnDisplay accepts only plain / null-prototype objects whose nested objects are plain too
+P8 proto: validateEvent field reads not own-only: KILLED (1 failing)
+    not ok 194 - prototype keys: an event whose payload fields are INHERITED is rejected by validateEvent (own fields only)
+P9 proto: pre_dispatch required-key check uses `in`: SURVIVED (0 failing)
+P10 proto: plainOwnDisplay accepts any prototype: KILLED (1 failing)
+    not ok 195 - prototype keys: plainOwnDisplay accepts only plain / null-prototype objects whose nested objects are plain too
+TOTAL 6/9 killed
+
+P5+P9 combined: KILLED 1
+    not ok 191 - prototype keys: a display whose fields are INHERITED (not own) is rejected by validateEvent and the port, never hashed as {}
+
+Notes:
+- P4 equivalent: countOf is only consulted after toolDisplay's own-key check on the category table, so an inherited category never reaches it.
+- P5 and P9 are each redundant with the other (layered own-property checks in displayProblems: the plainOwnDisplay early return, and the own-only required-key loop). Removing both at once is KILLED (above), so the pair is covered.
+- P6 (port guard) was removed from the code rather than kept as a surviving mutant: E02's vendored canonicalJson already throws CanonicalError('non-plain object') for any display with a non-Object/non-null prototype, so the port fails closed without it (test 'a display whose fields are INHERITED ... rejected by validateEvent and the port' still passes).
+- P7 and P10 are killed by the direct plainOwnDisplay unit test.

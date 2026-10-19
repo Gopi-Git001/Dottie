@@ -1,0 +1,12 @@
+{"caseId":"DOT099-FU3-DIRTY-rootfile","commit":"b370fa491ef67f9c29983329340a3af96f3e0711","dirtyTree":true,"dirtyTreeScope":"repo, excluding docs/evidence/","build":null,"installerSha256":null,"buildNote":"n/a: unpackaged","startedAt":"2026-10-19T06:18:35.945-05:00","finishedAt":"2026-10-19T06:18:37.014-05:00","command":"node scripts/smoke-run.mjs --runs 1 --timeout-ms 1000 --out /workspace/smoke-logs/b370fa4/dirty-check/rootfile --case-id DOT099-FU3-DIRTY-rootfile","exitCode":1,"durationMs":1069,"result":"fail","runner":"linux-box"}
+{
+  "runs": 1,
+  "ok": 0,
+  "failed": 1,
+  "timedOut": 1,
+  "failedSteps": [],
+  "msMin": 1067,
+  "msMedian": 1067,
+  "msMax": 1067,
+  "logs": "/workspace/smoke-logs/b370fa4/dirty-check/rootfile"
+}
