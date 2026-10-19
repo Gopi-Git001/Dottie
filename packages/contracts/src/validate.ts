@@ -227,7 +227,9 @@ const PAYLOADS: Readonly<Record<EventType, Check>> = {
     sideEffects: req(oneOf(SIDE_EFFECT_SUMMARIES)),
     sideEffectsCommitted: req(bool),
     committedActions: req(
-      arrayOf(objectOf({ toolId: req(nonEmpty), observedState: req(observedState), certainty: req(oneOf(['committed', 'possible'])) })),
+      // E01 ruling 2j: observedState is ObservedState | null. The key is always present (a missing key is rejected),
+      // and null is only for an unverified entry whose side effect is possible (cross-checks below).
+      arrayOf(objectOf({ toolId: req(nonEmpty), observedState: req((v, p, i) => (v === null ? undefined : observedState(v, p, i))), certainty: req(oneOf(['committed', 'possible'])) })),
     ),
     report: req(str),
   }),
@@ -344,6 +346,28 @@ function invariants(type: EventType, envelope: Record<string, unknown>, payload:
     case 'TaskCancelled':
       if ((payload['sideEffects'] === 'committed') !== payload['sideEffectsCommitted']) {
         i.push({ path: 'payload.sideEffectsCommitted', message: "must be true exactly when sideEffects is 'committed'" });
+      }
+      {
+        // E01 ruling 2j. (a) A null observedState means nothing was verified. CommittedAction has no separate
+        // verified/sideEffect field, so the entry's side effect is its certainty: null only with certainty
+        // 'possible' (a 'committed' claim needs an observed state). (b) Any null entry means the stop is not clean.
+        const actions = Array.isArray(payload['committedActions']) ? (payload['committedActions'] as unknown[]) : [];
+        let anyNull = false;
+        actions.forEach((a, k) => {
+          if (!isRecord(a) || !hasOwn(a, 'observedState') || a['observedState'] !== null) return;
+          anyNull = true;
+          if (a['certainty'] !== 'possible') {
+            i.push({ path: `payload.committedActions[${k}].observedState`, message: "may be null only for an unverified entry with certainty 'possible' (ruling 2j)" });
+          }
+        });
+        if (anyNull) {
+          if (payload['stopStatus'] === 'stopped_no_side_effects' || payload['stopStatus'] === 'completed_before_stop') {
+            i.push({ path: 'payload.stopStatus', message: `cannot be '${String(payload['stopStatus'])}' while an entry's observedState is null (ruling 2j)` });
+          }
+          if (payload['sideEffects'] !== 'possible' && payload['sideEffects'] !== 'committed') {
+            i.push({ path: 'payload.sideEffects', message: "must be at least 'possible' while an entry's observedState is null (ruling 2j)" });
+          }
+        }
       }
       break;
     default:

@@ -78,6 +78,18 @@ over every event type's valid fixtures: it injects an ordinary unknown key and e
 ordinary keys. Prototype member names (`RESERVED_KEY_NAMES`) are now rejected there too ("reserved prototype member
 name"). No hash changed.
 
+E01 ruling 2j (given 2026-10-19 11:31 CDT via E02's dispatcher, not yet committed in dottie-e01, so no pin SHA).
+`TaskCancelled.committedActions[].observedState` is `ObservedState | null`. (a) Null only for an unverified entry
+whose side effect is possible. `CommittedAction` has no separate `verified` / `sideEffect` member, so this reads
+the entry's `certainty` as its side effect: null only with `certainty: 'possible'`, rejected at
+`committedActions[k].observedState`. (b) If any entry is null, `stopStatus` is neither `stopped_no_side_effects` nor
+`completed_before_stop`, and `sideEffects` is `possible` or `committed`. (c) The key is always present; a missing key
+is rejected (closed objects). Fixtures: valid `task-cancelled-null-observed-state{,-mixed}.json` and the clean-stop
+pair `task-cancelled-{stopped-no-side-effects,completed-before-stop}.json`; invalid
+`cancelled-null-observed-state-{certainty-committed,stopped-no-side-effects,completed-before-stop,side-effects-none}.json`
+and `cancelled-observed-state-missing.json`. No JSON Schema or Python record covers events, so none changed. No
+hash changed. If E01 meant new per-entry `verified` / `sideEffect` members, (a) needs revisiting.
+
 When E01 lands a new ruling, update the mirror and this pin in the same commit. Where CONTRACTS leaves
 something open, the conservative reading is implemented and noted at the code site (search for
 `ruling` / `TODO(DOT-095)` / `TODO(E03 port`).
