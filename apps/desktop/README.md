@@ -20,7 +20,9 @@ npm run check          # typecheck + lint + test
 npm run build          # typecheck + esbuild bundles -> dist/{main,preload,renderer}
 npm start              # build:fast + launch Electron (dev)
 npm run smoke          # unpackaged only: boots the app, opens onboarding, probes renderer isolation, prints DOTTIE_SMOKE_OK {...}, quits
-                       #   writes dottie-smoke-<pid>.png under the app temp dir (not an env path)
+                       #   screenshot is opt-in (--dottie-smoke-screenshot). CI does not pass it.
+                       #   the PNG is <temp>/dottie-smoke/dottie-smoke-<pid>.png and is deleted at the end
+                       #   unless --dottie-smoke-screenshot-keep. The path is not taken from the environment.
 npm run smoke:ci       # DOT-098: runner with a hard timeout per run, keeps every run's log (also on timeout), no retries
                        #   node scripts/smoke-run.mjs --runs 100 --out /path/to/logs --timeout-ms 90000 --case-id DOT098-AC3
                        #   files: <YYYYMMDD>T<HHMMSS>-0500_<sha>_<caseId>_<artifact>[_runNNN].<ext>, header JSON on line 1

@@ -74,8 +74,9 @@ const iso = (d) => {
 const stamp = (d) => iso(d).replace(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})\.\d{3}([+-])(\d{2}):(\d{2})$/, '$1$2$3T$4$5$6$7$8$9');
 const name = (d, artifact, ext, run) => `${stamp(d)}_${shortSha}_${caseId}_${artifact}${run === undefined ? '' : `_run${pad(run, 3)}`}.${ext}`;
 const header = (o) => ({ caseId, commit, dirtyTree: dirty, dirtyTreeScope: DIRTY_SCOPE, build: null, installerSha256: null, buildNote: 'n/a: unpackaged', ...o, runner: runnerId });
-const screenshot = args.includes('--screenshot') || process.env['DOTTIE_SMOKE_SCREENSHOT'] === '1';
-const electronArgs = ['.', '--dottie-smoke-test', '--dottie-smoke-ui', ...(screenshot ? ['--dottie-smoke-screenshot'] : [])];
+const electronArgs = ['.', '--dottie-smoke-test', '--dottie-smoke-ui'];
+if (args.includes('--dottie-smoke-screenshot')) electronArgs.push('--dottie-smoke-screenshot');
+if (args.includes('--dottie-smoke-screenshot-keep')) electronArgs.push('--dottie-smoke-screenshot-keep');
 const electronCmd = `electron ${electronArgs.join(' ')}`;
 const KILL_GRACE_MS = 2000;
 /** The run in progress (for the abort handlers): its group pid, supervisor and .partial path. */

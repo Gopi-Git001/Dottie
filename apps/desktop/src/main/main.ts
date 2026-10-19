@@ -3,7 +3,7 @@
  * (controller, state/*, ipc/*, settings/*, lifecycle/*).
  */
 import { app, dialog, ipcMain, net, powerMonitor, session, shell } from 'electron';
-import { join } from 'node:path';
+import { join, sep } from 'node:path';
 import { IPC_EVENTS } from '../shared/ipc';
 import { isOnboardingComplete } from '../shared/onboarding';
 import { DesktopController } from './controller';
@@ -19,7 +19,7 @@ import { AutoStartManager, launchedAtLogin } from './lifecycle/autostart';
 import { QuitController } from './lifecycle/quit';
 import { MemoryAuditSink, StubAuthAdapter, StubCoordinator, StubRuntimeStatus, StubVoiceService } from './services/stubs';
 import { SettingsStore } from './settings/store';
-import { markSmokeActive, smokeLaunch, smokeScreenshotRequested, smokeShouldCapture } from './smoke/launch';
+import { markSmokeActive, smokeLaunch, smokeScreenshotKeep, smokeScreenshotRequested } from './smoke/launch';
 import { type ExpectedReply, type ReplyEntry, SmokeStepAssertion, SmokeStepTimeout, SmokeSteps, clickRepliesBlame, replySequenceBlame, shortActionId } from './smoke/steps';
 
 const SMOKE_UI_ARG = '--dottie-smoke-ui';
@@ -300,6 +300,7 @@ async function runSmokeTest(
     return;
   } finally {
     clearTimeout(watchdog);
+    await discardSmokeScreenshot(result);
   }
   const approval = result['approval'] as { assertionsPassed?: boolean } | undefined;
   if (approval && approval.assertionsPassed !== true) {
@@ -308,6 +309,23 @@ async function runSmokeTest(
     return;
   }
   console.log(`DOTTIE_SMOKE_OK ${JSON.stringify(result)}`);
+}
+
+/** Delete a smoke PNG we wrote, unless the caller passed --dottie-smoke-screenshot-keep. Never touches a path outside the pinned folder. */
+async function discardSmokeScreenshot(result: Record<string, unknown>): Promise<void> {
+  const shot = result['screenshot'];
+  if (typeof shot !== 'object' || shot === null) return;
+  const rec = shot as { path?: unknown; keep?: unknown };
+  if (rec.keep === true || typeof rec.path !== 'string') return;
+  const dir = join(app.getPath('temp'), 'dottie-smoke');
+  const prefix = dir.endsWith(sep) ? dir : `${dir}${sep}`;
+  if (!rec.path.startsWith(prefix)) return;
+  try {
+    const { rm } = await import('node:fs/promises');
+    await rm(rec.path, { force: true });
+  } catch {
+    // The result already records the capture. A leftover file is not a smoke failure.
+  }
 }
 
 async function smokeBody(window: MainWindow, approvalWindow: ApprovalWindow, coordinator: StubCoordinator, controller: DesktopController, result: Record<string, unknown>): Promise<void> {
@@ -330,31 +348,35 @@ async function smokeBody(window: MainWindow, approvalWindow: ApprovalWindow, coo
           inlineEvalBlocked: (() => { try { eval('1'); return false; } catch { return true; } })(),
         }))()`,
       ));
-      // b0ee837 called capturePage only when DOTTIE_SMOKE_SCREENSHOT was a path, and CI never set
-      // that variable. 65f9ebb always captured, to a pinned temp file. On the CI xvfb that call
-      // threw UnknownVizError (after:renderer.probe) and aborted before smokeApproval. Five local
-      // xvfb+openbox runs of the same commit still wrote the PNG, so the call is flaky, not dead.
-      // CI skips it unless a screenshot was requested. A failure is the named step
-      // renderer.screenshot and does not stop the approval steps. The path is never taken from
-      // the environment.
-      const requested = smokeScreenshotRequested(process.argv, process.env['DOTTIE_SMOKE_SCREENSHOT']);
-      if (smokeShouldCapture(process.env['CI'] === 'true', requested)) {
-        const shot = join(app.getPath('temp'), `dottie-smoke-${process.pid}.png`);
+      // Opt-in. Before 65f9ebb, capturePage ran only when DOTTIE_SMOKE_SCREENSHOT was set.
+      // That commit captured on every UI smoke, so CI called it for the first time and xvfb
+      // rejected it (UnknownVizError) outside a named step, which failed as after:renderer.probe.
+      // `--dottie-smoke-ui` stays the probe (CI passes it). The picture is a separate flag.
+      // The file is only under app.getPath('temp')/dottie-smoke/, never an env-chosen path.
+      // A failure is renderer.screenshot (STEP_MS) and is recorded; it does not fail the smoke.
+      if (smokeScreenshotRequested(process.argv)) {
+        const dir = join(app.getPath('temp'), 'dottie-smoke');
+        const shot = join(dir, `dottie-smoke-${process.pid}.png`);
+        const keep = smokeScreenshotKeep(process.argv);
         try {
-          result['screenshot'] = await smokeSteps.run('renderer.screenshot', (async () => {
+          await smokeSteps.run('renderer.screenshot', (async () => {
             const png = (await wc.capturePage()).toPNG();
-            const { writeFile } = await import('node:fs/promises');
+            const { mkdir, writeFile } = await import('node:fs/promises');
+            await mkdir(dir, { recursive: true });
             await writeFile(shot, png);
-            return shot;
           })(), STEP_MS);
+          result['screenshot'] = { ok: true, path: shot, keep };
         } catch (e) {
           smokeSteps.detach();
+          try {
+            const { rm } = await import('node:fs/promises');
+            await rm(shot, { force: true });
+          } catch {
+            // A failed capture must not leave a partial PNG, and must not fail the smoke.
+          }
           const error = e instanceof Error ? e.message : String(e);
-          result['screenshot'] = { step: 'renderer.screenshot', ok: false, fatal: false, error };
-          console.log(`DOTTIE_SMOKE_STEP ${JSON.stringify({ step: 'renderer.screenshot', ok: false, fatal: false, error })}`);
+          result['screenshot'] = { ok: false, error };
         }
-      } else {
-        result['screenshot'] = { step: 'renderer.screenshot', skipped: true, reason: 'ci-default' };
       }
       // The main window must not be able to use the approval channels.
       result['mainWindowGetApproval'] = (await js('renderer.mainWindowGetApproval', wc, `window.dottie.getApproval().then((r) => r.ok ? 'ok' : r.error.code)`));

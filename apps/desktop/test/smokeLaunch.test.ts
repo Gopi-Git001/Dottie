@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { smokeLaunch, smokeScreenshotRequested, smokeShouldCapture } from '../src/main/smoke/launch';
+import { smokeLaunch, smokeScreenshotKeep, smokeScreenshotRequested } from '../src/main/smoke/launch';
 
 const FLAG = '--dottie-smoke-test';
 
@@ -23,17 +23,14 @@ describe('smoke launch gate', () => {
 });
 
 describe('smoke screenshot', () => {
-  it('treats the flag or env 1 as a request, and a path as not a destination', () => {
-    expect(smokeScreenshotRequested(['--dottie-smoke-screenshot'], undefined)).toBe(true);
-    expect(smokeScreenshotRequested([], '1')).toBe(true);
-    expect(smokeScreenshotRequested([], undefined)).toBe(false);
-    expect(smokeScreenshotRequested([], '/tmp/anywhere.png')).toBe(false);
+  it('is opt-in via the explicit flag; --dottie-smoke-ui alone does not capture (CI stays opt-out)', () => {
+    expect(smokeScreenshotRequested(['--dottie-smoke-ui'])).toBe(false);
+    expect(smokeScreenshotRequested(['--dottie-smoke-screenshot'])).toBe(true);
+    expect(smokeScreenshotRequested([])).toBe(false);
   });
 
-  it('skips only the CI default, and still captures when a screenshot was requested', () => {
-    expect(smokeShouldCapture(true, false)).toBe(false);
-    expect(smokeShouldCapture(true, true)).toBe(true);
-    expect(smokeShouldCapture(false, false)).toBe(true);
-    expect(smokeShouldCapture(false, true)).toBe(true);
+  it('keeps the PNG only when asked', () => {
+    expect(smokeScreenshotKeep(['--dottie-smoke-screenshot'])).toBe(false);
+    expect(smokeScreenshotKeep(['--dottie-smoke-screenshot', '--dottie-smoke-screenshot-keep'])).toBe(true);
   });
 });

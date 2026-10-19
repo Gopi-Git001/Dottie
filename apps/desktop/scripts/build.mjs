@@ -4,7 +4,7 @@ import { copyFile, mkdir, readFile, rm } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { checkPackaging } from './check-packaging.mjs';
-import { smokeDefine } from './smoke-define.mjs';
+import { smokeDefine, smokeMarkerHits } from './smoke-define.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
@@ -44,6 +44,14 @@ for (const bundle of ['renderer.js', 'approval.js']) {
   const renderer = await readFile(join(dist, 'renderer', bundle), 'utf8');
   if (/require\(["'](electron|node:|fs|child_process)/.test(renderer)) {
     console.error(`renderer bundle ${bundle} references Node/Electron modules`);
+    process.exit(1);
+  }
+}
+if (production) {
+  const mainJs = await readFile(join(dist, 'main/main.js'), 'utf8');
+  const hits = smokeMarkerHits(mainJs);
+  if (hits.length) {
+    for (const hit of hits) console.error(`packaging check: production main bundle contains "${hit}"`);
     process.exit(1);
   }
 }

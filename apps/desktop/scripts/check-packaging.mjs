@@ -5,7 +5,7 @@ import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { SMOKE_BUNDLE_MARKERS, smokeDefine } from './smoke-define.mjs';
+import { smokeDefine, smokeMarkerHits } from './smoke-define.mjs';
 
 // Why: build/installer.nsh was deleted from the shared checkout twice (2026-10-19). Nothing in our
 // scripts or electron-builder removes it; the conventional name `build/` reads as a disposable
@@ -83,7 +83,7 @@ export async function smokeMarkersInMainBundle(root = join(dirname(fileURLToPath
       external: ['electron'],
     });
     const js = await readFile(outfile, 'utf8');
-    return SMOKE_BUNDLE_MARKERS.filter((marker) => js.includes(marker));
+    return smokeMarkerHits(js);
   } finally {
     await rm(dir, { recursive: true, force: true });
   }
@@ -109,7 +109,7 @@ export async function minifiedSmokeMarkers(root = join(dirname(fileURLToPath(imp
       external: ['electron'],
     });
     const js = await readFile(outfile, 'utf8');
-    return SMOKE_BUNDLE_MARKERS.filter((marker) => js.includes(marker));
+    return smokeMarkerHits(js);
   } finally {
     await rm(dir, { recursive: true, force: true });
   }

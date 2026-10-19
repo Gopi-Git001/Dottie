@@ -26,19 +26,18 @@ export function assertSmokeMode(): void {
 }
 
 const SCREENSHOT_FLAG = '--dottie-smoke-screenshot';
+const SCREENSHOT_KEEP_FLAG = '--dottie-smoke-screenshot-keep';
 
 /**
- * A screenshot was asked for. The env value must be exactly `1`. A path is not a
- * destination: the file is always the pinned temp path.
+ * Screenshot is opt-in. `--dottie-smoke-ui` only opens the UI probe (CI always passes it)
+ * and does not call capturePage. An explicit `--dottie-smoke-screenshot` does.
+ * A path in the environment is never a destination.
  */
-export function smokeScreenshotRequested(argv: readonly string[], envValue: string | undefined): boolean {
-  return argv.includes(SCREENSHOT_FLAG) || envValue === '1';
+export function smokeScreenshotRequested(argv: readonly string[]): boolean {
+  return argv.includes(SCREENSHOT_FLAG);
 }
 
-/**
- * CI skips capturePage unless a screenshot was requested. Every other launch takes one.
- * capturePage under xvfb can throw UnknownVizError; the caller must not abort the smoke on that.
- */
-export function smokeShouldCapture(inCi: boolean, requested: boolean): boolean {
-  return requested || !inCi;
+/** Keep the PNG. Otherwise the smoke deletes it at the end of the run. */
+export function smokeScreenshotKeep(argv: readonly string[]): boolean {
+  return argv.includes(SCREENSHOT_KEEP_FLAG);
 }

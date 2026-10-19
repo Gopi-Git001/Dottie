@@ -2,7 +2,8 @@ import { mkdtemp, cp, rm, writeFile, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { checkPackaging, NSIS_INCLUDE, productionSmokeProblems } from '../scripts/check-packaging.mjs';
+import { checkPackaging, NSIS_INCLUDE, productionSmokeProblems, smokeMarkersInMainBundle } from '../scripts/check-packaging.mjs';
+import { smokeMarkerHits } from '../scripts/smoke-define.mjs';
 
 const root = join(__dirname, '..');
 const check = checkPackaging;
@@ -48,6 +49,15 @@ describe('packaging guard (installer.nsh must never silently disappear)', () => 
 
   it('production main bundle has no smoke mode', async () => {
     expect(await productionSmokeProblems(root)).toEqual([]);
+  });
+
+  it('the smoke-marker pattern matches smoke identifiers and bites when the define is true', async () => {
+    expect(smokeMarkerHits('function main(){return 1}')).toEqual([]);
+    expect(smokeMarkerHits('function smokeBody(){} function smokeApproval(){}')).toEqual(['smokeBody', 'smokeApproval']);
+    expect(smokeMarkerHits('proto.nudgeForSmokeTest = 1; const f = "dottie-smoke";')).toEqual(['ForSmokeTest', 'dottie-smoke']);
+    expect(smokeMarkerHits('if (__DOTTIE_SMOKE__) {}')).toEqual(['__DOTTIE_SMOKE__']);
+    const hits = await smokeMarkersInMainBundle(root, 'true');
+    expect(hits.length).toBeGreaterThan(0);
   });
 
   it('fails when a script would delete the packaging dir', async () => {
