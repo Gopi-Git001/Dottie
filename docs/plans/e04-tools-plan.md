@@ -1,7 +1,7 @@
 # E04: Windows tool adapters (`packages/tools`): assessment and test-first plan, v2.2
 
-- Owner: E04 (Windows Integration Specialist). v2 prepared Mon 2026-10-19 00:36–01:30 CDT (UTC-5). v1 (Sun 2026-10-18) is kept verbatim at `e04-tools-plan.v1-2026-10-18.md`. ADR-0008 and ADR-0012 cite v1 line numbers, so those citations point at that file.
-- **v2 approved by E01 (2026-10-19)** on the basis of the CONTRACTS §5 "E04 review" rulings. v2.1 (Mon 2026-10-19 ~00:46–01:05 CDT) applies those rulings, the processStartTime and §3.3 wire-encoding amendments, and ADR-0009 CR2/3/6. **v2.2 (Mon 2026-10-19 ~01:15 CDT)** applies: E08's `navigate` category (co-signed), `pid` as a decimal string, and decisions **C1–C7** agreed with E03 on the control channel (`docs/contracts/tool-host-control.md` DOT-092 DRAFT 1, §10). Draft tool schema: `docs/contracts/tools.md` (Draft 3). Host-positions memo for E03: `docs/contracts/tool-host-control.e04-host-positions.md`.
+- Owner: E04 (Windows Integration Specialist). v2 prepared Mon 2026-10-19 00:36–01:30 CDT (UTC-5). v1 (Sun 2026-10-18) is kept verbatim at `docs/history/e04-tools-plan.v1-2026-10-18.md`. ADR-0008 and ADR-0012 cite v1 line numbers, so those citations point at that file.
+- **v2 approved by E01 (2026-10-19)** on the basis of the CONTRACTS §5 "E04 review" rulings. v2.1 (Mon 2026-10-19 ~00:46–01:05 CDT) applies those rulings, the processStartTime and §3.3 wire-encoding amendments, and ADR-0009 CR2/3/6. **v2.2 (Mon 2026-10-19 ~01:15 CDT)** applies: E08's `navigate` category (co-signed), `pid` as a decimal string, and decisions **C1–C7** agreed with E03 on the control channel (E03's DOT-092 DRAFT 1 `tool-host-control.md`, §10; not yet on `main`). Draft tool schema: `docs/contracts/tools.md` (Draft 3). Host-positions memo for E03: `docs/contracts/tool-host-control.e04-host-positions.md`.
 - Status: **plan only.** No Bot code has been copied or imported (that waits for Gopi's OK and the repo, Q7/DOT-003). Nothing has been pushed and nobody has been messaged.
 - Contract-level scaffolding with Windows mocked lives in `packages/tools/` (see (d)); moved from the shared `/workspace/dottie/e04-scratch` into this worktree (`feature/E04-start`) on 2026-10-19. The shared scratch copy is left in place and is no longer updated. **Linux results never prove Windows behaviour.**
 - Aligned to:
@@ -426,7 +426,7 @@ The first three were run against the four-field/string code. Spot mutations for 
 ### A. Still-open questions (owner)
 2. **The W1-S2 outcome** picks the tool host (MCP vs dynamic). E02 + E04 + E11 run it; E01 decides.
 3. **The W1-S1 outcome** picks the shell path. E02 + E04 run it; E01 decides (ADR-0016).
-4. **Control channel** (`docs/contracts/tool-host-control.md`, E03 DRAFT 1): E04 positions in the host-positions memo (P1 pipe naming/ACL, `itemId`, cancellation points, catalog category). E03 merges; E08 reviews §5; E01 signs.
+4. **Control channel** (E03's DOT-092 draft `tool-host-control.md`, not yet on `main`; E04 positions are in `docs/contracts/tool-host-control.e04-host-positions.md`): E04 positions in the host-positions memo (P1 pipe naming/ACL, `itemId`, cancellation points, catalog category). E03 merges; E08 reviews §5; E01 signs.
 5. **How cancel reaches an in-flight MCP call** in 0.163.0. E02.
 6. **E08's untrusted-content header** text. E08.
 7. **Canonical JSON and the test vector** for `actionId` (`packages/policy`), and the MAC byte encoding of `windowIdentity` (§3.3 says it's open). E08.
