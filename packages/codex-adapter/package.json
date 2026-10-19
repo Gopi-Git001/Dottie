@@ -4,22 +4,33 @@
   "private": true,
   "description": "Dottie <-> Codex App Server adapter (DOT-011, owner E02): supervised stdio child, JSON-RPC, auth, default-deny server requests, error mapping. Implements CodexPort/AuthPort from @dottie/contracts.",
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
-  "exports": { ".": { "types": "./dist/src/index.d.ts", "default": "./dist/src/index.js" } },
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
+    }
+  },
   "scripts": {
     "build": "npm --prefix ../contracts run build && tsc",
     "check": "tsc --noEmit",
     "test": "npm run build && node --test dist/test/*.test.js",
-    "test:live": "npm run build && DOTTIE_CODEX_LIVE=1 node --test dist/test/live-smoke.test.js"
+    "test:live": "npm run build && DOTTIE_CODEX_LIVE=1 node --test dist/test/live-smoke.test.js",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@dottie/contracts": "file:../contracts"
   },
   "devDependencies": {
+    "@eslint-community/eslint-plugin-eslint-comments": "^4.8.1",
     "@types/node": "^26.6.4",
     "ajv": "^8.20.0",
-    "typescript": "^6.0.3"
+    "eslint": "^10.13.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.2"
   }
 }

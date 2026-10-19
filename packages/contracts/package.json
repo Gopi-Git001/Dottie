@@ -30,10 +30,14 @@
     "vectors": "node scripts/action-id-vectors.mjs",
     "vectors:check": "node scripts/action-id-vectors.mjs --check",
     "schemas": "npm run build && node scripts/json-schemas.mjs",
-    "schemas:check": "npm run build && node scripts/json-schemas.mjs --check"
+    "schemas:check": "npm run build && node scripts/json-schemas.mjs --check",
+    "lint": "eslint ."
   },
   "devDependencies": {
+    "@eslint-community/eslint-plugin-eslint-comments": "^4.8.1",
     "@types/node": "^26.6.4",
-    "typescript": "^6.0.3"
+    "eslint": "^10.13.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.2"
   }
 }
