@@ -18,6 +18,17 @@ export default tseslint.config(
     },
   },
   {
+    // E01/E02 prototype-key sweep: `key in obj` also matches inherited members (constructor,
+    // __proto__, toString, ...). Use Object.hasOwn, a Map, or shared/own.ts `own()` for tables.
+    files: ['**/*.ts', '**/*.mts', '**/*.mjs'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        { selector: "BinaryExpression[operator='in']", message: 'Use Object.hasOwn(obj, key) (or a Map / own()) instead of `in`: `in` also matches inherited keys such as constructor and __proto__.' },
+      ],
+    },
+  },
+  {
     // vitest mocks are routinely passed as bare methods to expect().
     files: ['test/**/*.ts'],
     rules: { '@typescript-eslint/unbound-method': 'off' },

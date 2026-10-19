@@ -5,6 +5,7 @@
  * renderer only displays it and returns a decision bound to a single-use `dialogId` main minted.
  * The coordinator's `actionId` never crosses IPC.
  */
+import { own } from './own';
 import { z } from 'zod';
 import { APPROVAL_CATEGORIES, DISPLAY_HARD_LIMITS, HIDDEN_CHAR, NO_REPEAT_CATEGORIES, PATH_LIST_MAX, PRIOR_SIDE_EFFECTS, RISK_SEVERITIES, type PriorSideEffect } from './contracts.draft';
 import { BoundTextRenderSchema, CommandRenderSchema } from './commandRender';
@@ -122,7 +123,7 @@ export const ApprovalViewSchema = z
     /** Present only when the request carried `possibleRepeat` (never for read). */
     warning: ApprovalWarningSchema.nullable(),
   })
-  .refine((v) => v.warning === null || v.warning.text === POSSIBLE_REPEAT_WARNINGS[v.warning.priorSideEffect], { path: ['warning', 'text'] })
+  .refine((v) => v.warning === null || v.warning.text === own(POSSIBLE_REPEAT_WARNINGS, v.warning.priorSideEffect), { path: ['warning', 'text'] })
   .refine((v) => !(NO_REPEAT_CATEGORIES.includes(v.category) && v.warning !== null), { path: ['warning'] });
 export type ApprovalView = z.infer<typeof ApprovalViewSchema>;
 

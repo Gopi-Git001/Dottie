@@ -5,6 +5,7 @@
  *    "you declined" (ADR-0009 CR1; E03 README).
  *  - `blocked_unavailable` never mentions signing in; `account_unsupported` never says "reconnect".
  */
+import { own } from '../../shared/own';
 import type { TaskFinishedReason, TaskOutcome } from '../../shared/contracts.draft';
 
 export type CopyLevel = 'info' | 'warning';
@@ -29,6 +30,15 @@ export const REASON_DETAIL: Record<TaskFinishedReason, string> = {
 export const APPROVAL_UNAVAILABLE_COPY = "Couldn't ask for approval safely, so nothing was done.";
 export const FAILED_AFTER_CHANGES_APPROVAL_UNAVAILABLE_COPY = "Some changes were made, then I couldn't ask for approval safely, so I stopped.";
 
+/** ` (detail)` for a known reason, else '' (never an inherited value). */
+function reasonDetail(reason: string | undefined): string {
+  const d = reason === undefined ? undefined : own(REASON_DETAIL, reason);
+  return d === undefined ? '' : ` (${d})`;
+}
+
+/** Copy for an outcome that is not in TASK_OUTCOMES (unreachable after TaskFinishedSchema; fail calm, no throw). */
+const UNKNOWN_OUTCOME_COPY: OutcomeCopy = { level: 'warning', activity: 'The task ended, but Dottie could not tell how.' };
+
 export function taskFinishedCopy(outcome: TaskOutcome, reason?: TaskFinishedReason): OutcomeCopy {
   switch (outcome) {
     case 'succeeded':
@@ -49,7 +59,7 @@ export function taskFinishedCopy(outcome: TaskOutcome, reason?: TaskFinishedReas
     case 'failed_after_side_effects':
       // E01 ruling 8: kept as a valid pair with its own copy (never "declined").
       if (reason === 'approval_unavailable') return { level: 'warning', activity: FAILED_AFTER_CHANGES_APPROVAL_UNAVAILABLE_COPY };
-      return { level: 'warning', activity: `The task failed after making changes${reason ? ` (${REASON_DETAIL[reason]})` : ''}. Check what changed.` };
+      return { level: 'warning', activity: `The task failed after making changes${reasonDetail(reason)}. Check what changed.` };
     case 'declined':
       if (reason === 'approval_unavailable') return { level: 'warning', activity: APPROVAL_UNAVAILABLE_COPY };
       return { level: 'info', activity: 'You declined, so nothing was done.' };
@@ -60,6 +70,7 @@ export function taskFinishedCopy(outcome: TaskOutcome, reason?: TaskFinishedReas
     case 'blocked_unavailable':
       return { level: 'warning', activity: 'Codex is unavailable right now, so the task was not run. No sign-in is needed.' };
   }
+  return UNKNOWN_OUTCOME_COPY;
 }
 
 /** Tooltip detail for LastTaskNote (non-executing states). Never "declined". */

@@ -33,7 +33,7 @@ describe('admitUtterance (L211 origin check)', () => {
     expect(mayCarryRetry('renderer_ipc')).toBe(false);
     const d = gate();
     const r = admitUtterance(utt, 'renderer_ipc', d);
-    expect(r.ok && 'retryOfTaskId' in r.utterance).toBe(false);
+    expect(r.ok && Object.hasOwn(r.utterance, 'retryOfTaskId')).toBe(false);
     expect(d.audit.records.map((x) => x.sourceChannel)).toEqual(['renderer_ipc']);
     expect(InputFieldStrippedRecordSchema.safeParse(d.audit.records[0]).success).toBe(true);
     expect(JSON.stringify(d.audit.records)).not.toContain(CANARY);
@@ -65,12 +65,12 @@ describe('admitUtterance (L211 origin check)', () => {
     ]);
     expect(JSON.stringify(d.audit.records)).not.toContain(CANARY); // redactor canary: never the injected value
     const rec = d.audit.records[0] as Record<string, unknown>;
-    for (const k of ['channel', 'actionId', 'toolId']) expect(k in rec).toBe(false);
+    for (const k of ['channel', 'actionId', 'toolId']) expect(Object.hasOwn(rec, k)).toBe(false);
   });
   it('taskId is omitted when main does not know it', () => {
     const d = gate();
     admitUtterance(utt, 'renderer_ipc', d);
-    expect('taskId' in (d.audit.records[0] as object)).toBe(false);
+    expect(Object.hasOwn(d.audit.records[0] as object, 'taskId')).toBe(false);
   });
   it('strips even a malformed value (empty, number, object) and still audits; the rest validates normally', () => {
     for (const v of ['', 5, { x: CANARY }, null]) {
@@ -131,7 +131,7 @@ describe('DesktopController.submitUtterance: the coordinator never sees a stripp
       const t = await setup(dir);
       expect(t.controller.submitUtterance(utt, origin)).toBe(true);
       expect(t.coordinator.utterances).toHaveLength(1);
-      expect('retryOfTaskId' in (t.coordinator.utterances[0]?.utterance ?? {})).toBe(false);
+      expect(Object.hasOwn(t.coordinator.utterances[0]?.utterance ?? {}, 'retryOfTaskId')).toBe(false);
       expect(t.coordinator.utterances[0]?.source).toBe(origin);
       expect(t.audit.records.map((r) => [r.field, r.sourceChannel, r.reason, r.decision])).toEqual([['retryOfTaskId', origin, 'untrusted_origin', 'denied_by_policy']]);
       expect(JSON.stringify(t.controller.activity.list())).not.toContain(CANARY);

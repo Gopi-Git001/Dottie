@@ -990,7 +990,7 @@ describe('C-25: ApprovalService (main-side enforcement)', () => {
       t.svc.warningShown(v.dialogId);
       t.advance(500); // Approve would otherwise be allowed now
       const second: Record<string, unknown> = { ...req({ possibleRepeat: repeat() }), ...patch };
-      if (patch['possibleRepeat'] === undefined && 'possibleRepeat' in patch) delete second['possibleRepeat'];
+      if (patch['possibleRepeat'] === undefined && Object.hasOwn(patch, 'possibleRepeat')) delete second['possibleRepeat'];
       expect(t.svc.request({ ...second, display: patch['display'] ?? displayFor(second) })).toBeNull();
       expect(t.resolved).toHaveLength(1);
       expect(t.resolved[0]).toEqual({ taskId: 't2', payload: { actionId: 'a'.repeat(64), approved: false, timestamp: '2026-10-19T07:00:00.500Z', reason: 'display_unavailable' } });

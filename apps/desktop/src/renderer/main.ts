@@ -1,4 +1,5 @@
 /** Renderer entry: hash router over three views, driven by window.dottie only. */
+import { own } from '../shared/own';
 import type { ActivityEntry, AppView, NavigateTarget } from '../shared/ipc';
 import { isOnboardingComplete } from '../shared/onboarding';
 import { api, call } from './api';
@@ -30,7 +31,7 @@ function applyRuntime(status: AppView['tray']['snapshot']['runtime']): void {
     backoff: '· Reconnecting to Codex…',
     half_open: '· Reconnecting to Codex…',
   };
-  runtimeNote.textContent = notes[status] ?? '';
+  runtimeNote.textContent = own(notes, status) ?? '';
 }
 
 function applyView(v: AppView): void {

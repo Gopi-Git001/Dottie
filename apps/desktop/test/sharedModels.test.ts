@@ -373,7 +373,7 @@ describe('CONTRACTS @ 97e7bc0: X5 bound display kind union (1r), key names and v
     });
     it('METHOD_MAX is 64 code points, a never-cut limit', () => {
       expect(METHOD_MAX).toBe(64);
-      expect('method' in DISPLAY_MAX).toBe(false);
+      expect(Object.hasOwn(DISPLAY_MAX, 'method')).toBe(false);
     });
     it.each([
       ['tool', (m: string) => ({ ...tool, method: m, category: 'delete', paths: ['C:\\a'], fileCount: '1' }), 'files.' + 'd'.repeat(58)],

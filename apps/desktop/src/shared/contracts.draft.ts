@@ -8,6 +8,7 @@
  *  docs/contracts/desktop-ipc.DRAFT.md §5).
  * ============================================================================================
  */
+import { own } from './own';
 import { z } from 'zod';
 import { COORDINATOR_STATES } from './states';
 
@@ -127,6 +128,10 @@ export type StopStatus = z.infer<typeof StopStatusSchema>;
 /** `CoordinatorPort.stopTask()` result (CONTRACTS §3.1 / ADR-0012 §7). */
 export const StopTaskResultSchema = z.union([z.strictObject({ stopStatus: StopStatusSchema }), z.strictObject({ noActiveTask: z.literal(true) })]);
 export type StopTaskResult = z.infer<typeof StopTaskResultSchema>;
+/** The `{noActiveTask: true}` arm of StopTaskResult (own property only; no `in`). */
+export function isNoActiveTask(r: StopTaskResult): r is { noActiveTask: true } {
+  return Object.hasOwn(r, 'noActiveTask');
+}
 
 // ------------------------------------------------------------------------------------ shared shapes
 /** CONTRACTS §3.2 RedactedMetadata: flat scalars (incl. null), ≤ 32 keys, ≤ 2 KB. */
@@ -135,8 +140,8 @@ export const RedactedMetadataSchema = z
   .refine((m) => Object.keys(m).length <= 32, 'at most 32 keys')
   .refine((m) => JSON.stringify(m).length <= 2048, 'at most 2 KB')
   // CONTRACTS §3 TaskProgress @ 6834524 (E01 ruling 1o): advisory keys, no text.
-  .refine((m) => !('awaitingClarification' in m) || typeof m['awaitingClarification'] === 'boolean', { path: ['awaitingClarification'], message: 'must be a boolean' })
-  .refine((m) => !('turnsSoFar' in m) || typeof m['turnsSoFar'] === 'number', { path: ['turnsSoFar'], message: 'must be a number' });
+  .refine((m) => !Object.hasOwn(m, 'awaitingClarification') || typeof m['awaitingClarification'] === 'boolean', { path: ['awaitingClarification'], message: 'must be a boolean' })
+  .refine((m) => !Object.hasOwn(m, 'turnsSoFar') || typeof m['turnsSoFar'] === 'number', { path: ['turnsSoFar'], message: 'must be a number' });
 
 const Scalar = z.union([z.string().max(2048), z.number(), z.boolean(), z.null()]);
 /** CONTRACTS §5 ObservedState: redacted object; tool-specific scalar keys allowed. */
@@ -581,7 +586,7 @@ export const ApprovalRequestedSchema = z
   // Ruling 2b: for EVERY kind.
   .refine((e) => e.display.category === e.category, { path: ['display', 'category'], message: 'display.category must equal category (ruling 2b, every kind)' })
   // Kind/source guard (ruling 1r, L226).
-  .refine((e) => DISPLAY_KIND_SOURCE[e.display.kind] === e.requestSource, { path: ['requestSource'], message: 'display.kind does not fit requestSource' })
+  .refine((e) => own(DISPLAY_KIND_SOURCE, e.display.kind) === e.requestSource, { path: ['requestSource'], message: 'display.kind does not fit requestSource' })
   // pre_dispatch consistency (ruling 1r, L225).
   .superRefine((e, ctx) => {
     const d = e.display;
@@ -658,7 +663,11 @@ export const TaskFinishedSchema = z
     reason: z.enum(TASK_FINISHED_REASONS).optional(),
   })
   .superRefine((e, ctx) => {
-    const rule = TASK_FINISHED_REASON_RULES[e.outcome];
+    const rule = own(TASK_FINISHED_REASON_RULES, e.outcome);
+    if (rule === undefined) {
+      ctx.addIssue({ code: 'custom', path: ['outcome'], message: 'unknown outcome' });
+      return;
+    }
     if (e.reason === undefined && rule.required) ctx.addIssue({ code: 'custom', path: ['reason'], message: `${e.outcome} requires a reason (${rule.reasons.join('|')})` });
     if (e.reason !== undefined && !rule.reasons.includes(e.reason))
       ctx.addIssue({ code: 'custom', path: ['reason'], message: rule.reasons.length ? `${e.outcome} allows only ${rule.reasons.join('|')}` : `${e.outcome} carries no reason` });

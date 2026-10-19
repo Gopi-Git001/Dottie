@@ -117,8 +117,11 @@ describe('preload API', () => {
     const api = buildDottieApi(fakeIpc());
     expect(Object.keys(api).sort()).toEqual([...Object.keys(INVOKE_CHANNELS), 'on'].sort());
     expect(Object.isFrozen(api)).toBe(true);
-    expect('invoke' in api).toBe(false);
-    expect('send' in api).toBe(false);
+    // Own AND inherited: neither may be reachable on the API object at all.
+    expect(Object.hasOwn(api, 'invoke')).toBe(false);
+    expect((api as unknown as Record<string, unknown>)['invoke']).toBeUndefined();
+    expect(Object.hasOwn(api, 'send')).toBe(false);
+    expect((api as unknown as Record<string, unknown>)['send']).toBeUndefined();
   });
 
   it('binds each method to its fixed channel', async () => {
