@@ -348,7 +348,7 @@ export function isActionId(value: unknown): value is string {
   return typeof value === 'string' && ACTION_ID_PATTERN.test(value);
 }
 
-type FieldKind = 'string' | 'nonempty_string' | 'possible_repeat' | 'action_id' | 'number' | 'boolean' | 'object' | 'array' | readonly string[] | 'state' | 'observed_state' | 'tool_error';
+type FieldKind = 'string' | 'nonempty_string' | 'possible_repeat' | 'action_id' | 'number' | 'boolean' | 'object' | 'array' | readonly string[] | 'state' | 'observed_state' | 'observed_state_or_null' | 'tool_error' | 'workspace_scope' | 'committed_actions' | 'candidates' | 'scope_list' | 'string_list';
 interface FieldSpec {
   readonly name: string;
   readonly kind: FieldKind;
@@ -359,7 +359,7 @@ const f = (name: string, kind: FieldKind, optional = false): FieldSpec => ({ nam
 const PAYLOAD_FIELDS: Readonly<Record<EventType, readonly FieldSpec[]>> = {
   WakeDetected: [f('timestamp', 'string'), f('deviceId', 'string'), f('confidence', 'number')],
   UtteranceReady: [f('requestId', 'string'), f('text', 'string'), f('locale', 'string'), f('endReason', END_REASONS), f('retryOfTaskId', 'nonempty_string', true)],
-  TaskRequested: [f('taskId', 'string'), f('requestId', 'string'), f('text', 'string'), f('threadId', 'string', true), f('workspaceScope', 'object')],
+  TaskRequested: [f('taskId', 'string'), f('requestId', 'string'), f('text', 'string'), f('threadId', 'string', true), f('workspaceScope', 'workspace_scope')],
   TaskProgress: [f('taskId', 'string'), f('state', 'state'), f('message', 'string'), f('toolId', 'string', true), f('redactedMetadata', 'object')],
   ApprovalRequested: [f('taskId', 'string'), f('actionId', 'action_id'), f('summary', 'string'), f('risk', RISKS), f('expiry', 'string'), f('category', APPROVAL_CATEGORIES), f('possibleRepeat', 'possible_repeat', true), f('display', 'object'), f('requestSource', REQUEST_SOURCES)],
   ApprovalResolved: [f('actionId', 'action_id'), f('approved', 'boolean'), f('timestamp', 'string'), f('decision', ['expired'], true), f('reason', ['display_unavailable'], true)],
@@ -378,7 +378,7 @@ const PAYLOAD_FIELDS: Readonly<Record<EventType, readonly FieldSpec[]>> = {
     f('stopStatus', STOP_STATUSES),
     f('sideEffects', SIDE_EFFECT_SUMMARIES),
     f('sideEffectsCommitted', 'boolean'),
-    f('committedActions', 'array'),
+    f('committedActions', 'committed_actions'),
     f('report', 'string'),
   ],
 };
@@ -389,10 +389,35 @@ const OBSERVED_STATE_FIELDS: readonly FieldSpec[] = [
   f('checks', 'object'),
   f('sideEffect', SIDE_EFFECTS),
   f('question', 'string', true),
-  f('candidates', 'array', true),
+  f('candidates', 'candidates', true),
 ];
 const TOOL_ERROR_FIELDS: readonly FieldSpec[] = [f('code', TOOL_ERROR_CODES), f('message', 'string'), f('retryable', 'boolean')];
 const POSSIBLE_REPEAT_FIELDS: readonly FieldSpec[] = [f('priorTaskId', 'nonempty_string'), f('priorSideEffect', POSSIBLE_REPEAT_SIDE_EFFECTS)];
+const WORKSPACE_SCOPE_FIELDS: readonly FieldSpec[] = [f('scopes', 'scope_list'), f('paths', 'string_list')];
+const COMMITTED_ACTION_FIELDS: readonly FieldSpec[] = [f('toolId', 'nonempty_string'), f('observedState', 'observed_state_or_null'), f('certainty', ['committed', 'possible'])];
+const CANDIDATE_FIELDS: readonly FieldSpec[] = [f('id', 'nonempty_string'), f('label', 'string')];
+/** §3.1 envelope (E01 2i: closed, like the payload). */
+const ENVELOPE_FIELDS: readonly FieldSpec[] = [f('eventId', 'string'), f('correlationId', 'string'), f('causationId', 'string', true), f('taskId', 'string', true), f('timestamp', 'string')];
+const ENVELOPE_KEYS: readonly string[] = ['schema', 'version', 'type', 'payload', ...ENVELOPE_FIELDS.map(s => s.name)];
+const isScalar = (v: unknown): boolean => v === null || typeof v === 'string' || typeof v === 'boolean' || (typeof v === 'number' && Number.isFinite(v));
+
+/**
+ * E01 2i: a closed object. Every spec field is checked (own fields only) and every other own key is rejected, matched
+ * by name against the spec list (never by lookup, so constructor / toString / __proto__ are never "known"). `open`
+ * admits extra keys whose value passes it (observedState: tool-specific scalars only).
+ */
+function checkClosed(value: unknown, specs: readonly FieldSpec[], path: string, errors: string[], open?: (v: unknown) => boolean): void {
+  if (!isRecord(value)) {
+    errors.push(`${path} must be a plain object`);
+    return;
+  }
+  for (const s of specs) checkField(value, s, path, errors);
+  for (const k of Object.keys(value)) {
+    if (specs.some(s => s.name === k)) continue;
+    if (open && open(value[k])) continue;
+    errors.push(open ? `${path}.${k} must be a scalar (tool-specific keys)` : `${path}.${k} is not a v2 field`);
+  }
+}
 
 /** E02 45129fe: plain data objects only (vendored isPlainObject: no inherited fields, getters or symbol keys). */
 const isRecord = (value: unknown): value is Record<string, unknown> => isPlainObject(value);
@@ -412,9 +437,23 @@ function checkField(obj: Record<string, unknown>, spec: FieldSpec, path: string,
     if (!isActionId(value)) errors.push(`${path}.${spec.name} must be 64 lowercase hex (CONTRACTS §3.3 actionId)`);
     return;
   }
-  if (kind === 'observed_state') {
-    if (!isRecord(value)) errors.push(`${path}.${spec.name} must be object`);
-    else for (const s of OBSERVED_STATE_FIELDS) checkField(value, s, `${path}.${spec.name}`, errors);
+  const at = `${path}.${spec.name}`;
+  if (kind === 'observed_state' || kind === 'observed_state_or_null') {
+    if (kind === 'observed_state_or_null' && value === null) return;
+    return checkClosed(value, OBSERVED_STATE_FIELDS, at, errors, isScalar);
+  }
+  if (kind === 'workspace_scope') return checkClosed(value, WORKSPACE_SCOPE_FIELDS, at, errors);
+  if (kind === 'committed_actions' || kind === 'candidates') {
+    if (!isPlainArray(value)) return void errors.push(`${at} must be a plain dense array`);
+    const specs = kind === 'committed_actions' ? COMMITTED_ACTION_FIELDS : CANDIDATE_FIELDS;
+    value.forEach((x, i) => checkClosed(x, specs, `${at}[${i}]`, errors));
+    return;
+  }
+  if (kind === 'scope_list' || kind === 'string_list') {
+    if (!isPlainArray(value)) return void errors.push(`${at} must be a plain dense array`);
+    value.forEach((x, i) => {
+      if (kind === 'scope_list' ? !(CAPABILITY_SCOPES as readonly unknown[]).includes(x) : typeof x !== 'string') errors.push(`${at}[${i}] must be ${kind === 'scope_list' ? `one of ${CAPABILITY_SCOPES.join('|')}` : 'a string'}`);
+    });
     return;
   }
   if (kind === 'nonempty_string') {
@@ -423,19 +462,9 @@ function checkField(obj: Record<string, unknown>, spec: FieldSpec, path: string,
   }
   if (kind === 'possible_repeat') {
     // Closed shape: exactly {priorTaskId, priorSideEffect}. The superseded priorOutcome key (and any other key) is rejected.
-    if (!isRecord(value)) {
-      errors.push(`${path}.${spec.name} must be object`);
-      return;
-    }
-    for (const s of POSSIBLE_REPEAT_FIELDS) checkField(value, s, `${path}.${spec.name}`, errors);
-    for (const k of Object.keys(value)) if (!POSSIBLE_REPEAT_FIELDS.some(s => s.name === k)) errors.push(`${path}.${spec.name}.${k} is not allowed`);
-    return;
+    return checkClosed(value, POSSIBLE_REPEAT_FIELDS, at, errors);
   }
-  if (kind === 'tool_error') {
-    if (!isRecord(value)) errors.push(`${path}.${spec.name} must be object`);
-    else for (const s of TOOL_ERROR_FIELDS) checkField(value, s, `${path}.${spec.name}`, errors);
-    return;
-  }
+  if (kind === 'tool_error') return checkClosed(value, TOOL_ERROR_FIELDS, at, errors);
   const ok =
     kind === 'array' ? isPlainArray(value)
     : kind === 'object' ? isRecord(value)
@@ -460,9 +489,10 @@ export function validateEvent(input: unknown): ValidationResult {
     errors.push('unknown event type');
     return { ok: false, errors };
   }
-  for (const spec of [f('eventId', 'string'), f('correlationId', 'string'), f('causationId', 'string', true), f('taskId', 'string', true), f('timestamp', 'string')]) {
-    checkField(input, spec, 'envelope', errors);
-  }
+  for (const spec of ENVELOPE_FIELDS) checkField(input, spec, 'envelope', errors);
+  // E01 2i: the envelope is closed too; names matched against the list (constructor / __proto__ are never known).
+  for (const k of Object.keys(input)) if (!ENVELOPE_KEYS.includes(k)) errors.push(`envelope.${k} is not a v2 field`);
+  if (!Object.hasOwn(input, 'payload')) errors.push('envelope.payload is required');
   if (typeof input['timestamp'] === 'string' && !ISO.test(input['timestamp'])) errors.push('envelope.timestamp must be ISO-8601');
   const payload = input['payload'];
   if (!isRecord(payload)) {

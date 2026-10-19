@@ -2,7 +2,7 @@ import { contractsActionIdPort } from '../src/actionIdPort.js';
 import type { ApprovalDisplay, CodexDisplayParams } from '../src/display.js';
 import type { ApprovalDisplayPort } from '../src/ports.js';
 import { createHash } from 'node:crypto';
-import { EVENT_SCHEMA, EVENT_SCHEMA_VERSION, type AnyEvent, type EventEnvelope, type EventType, type ObservedState, type SideEffect } from '../src/contracts.js';
+import { EVENT_SCHEMA, EVENT_SCHEMA_VERSION, validateEvent, type AnyEvent, type EventEnvelope, type EventType, type ObservedState, type SideEffect } from '../src/contracts.js';
 import { Coordinator, type CoordinatorConfig } from '../src/coordinator.js';
 import type { PinnedToolCatalog } from '../src/toolCatalog.js';
 import type {
@@ -132,9 +132,24 @@ export class FakeSpeech implements SpeechPort {
   get playing(): number { return this.pending.length; }
 }
 
+/**
+ * E01 2i sweep: every event any test's coordinator emits must pass the closed validateEvent (envelope and payload).
+ * A failure is recorded here and fails the test file at exit, so no emit site can produce an unknown key unnoticed.
+ */
+export const EMITTED_INVALID: string[] = [];
+process.on('exit', () => {
+  if (EMITTED_INVALID.length > 0) {
+    console.error(`E01 2i sweep: ${EMITTED_INVALID.length} emitted event(s) failed validateEvent:\n${EMITTED_INVALID.slice(0, 20).join('\n')}`);
+    process.exitCode = 1;
+  }
+});
 export class Sink {
   readonly events: AnyEvent[] = [];
-  emit(e: AnyEvent): void { this.events.push(e); }
+  emit(e: AnyEvent): void {
+    const r = validateEvent(e);
+    if (!r.ok) EMITTED_INVALID.push(`${e.type}: ${r.errors.join('; ')}`);
+    this.events.push(e);
+  }
   of<T extends EventType>(type: T): EventEnvelope<T>[] { return this.events.filter((e): e is EventEnvelope<T> & AnyEvent => e.type === type) as EventEnvelope<T>[]; }
   types(): EventType[] { return this.events.map(e => e.type); }
 }
