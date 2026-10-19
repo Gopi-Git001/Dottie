@@ -1,0 +1,1138 @@
+{"caseId": "DOT095-contracts-test-node20", "commit": "9525cb0f54682ed96426b71c4f1035db2aa925e3", "build": null, "installerSha256": null, "buildNote": "n/a: unpackaged", "startedAt": "2026-10-19T11:57:13-05:00", "finishedAt": "2026-10-19T11:57:14-05:00", "runner": "linux-box-e02", "command": "(cd packages/contracts && /home/box/.npm/_npx/ebaba8b9e55fd0a9/node_modules/node/bin/node --test dist/test/*.test.js)", "exitCode": 0, "durationMs": 1521, "result": "pass", "dirtyTree": false, "platform": "Linux (never Windows evidence)", "rawOutputSha256": "86b1089357aaeaa968bdb84aff94e4d6dcacf540eecbe660204bf6260a120367", "linesWithheld": 54}
+[54 line(s) withheld: they match the evidence secret-sweep pattern (test NAMES that mention canaries/token keywords, no values). Full raw output kept off-repo; sha256 86b1089357aaeaa968bdb84aff94e4d6dcacf540eecbe660204bf6260a120367]
+TAP version 13
+# Subtest: RB02-U2 fixed vector: canonical JSON and actionId pinned by literal (not generated)
+ok 1 - RB02-U2 fixed vector: canonical JSON and actionId pinned by literal (not generated)
+  ---
+  duration_ms: 3.144865
+  ...
+# Subtest: RB02-U2 changing any hashed field changes the actionId
+ok 2 - RB02-U2 changing any hashed field changes the actionId
+  ---
+  duration_ms: 2.808469
+  ...
+# Subtest: RB02-U2 purpose and key set are enforced; fields that do not apply are null, never omitted
+ok 3 - RB02-U2 purpose and key set are enforced; fields that do not apply are null, never omitted
+  ---
+  duration_ms: 0.979001
+  ...
+# Subtest: follow-up 7: integers only; NaN, ±Infinity, -0, fractions, unsafe integers rejected as INVALID_ARGUMENT
+ok 4 - follow-up 7: integers only; NaN, ±Infinity, -0, fractions, unsafe integers rejected as INVALID_ARGUMENT
+  ---
+  duration_ms: 0.680762
+  ...
+# Subtest: canonicalJson rejects what it cannot represent faithfully
+ok 5 - canonicalJson rejects what it cannot represent faithfully
+  ---
+  duration_ms: 0.440134
+  ...
+# Subtest: canonicalJson: keys by code point (Python sort_keys order), minimal escaping
+ok 6 - canonicalJson: keys by code point (Python sort_keys order), minimal escaping
+  ---
+  duration_ms: 1.792213
+  ...
+# Subtest: CR2 duplicate JSON keys are detected anywhere in the raw text
+ok 7 - CR2 duplicate JSON keys are detected anywhere in the raw text
+  ---
+  duration_ms: 0.447599
+  ...
+# Subtest: follow-up 8: path canonicalisation folds equivalent spellings; a mismatch re-prompts, never bypasses
+ok 8 - follow-up 8: path canonicalisation folds equivalent spellings; a mismatch re-prompts, never bypasses
+  ---
+  duration_ms: 1.769855
+  ...
+# Subtest: published vectors are up to date and self-consistent
+ok 9 - published vectors are up to date and self-consistent
+  ---
+  duration_ms: 43.714563
+  ...
+# Subtest: published vectors verify under an independent Python implementation (E04/E11 consumers)
+ok 10 - published vectors verify under an independent Python implementation (E04/E11 consumers)
+  ---
+  duration_ms: 36.667144
+  ...
+# Subtest: validateEvent keeps rejecting act-… ids; a computed actionId is accepted
+ok 11 - validateEvent keeps rejecting act-… ids; a computed actionId is accepted
+  ---
+  duration_ms: 1.198144
+  ...
+# Subtest: D14 pinned vectors: the four new hashes are in vectors.json and the helpers produce them
+ok 12 - D14 pinned vectors: the four new hashes are in vectors.json and the helpers produce them
+  ---
+  duration_ms: 3.793821
+  ...
+# Subtest: superseded pins (E03 original, D14 before displayHash) are gone from vectors.json and the source
+ok 13 - superseded pins (E03 original, D14 before displayHash) are gone from vectors.json and the source
+  ---
+  duration_ms: 4.513076
+  ...
+# Subtest: ruling 1l: summary is bound twice (pre-dispatch arg and display); either alone changes the actionId
+ok 14 - ruling 1l: summary is bound twice (pre-dispatch arg and display); either alone changes the actionId
+  ---
+  duration_ms: 2.19002
+  ...
+# Subtest: displayHash placement: generic calls top-level only; pre-dispatch in args AND top-level (same value); navigate null
+ok 15 - displayHash placement: generic calls top-level only; pre-dispatch in args AND top-level (same value); navigate null
+  ---
+  duration_ms: 1.978132
+  ...
+# Subtest: E03 C-57 / rulings 1r/1u: computeActionId itself throws on a null, missing or out-of-enum requestSource; never null; pre-dispatch ⇔ coordinator; navigate = tool_host + null
+ok 16 - E03 C-57 / rulings 1r/1u: computeActionId itself throws on a null, missing or out-of-enum requestSource; never null; pre-dispatch ⇔ coordinator; navigate = tool_host + null
+  ---
+  duration_ms: 5.14247
+  ...
+# Subtest: ruling 1q: pre-dispatch args.displayHash must equal the top-level one; generic args never carry it (fail closed)
+ok 17 - ruling 1q: pre-dispatch args.displayHash must equal the top-level one; generic args never carry it (fail closed)
+  ---
+  duration_ms: 5.885395
+  ...
+# Subtest: D14: every pre-dispatch field changes the hash; not replayable to another turn
+ok 18 - D14: every pre-dispatch field changes the hash; not replayable to another turn
+  ---
+  duration_ms: 1.806251
+  ...
+# Subtest: D14: preDispatchArgs rejects the event object, unknown values and keys, and read with a repeat
+ok 19 - D14: preDispatchArgs rejects the event object, unknown values and keys, and read with a repeat
+  ---
+  duration_ms: 3.972626
+  ...
+# Subtest: ruling 1d: toolCallBinding needs an area.verb_object toolId; toolCallActionIdStatus flags missing/malformed ids
+ok 20 - ruling 1d: toolCallBinding needs an area.verb_object toolId; toolCallActionIdStatus flags missing/malformed ids
+  ---
+  duration_ms: 0.531008
+  ...
+# Subtest: the reserved key list covers every Object.prototype member name of this runtime
+ok 21 - the reserved key list covers every Object.prototype member name of this runtime
+  ---
+  duration_ms: 1.795173
+  ...
+# Subtest: the open maps stay open for ordinary keys (contract), closed for prototype names
+ok 22 - the open maps stay open for ordinary keys (contract), closed for prototype names
+  ---
+  duration_ms: 1.651511
+  ...
+# Subtest: every event type has a valid fixture here
+ok 23 - every event type has a valid fixture here
+  ---
+  duration_ms: 3.547759
+  ...
+# Subtest: ruling 2i: WakeDetected: an unknown or prototype-named key at any object level is rejected there, without throwing
+ok 24 - ruling 2i: WakeDetected: an unknown or prototype-named key at any object level is rejected there, without throwing
+  ---
+  duration_ms: 2.147129
+  ...
+# Subtest: ruling 2i: UtteranceReady: an unknown or prototype-named key at any object level is rejected there, without throwing
+ok 25 - ruling 2i: UtteranceReady: an unknown or prototype-named key at any object level is rejected there, without throwing
+  ---
+  duration_ms: 2.870995
+  ...
+# Subtest: ruling 2i: TaskRequested: an unknown or prototype-named key at any object level is rejected there, without throwing
+ok 26 - ruling 2i: TaskRequested: an unknown or prototype-named key at any object level is rejected there, without throwing
+  ---
+  duration_ms: 3.215149
+  ...
+# Subtest: ruling 2i: TaskProgress: an unknown or prototype-named key at any object level is rejected there, without throwing
+ok 27 - ruling 2i: TaskProgress: an unknown or prototype-named key at any object level is rejected there, without throwing
+  ---
+  duration_ms: 9.928243
+  ...
+# Subtest: ruling 2i: ApprovalRequested: an unknown or prototype-named key at any object level is rejected there, without throwing
+ok 28 - ruling 2i: ApprovalRequested: an unknown or prototype-named key at any object level is rejected there, without throwing
+  ---
+  duration_ms: 15.839518
+  ...
+# Subtest: ruling 2i: ApprovalResolved: an unknown or prototype-named key at any object level is rejected there, without throwing
+ok 29 - ruling 2i: ApprovalResolved: an unknown or prototype-named key at any object level is rejected there, without throwing
+  ---
+  duration_ms: 1.454343
+  ...
+# Subtest: ruling 2i: ToolResult: an unknown or prototype-named key at any object level is rejected there, without throwing
+ok 30 - ruling 2i: ToolResult: an unknown or prototype-named key at any object level is rejected there, without throwing
+  ---
+  duration_ms: 18.368714
+  ...
+# Subtest: ruling 2i: TaskFinished: an unknown or prototype-named key at any object level is rejected there, without throwing
+ok 31 - ruling 2i: TaskFinished: an unknown or prototype-named key at any object level is rejected there, without throwing
+  ---
+  duration_ms: 7.322449
+  ...
+# Subtest: ruling 2i: TaskCancelled: an unknown or prototype-named key at any object level is rejected there, without throwing
+ok 32 - ruling 2i: TaskCancelled: an unknown or prototype-named key at any object level is rejected there, without throwing
+  ---
+  duration_ms: 17.201426
+  ...
+# Subtest: pin is rust-v0.163.0 at the ADR-0003 commit with well-formed digests
+ok 33 - pin is rust-v0.163.0 at the ADR-0003 commit with well-formed digests
+  ---
+  duration_ms: 1.165423
+  ...
+# Subtest: checked-in generated schema was produced by the pinned binary
+ok 34 - checked-in generated schema was produced by the pinned binary
+  ---
+  duration_ms: 0.364897
+  ...
+# Subtest: codex:check passes on the checked-in output and fails on drift
+ok 35 - codex:check passes on the checked-in output and fails on drift
+  ---
+  duration_ms: 1311.008833
+  ...
+# Subtest: codegen refuses a binary whose sha256 does not match the pin
+ok 36 - codegen refuses a binary whose sha256 does not match the pin
+  ---
+  duration_ms: 37.332395
+  ...
+# Subtest: valid fixture approval-requested-codex-command.json validates
+ok 37 - valid fixture approval-requested-codex-command.json validates
+  ---
+  duration_ms: 2.797013
+  ...
+# Subtest: valid fixture approval-requested-codex-file-change.json validates
+ok 38 - valid fixture approval-requested-codex-file-change.json validates
+  ---
+  duration_ms: 0.47517
+  ...
+# Subtest: valid fixture approval-requested-display-hidden-chars-bound.json validates
+ok 39 - valid fixture approval-requested-display-hidden-chars-bound.json validates
+  ---
+  duration_ms: 0.291391
+  ...
+# Subtest: valid fixture approval-requested-possible-repeat-committed.json validates
+ok 40 - valid fixture approval-requested-possible-repeat-committed.json validates
+  ---
+  duration_ms: 0.261085
+  ...
+# Subtest: valid fixture approval-requested-possible-repeat-possible.json validates
+ok 41 - valid fixture approval-requested-possible-repeat-possible.json validates
+  ---
+  duration_ms: 0.158288
+  ...
+# Subtest: valid fixture approval-requested-possible-repeat-unknown.json validates
+ok 42 - valid fixture approval-requested-possible-repeat-unknown.json validates
+  ---
+  duration_ms: 0.236545
+  ...
+# Subtest: valid fixture approval-requested-pre-dispatch-clean-retry.json validates
+ok 43 - valid fixture approval-requested-pre-dispatch-clean-retry.json validates
+  ---
+  duration_ms: 0.159953
+  ...
+# Subtest: valid fixture approval-requested-pre-dispatch-read.json validates
+ok 44 - valid fixture approval-requested-pre-dispatch-read.json validates
+  ---
+  duration_ms: 1.217076
+  ...
+# Subtest: valid fixture approval-requested-pre-dispatch.json validates
+ok 45 - valid fixture approval-requested-pre-dispatch.json validates
+  ---
+  duration_ms: 0.322864
+  ...
+# Subtest: valid fixture approval-requested-ui-action.json validates
+ok 46 - valid fixture approval-requested-ui-action.json validates
+  ---
+  duration_ms: 0.417036
+  ...
+# Subtest: valid fixture approval-requested.json validates
+ok 47 - valid fixture approval-requested.json validates
+  ---
+  duration_ms: 0.298192
+  ...
+# Subtest: valid fixture approval-resolved-display-unavailable.json validates
+ok 48 - valid fixture approval-resolved-display-unavailable.json validates
+  ---
+  duration_ms: 0.241104
+  ...
+# Subtest: valid fixture approval-resolved-expired.json validates
+ok 49 - valid fixture approval-resolved-expired.json validates
+  ---
+  duration_ms: 0.148101
+  ...
+# Subtest: valid fixture approval-resolved.json validates
+ok 50 - valid fixture approval-resolved.json validates
+  ---
+  duration_ms: 0.236744
+  ...
+  ---
+  duration_ms: 0.46421
+  ...
+  ---
+  duration_ms: 0.267808
+  ...
+  ---
+  duration_ms: 0.183891
+  ...
+  ---
+  duration_ms: 0.323431
+  ...
+# Subtest: valid fixture task-cancelled.json validates
+ok 55 - valid fixture task-cancelled.json validates
+  ---
+  duration_ms: 0.21535
+  ...
+  ---
+  duration_ms: 0.518236
+  ...
+  ---
+  duration_ms: 0.165014
+  ...
+  ---
+  duration_ms: 0.122149
+  ...
+  ---
+  duration_ms: 0.143624
+  ...
+  ---
+  duration_ms: 0.097751
+  ...
+  ---
+  duration_ms: 0.137318
+  ...
+  ---
+  duration_ms: 0.118923
+  ...
+  ---
+  duration_ms: 0.087621
+  ...
+  ---
+  duration_ms: 0.090319
+  ...
+  ---
+  duration_ms: 0.088698
+  ...
+  ---
+  duration_ms: 0.094428
+  ...
+# Subtest: valid fixture task-finished.json validates
+ok 67 - valid fixture task-finished.json validates
+  ---
+  duration_ms: 0.082124
+  ...
+  ---
+  duration_ms: 0.382952
+  ...
+  ---
+  duration_ms: 0.235271
+  ...
+  ---
+  duration_ms: 0.211549
+  ...
+  ---
+  duration_ms: 0.252557
+  ...
+  ---
+  duration_ms: 0.123964
+  ...
+# Subtest: valid fixture task-progress.json validates
+ok 73 - valid fixture task-progress.json validates
+  ---
+  duration_ms: 1.387203
+  ...
+  ---
+  duration_ms: 0.173897
+  ...
+# Subtest: valid fixture task-requested.json validates
+ok 75 - valid fixture task-requested.json validates
+  ---
+  duration_ms: 0.130594
+  ...
+# Subtest: valid fixture tool-result-ambiguous.json validates
+ok 76 - valid fixture tool-result-ambiguous.json validates
+  ---
+  duration_ms: 0.138643
+  ...
+# Subtest: valid fixture tool-result-invalid-argument.json validates
+ok 77 - valid fixture tool-result-invalid-argument.json validates
+  ---
+  duration_ms: 0.194297
+  ...
+# Subtest: valid fixture tool-result-process-image.json validates
+ok 78 - valid fixture tool-result-process-image.json validates
+  ---
+  duration_ms: 0.304168
+  ...
+# Subtest: valid fixture tool-result-user-declined.json validates
+ok 79 - valid fixture tool-result-user-declined.json validates
+  ---
+  duration_ms: 0.123834
+  ...
+# Subtest: valid fixture tool-result-verified.json validates
+ok 80 - valid fixture tool-result-verified.json validates
+  ---
+  duration_ms: 2.382171
+  ...
+# Subtest: valid fixture utterance-ready-retry.json validates
+ok 81 - valid fixture utterance-ready-retry.json validates
+  ---
+  duration_ms: 0.110489
+  ...
+# Subtest: valid fixture utterance-ready.json validates
+ok 82 - valid fixture utterance-ready.json validates
+  ---
+  duration_ms: 0.066198
+  ...
+# Subtest: valid fixture wake-detected.json validates
+ok 83 - valid fixture wake-detected.json validates
+  ---
+  duration_ms: 0.133906
+  ...
+# Subtest: every event type has at least one valid fixture
+ok 84 - every event type has at least one valid fixture
+  ---
+  duration_ms: 0.101632
+  ...
+# Subtest: invalid fixture approval-requested-actionid-not-sha256.json is rejected at payload.actionId
+ok 85 - invalid fixture approval-requested-actionid-not-sha256.json is rejected at payload.actionId
+  ---
+  duration_ms: 0.229845
+  ...
+# Subtest: invalid fixture approval-requested-actionid-uppercase.json is rejected at payload.actionId
+ok 86 - invalid fixture approval-requested-actionid-uppercase.json is rejected at payload.actionId
+  ---
+  duration_ms: 0.074843
+  ...
+# Subtest: invalid fixture approval-requested-codex-command-category-mismatch.json is rejected at payload.display.category
+ok 87 - invalid fixture approval-requested-codex-command-category-mismatch.json is rejected at payload.display.category
+  ---
+  duration_ms: 0.153057
+  ...
+# Subtest: invalid fixture approval-requested-codex-command-from-tool-host.json is rejected at payload.requestSource
+ok 88 - invalid fixture approval-requested-codex-command-from-tool-host.json is rejected at payload.requestSource
+  ---
+  duration_ms: 0.098471
+  ...
+# Subtest: invalid fixture approval-requested-codex-command-over-8kb.json is rejected at payload.display.commandLine
+ok 89 - invalid fixture approval-requested-codex-command-over-8kb.json is rejected at payload.display.commandLine
+  ---
+  duration_ms: 0.114386
+  ...
+# Subtest: invalid fixture approval-requested-codex-file-change-501-paths.json is rejected at payload.display.paths
+ok 90 - invalid fixture approval-requested-codex-file-change-501-paths.json is rejected at payload.display.paths
+  ---
+  duration_ms: 0.162657
+  ...
+# Subtest: invalid fixture approval-requested-codex-file-change-category-mismatch.json is rejected at payload.display.category
+ok 91 - invalid fixture approval-requested-codex-file-change-category-mismatch.json is rejected at payload.display.category
+  ---
+  duration_ms: 0.068123
+  ...
+# Subtest: invalid fixture approval-requested-codex-file-change-from-coordinator.json is rejected at payload.requestSource
+ok 92 - invalid fixture approval-requested-codex-file-change-from-coordinator.json is rejected at payload.requestSource
+  ---
+  duration_ms: 0.058539
+  ...
+# Subtest: invalid fixture approval-requested-codex-reason-not-stripped.json is rejected at payload.display.reasonUntrusted
+ok 93 - invalid fixture approval-requested-codex-reason-not-stripped.json is rejected at payload.display.reasonUntrusted
+  ---
+  duration_ms: 0.111448
+  ...
+# Subtest: invalid fixture approval-requested-display-category-mismatch.json is rejected at payload.display.category
+ok 94 - invalid fixture approval-requested-display-category-mismatch.json is rejected at payload.display.category
+  ---
+  duration_ms: 0.195191
+  ...
+# Subtest: invalid fixture approval-requested-display-unknown-key.json is rejected at payload.display.title
+ok 95 - invalid fixture approval-requested-display-unknown-key.json is rejected at payload.display.title
+  ---
+  duration_ms: 0.081568
+  ...
+# Subtest: invalid fixture approval-requested-missing-display.json is rejected at payload.display
+ok 96 - invalid fixture approval-requested-missing-display.json is rejected at payload.display
+  ---
+  duration_ms: 0.066361
+  ...
+# Subtest: invalid fixture approval-requested-missing-kind.json is rejected at payload.display.kind
+ok 97 - invalid fixture approval-requested-missing-kind.json is rejected at payload.display.kind
+  ---
+  duration_ms: 0.056875
+  ...
+# Subtest: invalid fixture approval-requested-missing-request-source.json is rejected at payload.requestSource
+ok 98 - invalid fixture approval-requested-missing-request-source.json is rejected at payload.requestSource
+  ---
+  duration_ms: 0.045867
+  ...
+# Subtest: invalid fixture approval-requested-navigate-no-display-rule.json is rejected at payload.display.category
+ok 99 - invalid fixture approval-requested-navigate-no-display-rule.json is rejected at payload.display.category
+  ---
+  duration_ms: 0.050461
+  ...
+# Subtest: invalid fixture approval-requested-possible-repeat-empty-prior.json is rejected at payload.possibleRepeat.priorTaskId
+ok 100 - invalid fixture approval-requested-possible-repeat-empty-prior.json is rejected at payload.possibleRepeat.priorTaskId
+  ---
+  duration_ms: 0.047773
+  ...
+# Subtest: invalid fixture approval-requested-possible-repeat-extra-key.json is rejected at payload.possibleRepeat.retryOfTaskId
+ok 101 - invalid fixture approval-requested-possible-repeat-extra-key.json is rejected at payload.possibleRepeat.retryOfTaskId
+  ---
+  duration_ms: 0.047702
+  ...
+# Subtest: invalid fixture approval-requested-possible-repeat-none.json is rejected at payload.possibleRepeat.priorSideEffect
+ok 102 - invalid fixture approval-requested-possible-repeat-none.json is rejected at payload.possibleRepeat.priorSideEffect
+  ---
+  duration_ms: 0.050009
+  ...
+# Subtest: invalid fixture approval-requested-possible-repeat-read.json is rejected at payload.possibleRepeat
+ok 103 - invalid fixture approval-requested-possible-repeat-read.json is rejected at payload.possibleRepeat
+  ---
+  duration_ms: 0.917854
+  ...
+# Subtest: invalid fixture approval-requested-possible-repeat-same-task.json is rejected at payload.possibleRepeat.priorTaskId
+ok 104 - invalid fixture approval-requested-possible-repeat-same-task.json is rejected at payload.possibleRepeat.priorTaskId
+  ---
+  duration_ms: 0.167773
+  ...
+# Subtest: invalid fixture approval-requested-possible-repeat-string.json is rejected at payload.possibleRepeat
+ok 105 - invalid fixture approval-requested-possible-repeat-string.json is rejected at payload.possibleRepeat
+  ---
+  duration_ms: 0.070245
+  ...
+# Subtest: invalid fixture approval-requested-pre-dispatch-category-mismatch.json is rejected at payload.display.category
+ok 106 - invalid fixture approval-requested-pre-dispatch-category-mismatch.json is rejected at payload.display.category
+  ---
+  duration_ms: 0.070483
+  ...
+# Subtest: invalid fixture approval-requested-pre-dispatch-from-tool-host.json is rejected at payload.requestSource
+ok 107 - invalid fixture approval-requested-pre-dispatch-from-tool-host.json is rejected at payload.requestSource
+  ---
+  duration_ms: 0.106211
+  ...
+# Subtest: invalid fixture approval-requested-pre-dispatch-possible-repeat-mismatch.json is rejected at payload.display.possibleRepeat
+ok 108 - invalid fixture approval-requested-pre-dispatch-possible-repeat-mismatch.json is rejected at payload.display.possibleRepeat
+  ---
+  duration_ms: 0.067388
+  ...
+# Subtest: invalid fixture approval-requested-pre-dispatch-possible-repeat-not-on-event.json is rejected at payload.display.possibleRepeat
+ok 109 - invalid fixture approval-requested-pre-dispatch-possible-repeat-not-on-event.json is rejected at payload.display.possibleRepeat
+  ---
+  duration_ms: 0.055454
+  ...
+# Subtest: invalid fixture approval-requested-pre-dispatch-retry-of-task-id-mismatch.json is rejected at payload.display.retryOfTaskId
+ok 110 - invalid fixture approval-requested-pre-dispatch-retry-of-task-id-mismatch.json is rejected at payload.display.retryOfTaskId
+  ---
+  duration_ms: 0.136653
+  ...
+# Subtest: invalid fixture approval-requested-pre-dispatch-risk-mismatch.json is rejected at payload.display.risk
+ok 111 - invalid fixture approval-requested-pre-dispatch-risk-mismatch.json is rejected at payload.display.risk
+  ---
+  duration_ms: 0.237795
+  ...
+# Subtest: invalid fixture approval-requested-read-no-display-rule.json is rejected at payload.display.category
+ok 112 - invalid fixture approval-requested-read-no-display-rule.json is rejected at payload.display.category
+  ---
+  duration_ms: 0.074798
+  ...
+# Subtest: invalid fixture approval-requested-retry-of-task-id.json is rejected at payload.retryOfTaskId
+ok 113 - invalid fixture approval-requested-retry-of-task-id.json is rejected at payload.retryOfTaskId
+  ---
+  duration_ms: 0.052491
+  ...
+# Subtest: invalid fixture approval-requested-tool-from-codex.json is rejected at payload.requestSource
+ok 114 - invalid fixture approval-requested-tool-from-codex.json is rejected at payload.requestSource
+  ---
+  duration_ms: 0.087623
+  ...
+# Subtest: invalid fixture approval-requested-ui-action-category-mismatch.json is rejected at payload.display.category
+ok 115 - invalid fixture approval-requested-ui-action-category-mismatch.json is rejected at payload.display.category
+  ---
+  duration_ms: 0.124608
+  ...
+# Subtest: invalid fixture approval-requested-ui-action-empty-appName.json is rejected at payload.display.app.appName
+ok 116 - invalid fixture approval-requested-ui-action-empty-appName.json is rejected at payload.display.app.appName
+  ---
+  duration_ms: 0.073325
+  ...
+# Subtest: invalid fixture approval-requested-ui-action-empty-processImage.json is rejected at payload.display.app.processImage
+ok 117 - invalid fixture approval-requested-ui-action-empty-processImage.json is rejected at payload.display.app.processImage
+  ---
+  duration_ms: 0.061845
+  ...
+# Subtest: invalid fixture approval-requested-ui-action-empty-windowTitle.json is rejected at payload.display.app.windowTitle
+ok 118 - invalid fixture approval-requested-ui-action-empty-windowTitle.json is rejected at payload.display.app.windowTitle
+  ---
+  duration_ms: 0.164366
+  ...
+# Subtest: invalid fixture approval-requested-ui-action-missing-appName.json is rejected at payload.display.app.appName
+ok 119 - invalid fixture approval-requested-ui-action-missing-appName.json is rejected at payload.display.app.appName
+  ---
+  duration_ms: 0.081919
+  ...
+# Subtest: invalid fixture approval-requested-ui-action-missing-processImage.json is rejected at payload.display.app.processImage
+ok 120 - invalid fixture approval-requested-ui-action-missing-processImage.json is rejected at payload.display.app.processImage
+  ---
+  duration_ms: 0.060434
+  ...
+# Subtest: invalid fixture approval-requested-ui-action-missing-windowTitle.json is rejected at payload.display.app.windowTitle
+ok 121 - invalid fixture approval-requested-ui-action-missing-windowTitle.json is rejected at payload.display.app.windowTitle
+  ---
+  duration_ms: 0.055666
+  ...
+# Subtest: invalid fixture approval-requested-ui-action-process-image-path.json is rejected at payload.display.app.processImage
+ok 122 - invalid fixture approval-requested-ui-action-process-image-path.json is rejected at payload.display.app.processImage
+  ---
+  duration_ms: 0.06006
+  ...
+# Subtest: invalid fixture approval-requested-unknown-category.json is rejected at payload.category
+ok 123 - invalid fixture approval-requested-unknown-category.json is rejected at payload.category
+  ---
+  duration_ms: 0.051757
+  ...
+# Subtest: invalid fixture approval-requested-unknown-kind.json is rejected at payload.display.kind
+ok 124 - invalid fixture approval-requested-unknown-kind.json is rejected at payload.display.kind
+  ---
+  duration_ms: 0.080318
+  ...
+# Subtest: invalid fixture approval-requested-unknown-request-source.json is rejected at payload.requestSource
+ok 125 - invalid fixture approval-requested-unknown-request-source.json is rejected at payload.requestSource
+  ---
+  duration_ms: 0.052886
+  ...
+# Subtest: invalid fixture approval-resolved-decision-and-reason.json is rejected at payload.reason
+ok 126 - invalid fixture approval-resolved-decision-and-reason.json is rejected at payload.reason
+  ---
+  duration_ms: 0.054984
+  ...
+# Subtest: invalid fixture approval-resolved-decision-enum.json is rejected at payload.decision
+ok 127 - invalid fixture approval-resolved-decision-enum.json is rejected at payload.decision
+  ---
+  duration_ms: 0.046153
+  ...
+# Subtest: invalid fixture approval-resolved-expired-approved.json is rejected at payload.decision
+ok 128 - invalid fixture approval-resolved-expired-approved.json is rejected at payload.decision
+  ---
+  duration_ms: 0.048577
+  ...
+# Subtest: invalid fixture approval-resolved-no-task.json is rejected at taskId
+ok 129 - invalid fixture approval-resolved-no-task.json is rejected at taskId
+  ---
+  duration_ms: 0.047043
+  ...
+# Subtest: invalid fixture approval-resolved-reason-approved.json is rejected at payload.reason
+ok 130 - invalid fixture approval-resolved-reason-approved.json is rejected at payload.reason
+  ---
+  duration_ms: 0.07015
+  ...
+# Subtest: invalid fixture approval-resolved-unknown-reason.json is rejected at payload.reason
+ok 131 - invalid fixture approval-resolved-unknown-reason.json is rejected at payload.reason
+  ---
+  duration_ms: 0.091077
+  ...
+# Subtest: invalid fixture cancelled-committed-flag-mismatch.json is rejected at payload.sideEffectsCommitted
+ok 132 - invalid fixture cancelled-committed-flag-mismatch.json is rejected at payload.sideEffectsCommitted
+  ---
+  duration_ms: 0.074198
+  ...
+# Subtest: invalid fixture cancelled-null-observed-state-certainty-committed.json is rejected at payload.committedActions[0].observedState
+ok 133 - invalid fixture cancelled-null-observed-state-certainty-committed.json is rejected at payload.committedActions[0].observedState
+  ---
+  duration_ms: 0.989094
+  ...
+# Subtest: invalid fixture cancelled-null-observed-state-completed-before-stop.json is rejected at payload.stopStatus
+ok 134 - invalid fixture cancelled-null-observed-state-completed-before-stop.json is rejected at payload.stopStatus
+  ---
+  duration_ms: 0.072929
+  ...
+# Subtest: invalid fixture cancelled-null-observed-state-side-effects-none.json is rejected at payload.sideEffects
+ok 135 - invalid fixture cancelled-null-observed-state-side-effects-none.json is rejected at payload.sideEffects
+  ---
+  duration_ms: 0.050582
+  ...
+# Subtest: invalid fixture cancelled-null-observed-state-stopped-no-side-effects.json is rejected at payload.stopStatus
+ok 136 - invalid fixture cancelled-null-observed-state-stopped-no-side-effects.json is rejected at payload.stopStatus
+  ---
+  duration_ms: 0.048409
+  ...
+# Subtest: invalid fixture cancelled-observed-state-missing.json is rejected at payload.committedActions[0].observedState
+ok 137 - invalid fixture cancelled-observed-state-missing.json is rejected at payload.committedActions[0].observedState
+  ---
+  duration_ms: 4.37411
+  ...
+# Subtest: invalid fixture cancelled-observed-state-string.json is rejected at payload.committedActions[0].observedState
+ok 138 - invalid fixture cancelled-observed-state-string.json is rejected at payload.committedActions[0].observedState
+  ---
+  duration_ms: 0.296537
+  ...
+# Subtest: invalid fixture cancelled-v1-stop-status.json is rejected at payload.stopStatus
+ok 139 - invalid fixture cancelled-v1-stop-status.json is rejected at payload.stopStatus
+  ---
+  duration_ms: 0.128016
+  ...
+# Subtest: invalid fixture confidence-out-of-range.json is rejected at payload.confidence
+ok 140 - invalid fixture confidence-out-of-range.json is rejected at payload.confidence
+  ---
+  duration_ms: 0.087505
+  ...
+# Subtest: invalid fixture credential-access-request.json is rejected at payload.category
+ok 141 - invalid fixture credential-access-request.json is rejected at payload.category
+  ---
+  duration_ms: 0.219828
+  ...
+# Subtest: invalid fixture finished-approval-unavailable-on-blocked-auth.json is rejected at payload.reason
+ok 142 - invalid fixture finished-approval-unavailable-on-blocked-auth.json is rejected at payload.reason
+  ---
+  duration_ms: 0.096406
+  ...
+# Subtest: invalid fixture finished-approval-unavailable-on-failed.json is rejected at payload.reason
+ok 143 - invalid fixture finished-approval-unavailable-on-failed.json is rejected at payload.reason
+  ---
+  duration_ms: 1.257262
+  ...
+# Subtest: invalid fixture finished-approval-unavailable-on-succeeded.json is rejected at payload.reason
+ok 144 - invalid fixture finished-approval-unavailable-on-succeeded.json is rejected at payload.reason
+  ---
+  duration_ms: 0.090061
+  ...
+# Subtest: invalid fixture finished-auth-reason-on-failed.json is rejected at payload.reason
+ok 145 - invalid fixture finished-auth-reason-on-failed.json is rejected at payload.reason
+  ---
+  duration_ms: 0.059969
+  ...
+# Subtest: invalid fixture finished-blocked-auth-codex-unavailable.json is rejected at payload.reason
+ok 146 - invalid fixture finished-blocked-auth-codex-unavailable.json is rejected at payload.reason
+  ---
+  duration_ms: 0.042995
+  ...
+# Subtest: invalid fixture finished-blocked-auth-without-reason.json is rejected at payload.reason
+ok 147 - invalid fixture finished-blocked-auth-without-reason.json is rejected at payload.reason
+  ---
+  duration_ms: 0.044929
+  ...
+# Subtest: invalid fixture finished-blocked-unavailable-auth-reason.json is rejected at payload.reason
+ok 148 - invalid fixture finished-blocked-unavailable-auth-reason.json is rejected at payload.reason
+  ---
+  duration_ms: 0.039454
+  ...
+# Subtest: invalid fixture finished-blocked-unavailable-without-reason.json is rejected at payload.reason
+ok 149 - invalid fixture finished-blocked-unavailable-without-reason.json is rejected at payload.reason
+  ---
+  duration_ms: 0.03884
+  ...
+# Subtest: invalid fixture finished-declined-auth-reason.json is rejected at payload.reason
+ok 150 - invalid fixture finished-declined-auth-reason.json is rejected at payload.reason
+  ---
+  duration_ms: 0.064053
+  ...
+# Subtest: invalid fixture finished-declined-clarification-reason.json is rejected at payload.reason
+ok 151 - invalid fixture finished-declined-clarification-reason.json is rejected at payload.reason
+  ---
+  duration_ms: 0.099918
+  ...
+# Subtest: invalid fixture finished-partial-with-reason.json is rejected at payload.reason
+ok 152 - invalid fixture finished-partial-with-reason.json is rejected at payload.reason
+  ---
+  duration_ms: 0.045858
+  ...
+# Subtest: invalid fixture finished-retry-not-allowed-on-declined.json is rejected at payload.reason
+ok 153 - invalid fixture finished-retry-not-allowed-on-declined.json is rejected at payload.reason
+  ---
+  duration_ms: 0.082395
+  ...
+# Subtest: invalid fixture finished-succeeded-unverified.json is rejected at payload.verified
+ok 154 - invalid fixture finished-succeeded-unverified.json is rejected at payload.verified
+  ---
+  duration_ms: 0.046493
+  ...
+# Subtest: invalid fixture finished-unknown-reason.json is rejected at payload.reason
+ok 155 - invalid fixture finished-unknown-reason.json is rejected at payload.reason
+  ---
+  duration_ms: 0.039145
+  ...
+# Subtest: invalid fixture finished-verified-not-succeeded.json is rejected at payload.verified
+ok 156 - invalid fixture finished-verified-not-succeeded.json is rejected at payload.verified
+  ---
+  duration_ms: 0.058003
+  ...
+# Subtest: invalid fixture missing-correlation.json is rejected at correlationId
+ok 157 - invalid fixture missing-correlation.json is rejected at correlationId
+  ---
+  duration_ms: 0.143922
+  ...
+# Subtest: invalid fixture observed-decision-cancelled.json is rejected at payload.observedState.decision
+ok 158 - invalid fixture observed-decision-cancelled.json is rejected at payload.observedState.decision
+  ---
+  duration_ms: 0.059399
+  ...
+# Subtest: invalid fixture observed-state-nested-object.json is rejected at payload.observedState.window
+ok 159 - invalid fixture observed-state-nested-object.json is rejected at payload.observedState.window
+  ---
+  duration_ms: 0.071316
+  ...
+# Subtest: invalid fixture payload-extra-field.json is rejected at payload.status
+ok 160 - invalid fixture payload-extra-field.json is rejected at payload.status
+  ---
+  duration_ms: 0.052028
+  ...
+# Subtest: invalid fixture progress-metadata-2049-bytes.json is rejected at payload.redactedMetadata
+ok 161 - invalid fixture progress-metadata-2049-bytes.json is rejected at payload.redactedMetadata
+  ---
+  duration_ms: 0.06088
+  ...
+# Subtest: invalid fixture progress-metadata-33-keys.json is rejected at payload.redactedMetadata
+ok 162 - invalid fixture progress-metadata-33-keys.json is rejected at payload.redactedMetadata
+  ---
+  duration_ms: 0.055931
+  ...
+# Subtest: invalid fixture progress-metadata-nested.json is rejected at payload.redactedMetadata.nested
+ok 163 - invalid fixture progress-metadata-nested.json is rejected at payload.redactedMetadata.nested
+  ---
+  duration_ms: 0.044173
+  ...
+  ---
+  duration_ms: 0.043804
+  ...
+# Subtest: invalid fixture risk-v1-shape.json is rejected at payload.risk
+ok 165 - invalid fixture risk-v1-shape.json is rejected at payload.risk
+  ---
+  duration_ms: 0.042637
+  ...
+# Subtest: invalid fixture scope-unknown.json is rejected at payload.workspaceScope.scopes[1]
+ok 166 - invalid fixture scope-unknown.json is rejected at payload.workspaceScope.scopes[1]
+  ---
+  duration_ms: 0.048185
+  ...
+  ---
+  duration_ms: 0.045993
+  ...
+  ---
+  duration_ms: 0.042059
+  ...
+  ---
+  duration_ms: 0.041473
+  ...
+  ---
+  duration_ms: 0.171274
+  ...
+  ---
+  duration_ms: 0.062946
+  ...
+# Subtest: invalid fixture timestamp-no-offset.json is rejected at timestamp
+ok 172 - invalid fixture timestamp-no-offset.json is rejected at timestamp
+  ---
+  duration_ms: 0.080675
+  ...
+# Subtest: invalid fixture tool-result-bad-error-code.json is rejected at payload.error.code
+ok 173 - invalid fixture tool-result-bad-error-code.json is rejected at payload.error.code
+  ---
+  duration_ms: 0.054556
+  ...
+# Subtest: invalid fixture tool-result-invalid-argument-retryable.json is rejected at payload.error.retryable
+ok 174 - invalid fixture tool-result-invalid-argument-retryable.json is rejected at payload.error.retryable
+  ---
+  duration_ms: 0.055807
+  ...
+# Subtest: invalid fixture tool-result-invalid-argument-side-effect.json is rejected at payload.sideEffect
+ok 175 - invalid fixture tool-result-invalid-argument-side-effect.json is rejected at payload.sideEffect
+  ---
+  duration_ms: 0.053406
+  ...
+# Subtest: invalid fixture tool-result-process-image-path.json is rejected at payload.observedState.processImage
+ok 176 - invalid fixture tool-result-process-image-path.json is rejected at payload.observedState.processImage
+  ---
+  duration_ms: 0.123053
+  ...
+# Subtest: invalid fixture tool-result-retryable-after-side-effect.json is rejected at payload.error.retryable
+ok 177 - invalid fixture tool-result-retryable-after-side-effect.json is rejected at payload.error.retryable
+  ---
+  duration_ms: 0.099918
+  ...
+# Subtest: invalid fixture tool-result-unknown-error-code.json is rejected at payload.error.code
+ok 178 - invalid fixture tool-result-unknown-error-code.json is rejected at payload.error.code
+  ---
+  duration_ms: 0.118521
+  ...
+# Subtest: invalid fixture tool-result-unverified-no-error.json is rejected at payload.error
+ok 179 - invalid fixture tool-result-unverified-no-error.json is rejected at payload.error
+  ---
+  duration_ms: 0.091615
+  ...
+# Subtest: invalid fixture tool-result-user-declined-retryable.json is rejected at payload.error.retryable
+ok 180 - invalid fixture tool-result-user-declined-retryable.json is rejected at payload.error.retryable
+  ---
+  duration_ms: 0.111973
+  ...
+# Subtest: invalid fixture tool-result-verified-with-error.json is rejected at payload.error
+ok 181 - invalid fixture tool-result-verified-with-error.json is rejected at payload.error
+  ---
+  duration_ms: 0.120986
+  ...
+# Subtest: invalid fixture unknown-type.json is rejected at type
+ok 182 - invalid fixture unknown-type.json is rejected at type
+  ---
+  duration_ms: 0.103446
+  ...
+# Subtest: invalid fixture utterance-ready-retry-empty.json is rejected at payload.retryOfTaskId
+ok 183 - invalid fixture utterance-ready-retry-empty.json is rejected at payload.retryOfTaskId
+  ---
+  duration_ms: 0.076141
+  ...
+# Subtest: invalid fixture utterance-v1-end-reason.json is rejected at payload.endReason
+ok 184 - invalid fixture utterance-v1-end-reason.json is rejected at payload.endReason
+  ---
+  duration_ms: 0.089
+  ...
+# Subtest: invalid fixture v1-auth-spelling-in-progress.json is rejected at payload.state
+ok 185 - invalid fixture v1-auth-spelling-in-progress.json is rejected at payload.state
+  ---
+  duration_ms: 0.10715
+  ...
+# Subtest: invalid fixture version-1.json is rejected at version
+ok 186 - invalid fixture version-1.json is rejected at version
+  ---
+  duration_ms: 0.099626
+  ...
+# Subtest: invalid fixture wrong-schema.json is rejected at schema
+ok 187 - invalid fixture wrong-schema.json is rejected at schema
+  ---
+  duration_ms: 0.054656
+  ...
+# Subtest: v1 envelopes are rejected, not coerced
+ok 188 - v1 envelopes are rejected, not coerced
+  ---
+  duration_ms: 0.245231
+  ...
+# Subtest: non-objects are rejected
+ok 189 - non-objects are rejected
+  ---
+  duration_ms: 0.132132
+  ...
+# Subtest: only signed_in admits tasks
+ok 190 - only signed_in admits tasks
+  ---
+  duration_ms: 0.272431
+  ...
+# Subtest: X5 coverage (ruling 1l, scoped by ruling 2a dottie-e01 972d5f4): per display kind
+ok 191 - X5 coverage (ruling 1l, scoped by ruling 2a dottie-e01 972d5f4): per display kind
+  ---
+  duration_ms: 7.569165
+  ...
+# Subtest: ruling 2b (dottie-e01 97e7bc0): display.category must equal the event category for every kind (both directions)
+ok 192 - ruling 2b (dottie-e01 97e7bc0): display.category must equal the event category for every kind (both directions)
+  ---
+  duration_ms: 1.321797
+  ...
+# Subtest: all Dottie enum values are snake_case
+ok 193 - all Dottie enum values are snake_case
+  ---
+  duration_ms: 0.726251
+  ...
+# Subtest: authGate (CONTRACTS §2.1, E01 2026-10-19): only signed_in admits; unavailable/unknown never map to a sign-in reason
+ok 194 - authGate (CONTRACTS §2.1, E01 2026-10-19): only signed_in admits; unavailable/unknown never map to a sign-in reason
+  ---
+  duration_ms: 0.349165
+  ...
+# Subtest: CONTRACTS §3 / ADR-0012 §4 sets (E01 drift fix 2026-10-19): scopes, categories, always-confirm, error codes, runtime
+ok 195 - CONTRACTS §3 / ADR-0012 §4 sets (E01 drift fix 2026-10-19): scopes, categories, always-confirm, error codes, runtime
+  ---
+  duration_ms: 0.22948
+  ...
+# Subtest: TaskFinished reason pairing = E03 reasonFitsOutcome (61447a6): every outcome × reason
+ok 196 - TaskFinished reason pairing = E03 reasonFitsOutcome (61447a6): every outcome × reason
+  ---
+  duration_ms: 0.312944
+  ...
+# Subtest: ruling 1v: wire keys come from the one table (E03 3029c7b DISPLAY_KEYS, verbatim)
+ok 197 - ruling 1v: wire keys come from the one table (E03 3029c7b DISPLAY_KEYS, verbatim)
+  ---
+  duration_ms: 4.071894
+  ...
+# Subtest: value conventions (E03): strings only; escalation [] when none; fileCount = String(paths.length); a move lists both paths
+ok 198 - value conventions (E03): strings only; escalation [] when none; fileCount = String(paths.length); a move lists both paths
+  ---
+  duration_ms: 0.619365
+  ...
+# Subtest: ruling 1o/1r: the 8 KB command limit is raw UTF-8 bytes (8191/8192 ok, 8193 display_unavailable), never an ellipsis
+ok 199 - ruling 1o/1r: the 8 KB command limit is raw UTF-8 bytes (8191/8192 ok, 8193 display_unavailable), never an ellipsis
+  ---
+  duration_ms: 0.917814
+  ...
+# Subtest: never cut: workingDirectory and each path ≤ 4096 bytes; escalation ≤ 32 entries of ≤ 256 code points
+ok 200 - never cut: workingDirectory and each path ≤ 4096 bytes; escalation ≤ 32 entries of ≤ 256 code points
+  ---
+  duration_ms: 2.160039
+  ...
+# Subtest: ruling 1o/1r: 500 paths ok in full, 501 display_unavailable; 250 moves = 500 paths ok, 251 moves not
+ok 201 - ruling 1o/1r: 500 paths ok in full, 501 display_unavailable; 250 moves = 500 paths ok, 251 moves not
+  ---
+  duration_ms: 3.440877
+  ...
+# Subtest: cut rule = E03 f3672da: strip if untrusted, then max−1 code points + U+2026 (exactly max)
+ok 202 - cut rule = E03 f3672da: strip if untrusted, then max−1 code points + U+2026 (exactly max)
+  ---
+  duration_ms: 2.118742
+  ...
+# Subtest: ruling 1o/1t: Codex reason (untrusted) is stripped, cut with an ellipsis, and never enters a bound field
+ok 203 - ruling 1o/1t: Codex reason (untrusted) is stripped, cut with an ellipsis, and never enters a bound field
+  ---
+  duration_ms: 0.640727
+  ...
+# Subtest: missing or malformed port params → display_unavailable (fail closed)
+ok 204 - missing or malformed port params → display_unavailable (fail closed)
+  ---
+  duration_ms: 1.61506
+  ...
+# Subtest: changing any command / cwd / network / escalation / path / reason changes the displayHash and so the actionId
+ok 205 - changing any command / cwd / network / escalation / path / reason changes the displayHash and so the actionId
+  ---
+  duration_ms: 4.490967
+  ...
+# Subtest: ruling 1t: every bidi, zero-width and control character in a bound field is escaped and flags the badge
+ok 206 - ruling 1t: every bidi, zero-width and control character in a bound field is escaped and flags the badge
+  ---
+  duration_ms: 1.827356
+  ...
+# Subtest: ruling 1t: codex_command renders lines and a line count; CRLF displays like LF but hashes differently; escapes in the box
+ok 207 - ruling 1t: codex_command renders lines and a line count; CRLF displays like LF but hashes differently; escapes in the box
+  ---
+  duration_ms: 0.771767
+  ...
+# Subtest: ruling 1r: kind/source guard: every allowed pair accepted, every disallowed pair rejected
+ok 208 - ruling 1r: kind/source guard: every allowed pair accepted, every disallowed pair rejected
+  ---
+  duration_ms: 5.684232
+  ...
+# Subtest: ruling 1r: displayHash covers kind; unknown kinds and extra fields are rejected
+ok 209 - ruling 1r: displayHash covers kind; unknown kinds and extra fields are rejected
+  ---
+  duration_ms: 1.155953
+  ...
+# Subtest: ruling 1z (dottie-e01 492c01c): isUiActionMethod is exactly ^(ui|window)\\.[a-z][a-z0-9_]*$
+ok 210 - ruling 1z (dottie-e01 492c01c): isUiActionMethod is exactly ^(ui|window)\\.[a-z][a-z0-9_]*$
+  ---
+  duration_ms: 4.372173
+  ...
+# Subtest: ruling 1z: a single-file delete / overwrite still carries paths[] (one entry) and fileCount "1"
+ok 211 - ruling 1z: a single-file delete / overwrite still carries paths[] (one entry) and fileCount "1"
+  ---
+  duration_ms: 3.580764
+  ...
+# Subtest: ruling 2a (dottie-e01 972d5f4): pre_dispatch read/navigate build and validate; tool and ui_action read/navigate do not
+ok 212 - ruling 2a (dottie-e01 972d5f4): pre_dispatch read/navigate build and validate; tool and ui_action read/navigate do not
+  ---
+  duration_ms: 0.871898
+  ...
+# Subtest: 2a addition (with E03): method is NEVER cut; 64 code points accepted, 65 → display_unavailable / rejected (ui_action and tool)
+ok 213 - 2a addition (with E03): method is NEVER cut; 64 code points accepted, 65 → display_unavailable / rejected (ui_action and tool)
+  ---
+  duration_ms: 2.828808
+  ...
+# Subtest: E01 1y follow-up: kind tool rejects any ui./window. method (any case), in the validator and the toolDisplay builder
+ok 214 - E01 1y follow-up: kind tool rejects any ui./window. method (any case), in the validator and the toolDisplay builder
+  ---
+  duration_ms: 4.053074
+  ...
+# Subtest: baseline: the plain displays and the fixture event are valid
+ok 215 - baseline: the plain displays and the fixture event are valid
+  ---
+  duration_ms: 1.7102
+  ...
+# Subtest: a display whose fields are inherited is rejected (top level and nested app), as canonicalJson refuses it
+ok 216 - a display whose fields are inherited is rejected (top level and nested app), as canonicalJson refuses it
+  ---
+  duration_ms: 0.638563
+  ...
+# Subtest: a class instance is rejected, even with only own data fields
+ok 217 - a class instance is rejected, even with only own data fields
+  ---
+  duration_ms: 0.690562
+  ...
+# Subtest: a null-prototype object is accepted when otherwise valid, and hashes the same
+ok 218 - a null-prototype object is accepted when otherwise valid, and hashes the same
+  ---
+  duration_ms: 0.946801
+  ...
+# Subtest: a "__proto__" key in JSON-parsed input is an unknown own key: rejected, no prototype change, no pollution
+ok 219 - a "__proto__" key in JSON-parsed input is an unknown own key: rejected, no prototype change, no pollution
+  ---
+  duration_ms: 0.432479
+  ...
+# Subtest: other non-plain shapes: getters, non-enumerable or symbol keys, sparse or decorated arrays
+ok 220 - other non-plain shapes: getters, non-enumerable or symbol keys, sparse or decorated arrays
+  ---
+  duration_ms: 0.561826
+  ...
+# Subtest: computeActionId refuses an inherited binding
+ok 221 - computeActionId refuses an inherited binding
+  ---
+  duration_ms: 1.360115
+  ...
+# Subtest: arrays: an index that is a getter, non-enumerable or joined by a symbol key is not plain (display lists and event arrays)
+ok 222 - arrays: an index that is a getter, non-enumerable or joined by a symbol key is not plain (display lists and event arrays)
+  ---
+  duration_ms: 0.959343
+  ...
+# Subtest: a polluted Object.prototype / Array.prototype never supplies a missing field or array entry
+ok 223 - a polluted Object.prototype / Array.prototype never supplies a missing field or array entry
+  ---
+  duration_ms: 0.647203
+  ...
+# Subtest: sync: schemas/ is exactly what scripts/json-schemas.mjs generates from the TS consts (npm run schemas)
+ok 224 - sync: schemas/ is exactly what scripts/json-schemas.mjs generates from the TS consts (npm run schemas)
+  ---
+  duration_ms: 67.93314
+  ...
+# Subtest: sync: every case agrees between the TS validator and the JSON Schema (valid → both accept; schemaRejects → both reject)
+ok 225 - sync: every case agrees between the TS validator and the JSON Schema (valid → both accept; schemaRejects → both reject)
+  ---
+  duration_ms: 72.286576
+  ...
+# Subtest: sync: schema property names are the TS key tuples (which tsc pins to the interfaces)
+ok 226 - sync: schema property names are the TS key tuples (which tsc pins to the interfaces)
+  ---
+  duration_ms: 0.953502
+  ...
+# Subtest: sync: every audit kind has a valid case, and the vectors file matches its schema
+ok 227 - sync: every audit kind has a valid case, and the vectors file matches its schema
+  ---
+  duration_ms: 5.99726
+  ...
+# Subtest: §3.2 enums: 24 kinds (d88c9c3), 12 tool_token.revoked reasons, kinds with no outcome
+ok 228 - §3.2 enums: 24 kinds (d88c9c3), 12 tool_token.revoked reasons, kinds with no outcome
+  ---
+  duration_ms: 0.231965
+  ...
+# Subtest: Redacted<T>: a plain AuditRecord is not assignable to RedactedAuditRecord (compile-time brand)
+ok 229 - Redacted<T>: a plain AuditRecord is not assignable to RedactedAuditRecord (compile-time brand)
+  ---
+  duration_ms: 0.110154
+  ...
+# Subtest: cases.json escapes the lone surrogate, so Python reads the same value
+ok 230 - cases.json escapes the lone surrogate, so Python reads the same value
+  ---
+  duration_ms: 0.29404
+  ...
+# Subtest: Python jsonschema agrees with every case (DOTTIE_PYTHON with jsonschema installed; skipped otherwise)
+ok 231 - Python jsonschema agrees with every case (DOTTIE_PYTHON with jsonschema installed; skipped otherwise)
+  ---
+  duration_ms: 367.084553
+  ...
+# Subtest: ruling 2j: observedState null is ACCEPTED when certainty is 'possible'
+ok 232 - ruling 2j: observedState null is ACCEPTED when certainty is 'possible'
+  ---
+  duration_ms: 2.086611
+  ...
+# Subtest: ruling 2j: observedState null is REJECTED when certainty is 'committed' (same event otherwise), by the 2j rule
+ok 233 - ruling 2j: observedState null is REJECTED when certainty is 'committed' (same event otherwise), by the 2j rule
+  ---
+  duration_ms: 1.243739
+  ...
+# Subtest: ruling 2j: null with a certainty outside the enum is rejected (enum issue), never accepted
+ok 234 - ruling 2j: null with a certainty outside the enum is rejected (enum issue), never accepted
+  ---
+  duration_ms: 0.313237
+  ...
+# Subtest: ruling 2j: a non-null observedState with certainty 'committed' is unaffected (the null rule only)
+ok 235 - ruling 2j: a non-null observedState with certainty 'committed' is unaffected (the null rule only)
+  ---
+  duration_ms: 0.204638
+  ...
+# Subtest: vendored subset (canonical, display, enums) is self-contained and reproduces every vector on Node 20.20.2
+ok 236 - vendored subset (canonical, display, enums) is self-contained and reproduces every vector on Node 20.20.2
+  ---
+  duration_ms: 23.763385
+  ...
+1..236
+# tests 236
+# suites 0
+# pass 236
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1455.078959
