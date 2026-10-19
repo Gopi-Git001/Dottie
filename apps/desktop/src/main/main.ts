@@ -420,8 +420,12 @@ async function smokeApproval(approvalWindow: ApprovalWindow, coordinator: StubCo
   // already on screen, and try an early Approve over IPC at that moment.
   const smokeApprovalWindow = approvalWindow as ApprovalWindow & {
     nudgeForSmokeTest(): void;
+    holdFocusForSmokeTest(on: boolean): void;
     smokeWindowState(): SmokeWindowState;
   };
+  // DOT-102: hold focus for the whole repeat dialog (wait for Approve, then the double click), so a
+  // stray blur on xvfb is undone at once instead of resetting the 500 ms timer until STEP_MS runs out.
+  smokeApprovalWindow.holdFocusForSmokeTest(true);
   let state: { warning: string | null; approveDisabled: boolean | null } = { warning: null, approveDisabled: null };
   let disabledWithWarning = false;
   let earlyApprove: unknown = null;
@@ -438,6 +442,7 @@ async function smokeApproval(approvalWindow: ApprovalWindow, coordinator: StubCo
       // setWindowAttention ignores an unchanged value. attentionSince starts only on a
       // not-attentive → attentive change, so another focus() while already attentive does not
       // restart the 500 ms timer. Nudge only while the window is not attentive.
+      smokeApprovalWindow.holdFocusForSmokeTest(true); // idempotent; attaches once the window exists
       if (!approvalWindow.isAttentive()) {
         nudges += 1;
         smokeApprovalWindow.nudgeForSmokeTest();
@@ -461,6 +466,7 @@ async function smokeApproval(approvalWindow: ApprovalWindow, coordinator: StubCo
   const replies = (): ReplyEntry[] => replyEntries(coordinator);
   const closed = (): boolean => approvalWindow.webContents === null;
   await clickThatCloses('repeat.approveDoubleClick', 'a'.repeat(64), wc, `document.getElementById('approve').click(); document.getElementById('approve').click();`, replies, closed);
+  smokeApprovalWindow.holdFocusForSmokeTest(false);
   out['repeatResolved'] = coordinator.resolutions.map((r) => r.resolved.approved);
 
   coordinator.requestApproval({ ...base, actionId: 'b'.repeat(64), category: 'read', requestSource: 'coordinator', display: preDispatch('local_change', 'possible'), possibleRepeat: { priorTaskId: 'smoke-t0', priorSideEffect: 'possible' } });

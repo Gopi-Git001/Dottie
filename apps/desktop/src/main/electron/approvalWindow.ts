@@ -102,6 +102,7 @@ export interface SmokeWindowState {
 
 type SmokeApprovalWindow = ApprovalWindow & {
   nudgeForSmokeTest(): void;
+  holdFocusForSmokeTest(on: boolean): void;
   hideForSmokeTest(): void;
   smokeWindowState(): SmokeWindowState;
 };
@@ -119,6 +120,36 @@ if (__DOTTIE_SMOKE__) {
     if (!w || w.isDestroyed()) return;
     if (!w.isVisible()) w.show();
     if (!w.isFocused()) w.focus();
+  };
+  /**
+   * DOT-102: on xvfb (no window manager) focus is unreliable and the dialog can be blurred by
+   * another window mid-way through the 500 ms X5 timer, which resets it. While held, every blur
+   * re-asserts focus on the next tick. The X5 gate itself is untouched: a blur still resets the
+   * timer, and the timer restarts only when main sees visible+focused again.
+   */
+  const held = new WeakMap<BrowserWindow, () => void>();
+  proto.holdFocusForSmokeTest = function (this: ApprovalWindow, on: boolean): void {
+    assertSmokeMode();
+    const w = (this as unknown as { win: BrowserWindow | null }).win;
+    if (!w || w.isDestroyed()) return;
+    const prev = held.get(w);
+    if (!on) {
+      if (prev) w.removeListener('blur', prev);
+      held.delete(w);
+      return;
+    }
+    const refocus = (): void => {
+      if (w.isDestroyed()) return;
+      if (!w.isVisible()) w.show();
+      w.moveTop();
+      if (!w.isFocused()) w.focus();
+    };
+    if (!prev) {
+      const onBlur = (): void => void setTimeout(refocus, 0);
+      held.set(w, onBlur);
+      w.on('blur', onBlur);
+    }
+    refocus();
   };
   proto.hideForSmokeTest = function (this: ApprovalWindow): void {
     assertSmokeMode();

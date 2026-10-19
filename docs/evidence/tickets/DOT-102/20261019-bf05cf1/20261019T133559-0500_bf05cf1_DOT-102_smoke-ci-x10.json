@@ -1,0 +1,138 @@
+{
+ "header": {
+  "caseId": "DOT-102-smoke-ci-x10",
+  "commit": "bf05cf1",
+  "build": "dev build:fast (smoke bundle) @bf05cf1",
+  "installerSha256": "n/a (no installer; smoke runs the unpacked dev bundle)",
+  "startedAt": "2026-10-19T13:34-05:00",
+  "finishedAt": "2026-10-19T13:36-05:00",
+  "runner": "box-linux (xvfb-run + openbox, Linux; NOT Windows evidence)",
+  "command": "10x: xvfb-run -a bash -c 'openbox & npm run smoke:ci -- --case-id dot-102 --runner box-linux'",
+  "exitCode": 0,
+  "durationMs": 90858,
+  "result": "PASS 10/10"
+ },
+ "runs": [
+  {
+   "runs": 1,
+   "ok": 1,
+   "failed": 0,
+   "timedOut": 0,
+   "failedSteps": [],
+   "msMin": 7604,
+   "msMedian": 7604,
+   "msMax": 7604,
+   "commit": "bf05cf1",
+   "dirtyTree": false
+  },
+  {
+   "runs": 1,
+   "ok": 1,
+   "failed": 0,
+   "timedOut": 0,
+   "failedSteps": [],
+   "msMin": 7698,
+   "msMedian": 7698,
+   "msMax": 7698,
+   "commit": "bf05cf1",
+   "dirtyTree": false
+  },
+  {
+   "runs": 1,
+   "ok": 1,
+   "failed": 0,
+   "timedOut": 0,
+   "failedSteps": [],
+   "msMin": 7533,
+   "msMedian": 7533,
+   "msMax": 7533,
+   "commit": "bf05cf1",
+   "dirtyTree": false
+  },
+  {
+   "runs": 1,
+   "ok": 1,
+   "failed": 0,
+   "timedOut": 0,
+   "failedSteps": [],
+   "msMin": 7635,
+   "msMedian": 7635,
+   "msMax": 7635,
+   "commit": "bf05cf1",
+   "dirtyTree": false
+  },
+  {
+   "runs": 1,
+   "ok": 1,
+   "failed": 0,
+   "timedOut": 0,
+   "failedSteps": [],
+   "msMin": 7657,
+   "msMedian": 7657,
+   "msMax": 7657,
+   "commit": "bf05cf1",
+   "dirtyTree": false
+  },
+  {
+   "runs": 1,
+   "ok": 1,
+   "failed": 0,
+   "timedOut": 0,
+   "failedSteps": [],
+   "msMin": 7530,
+   "msMedian": 7530,
+   "msMax": 7530,
+   "commit": "bf05cf1",
+   "dirtyTree": false
+  },
+  {
+   "runs": 1,
+   "ok": 1,
+   "failed": 0,
+   "timedOut": 0,
+   "failedSteps": [],
+   "msMin": 7557,
+   "msMedian": 7557,
+   "msMax": 7557,
+   "commit": "bf05cf1",
+   "dirtyTree": false
+  },
+  {
+   "runs": 1,
+   "ok": 1,
+   "failed": 0,
+   "timedOut": 0,
+   "failedSteps": [],
+   "msMin": 7592,
+   "msMedian": 7592,
+   "msMax": 7592,
+   "commit": "bf05cf1",
+   "dirtyTree": false
+  },
+  {
+   "runs": 1,
+   "ok": 1,
+   "failed": 0,
+   "timedOut": 0,
+   "failedSteps": [],
+   "msMin": 7622,
+   "msMedian": 7622,
+   "msMax": 7622,
+   "commit": "bf05cf1",
+   "dirtyTree": false
+  },
+  {
+   "runs": 1,
+   "ok": 1,
+   "failed": 0,
+   "timedOut": 0,
+   "failedSteps": [],
+   "msMin": 7721,
+   "msMedian": 7721,
+   "msMax": 7721,
+   "commit": "bf05cf1",
+   "dirtyTree": false
+  }
+ ],
+ "note": "An earlier 12/12 pass on the uncommitted tree (dirtyTree=true) preceded this clean run; not counted. No failing runs occurred, none removed. Pre-fix baseline was not reproduced locally (the flake was CI-only)."
+}
