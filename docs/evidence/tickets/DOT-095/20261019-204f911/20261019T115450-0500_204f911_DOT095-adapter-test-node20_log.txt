@@ -1,0 +1,697 @@
+{"caseId": "DOT095-adapter-test-node20", "commit": "204f911650f61c5b69d7dc9aace7dfc707cef006", "build": null, "installerSha256": null, "buildNote": "n/a: unpackaged", "startedAt": "2026-10-19T11:54:50-05:00", "finishedAt": "2026-10-19T11:54:52-05:00", "runner": "linux-box-e02", "command": "(cd packages/codex-adapter && /home/box/.npm/_npx/ebaba8b9e55fd0a9/node_modules/node/bin/node --test dist/test/*.test.js)", "exitCode": 0, "durationMs": 1972, "result": "pass", "dirtyTree": false, "platform": "Linux (never Windows evidence)", "rawOutputSha256": "669f9d454b92ec31407c6b20ec55eff610551417847bf9c30ad95db151cba2b8", "linesWithheld": 2}
+[2 line(s) withheld: they match the evidence secret-sweep pattern (test NAMES that mention canaries/token keywords, no values). Full raw output kept off-repo; sha256 669f9d454b92ec31407c6b20ec55eff610551417847bf9c30ad95db151cba2b8]
+TAP version 13
+# Subtest: A9-I5 / CONTRACTS §1.4 with the bridge installed: decline; permissions empty grant; elicitation URL → decline and nothing opened; tool/call and unknown → -32601
+ok 1 - A9-I5 / CONTRACTS §1.4 with the bridge installed: decline; permissions empty grant; elicitation URL → decline and nothing opened; tool/call and unknown → -32601
+  ---
+  duration_ms: 1039.97576
+  ...
+# Subtest: A9-I2 end to end: an approve without a K8 token (default port) is declined on the wire
+ok 2 - A9-I2 end to end: an approve without a K8 token (default port) is declined on the wire
+  ---
+  duration_ms: 14.813849
+  ...
+# Subtest: A9-I3 task cancel revokes the pending approval (cancel on the wire) alongside the interrupt
+ok 3 - A9-I3 task cancel revokes the pending approval (cancel on the wire) alongside the interrupt
+  ---
+  duration_ms: 12.867106
+  ...
+# Subtest: A9-I3 panic-stop through the control surface; serverRequest/resolved → no reply; unknown turn → decline
+ok 4 - A9-I3 panic-stop through the control surface; serverRequest/resolved → no reply; unknown turn → decline
+  ---
+  duration_ms: 24.859903
+  ...
+# Subtest: A9-I3 app-server crash while pending: revoked, nothing written to the dead connection
+ok 5 - A9-I3 app-server crash while pending: revoked, nothing written to the dead connection
+  ---
+  duration_ms: 17.734947
+  ...
+# Subtest: A9-I4 locked desktop end to end: decline, no dialog
+ok 6 - A9-I4 locked desktop end to end: decline, no dialog
+  ---
+  duration_ms: 6.812372
+  ...
+# Subtest: CR2 duplicate JSON keys anywhere in a server request line are flagged for the bridge
+ok 7 - CR2 duplicate JSON keys anywhere in a server request line are flagged for the bridge
+  ---
+  duration_ms: 0.227368
+  ...
+# Subtest: E01 ruling 1x: a writeStdin approval gets exactly one decline per requestId; no dialog, no coordinator approval request
+ok 8 - E01 ruling 1x: a writeStdin approval gets exactly one decline per requestId; no dialog, no coordinator approval request
+  ---
+  duration_ms: 6.101948
+  ...
+# Subtest: RB02-U1 silence → expired at the time limit: decline, dialog dismissed, audit expired/timeout
+ok 9 - RB02-U1 silence → expired at the time limit: decline, dialog dismissed, audit expired/timeout
+  ---
+  duration_ms: 59.028001
+  ...
+# Subtest: RB02-U1 "no", noise / free text, render failure: decline; non-user outcomes dismiss the dialog
+ok 10 - RB02-U1 "no", noise / free text, render failure: decline; non-user outcomes dismiss the dialog
+  ---
+  duration_ms: 4.388041
+  ...
+# Subtest: RB02-U1 turn ended / interrupted → cancel; serverRequest/resolved → no reply at all; both dismiss
+ok 11 - RB02-U1 turn ended / interrupted → cancel; serverRequest/resolved → no reply at all; both dismiss
+  ---
+  duration_ms: 1.982166
+  ...
+# Subtest: RB02-U1 / follow-up 9 catch-all: bridge exception, schema failure, duplicate JSON keys, unknown turn/item, hash failure, K8 exception → decline, nothing approved
+ok 12 - RB02-U1 / follow-up 9 catch-all: bridge exception, schema failure, duplicate JSON keys, unknown turn/item, hash failure, K8 exception → decline, nothing approved
+  ---
+  duration_ms: 4.55872
+  ...
+# Subtest: RB02-U2 the bridge hashes with the contracts helper: exact binding, requestId and every arg bound; equivalent paths one id, different paths another
+ok 13 - RB02-U2 the bridge hashes with the contracts helper: exact binding, requestId and every arg bound; equivalent paths one id, different paths another
+  ---
+  duration_ms: 4.285494
+  ...
+# Subtest: RB02-U2 fileChange actionId binds every path, kind, move target and diff hash
+ok 14 - RB02-U2 fileChange actionId binds every path, kind, move target and diff hash
+  ---
+  duration_ms: 121.721078
+  ...
+# Subtest: RB02-U3 overwrite detection: update/move, or add onto an existing or unknown path → overwrite (approval required); delete → delete
+ok 15 - RB02-U3 overwrite detection: update/move, or add onto an existing or unknown path → overwrite (approval required); delete → delete
+  ---
+  duration_ms: 3.321278
+  ...
+# Subtest: RB02-U3 deny list (BACKLOG reading): credential stores and Dottie/Codex state → credential_access, DENIED_BY_POLICY, no dialog
+ok 16 - RB02-U3 deny list (BACKLOG reading): credential stores and Dottie/Codex state → credential_access, DENIED_BY_POLICY, no dialog
+  ---
+  duration_ms: 2.868932
+  ...
+# Subtest: A9-U3 reused id, a late yes after expiry/revoke, free text and model text never approve
+ok 17 - A9-U3 reused id, a late yes after expiry/revoke, free text and model text never approve
+  ---
+  duration_ms: 2.051654
+  ...
+# Subtest: A9-U3 yes for another action / another task / expired id: a token not bound to this request is DENIED_BY_POLICY
+ok 18 - A9-U3 yes for another action / another task / expired id: a token not bound to this request is DENIED_BY_POLICY
+  ---
+  duration_ms: 7.31079
+  ...
+# Subtest: A9-I1 amendments proposed → still only the plain `accept` (never acceptForSession or an amendment); grantRoot → decline
+ok 19 - A9-I1 amendments proposed → still only the plain `accept` (never acceptForSession or an amendment); grantRoot → decline
+  ---
+  duration_ms: 1.392936
+  ...
+# Subtest: A9-I2 no token (default FAIL_CLOSED_TOKENS, DOT-092 pending) → DENIED_BY_POLICY even after an approve
+ok 20 - A9-I2 no token (default FAIL_CLOSED_TOKENS, DOT-092 pending) → DENIED_BY_POLICY even after an approve
+  ---
+  duration_ms: 0.739021
+  ...
+# Subtest: A9-I2 token request is bound (purpose, actionId, taskId, expiry = the approval's); single use; never in logs, audit, args or the reply
+ok 21 - A9-I2 token request is bound (purpose, actionId, taskId, expiry = the approval's); single use; never in logs, audit, args or the reply
+  ---
+  duration_ms: 2.002852
+  ...
+# Subtest: A9-I2 / item 7 a token issued after the time limit passed is refused even if the expiry timer is late
+ok 22 - A9-I2 / item 7 a token issued after the time limit passed is refused even if the expiry timer is late
+  ---
+  duration_ms: 1.770236
+  ...
+# Subtest: A9-I3 panic-stop, mute, Quit, task cancel, lock and app-server restart revoke every pending approval
+ok 23 - A9-I3 panic-stop, mute, Quit, task cancel, lock and app-server restart revoke every pending approval
+  ---
+  duration_ms: 3.294924
+  ...
+# Subtest: A9-I3 a revoke after the accept was sent is reported already_executed (not undone); turn end forgets it
+ok 24 - A9-I3 a revoke after the accept was sent is reported already_executed (not undone); turn end forgets it
+  ---
+  duration_ms: 1.088687
+  ...
+# Subtest: item 7 time limit: 60 s default, clamped to 120 s, invalid values give the default
+ok 25 - item 7 time limit: 60 s default, clamped to 120 s, invalid values give the default
+  ---
+  duration_ms: 0.268021
+  ...
+# Subtest: A9-I4 locked desktop → denied with no dialog (also when the lock check throws or is not false)
+ok 26 - A9-I4 locked desktop → denied with no dialog (also when the lock check throws or is not false)
+  ---
+  duration_ms: 0.546645
+  ...
+# Subtest: A9-I4 audit records hold ids, hashes, category, risk, decision, times: never args, commands, paths or Codex text
+ok 27 - A9-I4 audit records hold ids, hashes, category, risk, decision, times: never args, commands, paths or Codex text
+  ---
+  duration_ms: 1.312311
+  ...
+# Subtest: ruling 2b (dottie-e01 97e7bc0): a Codex read/navigate approval opens exactly one dialog with category read/navigate (passed through; never skipped, never display_unavailable)
+ok 28 - ruling 2b (dottie-e01 97e7bc0): a Codex read/navigate approval opens exactly one dialog with category read/navigate (passed through; never skipped, never display_unavailable)
+  ---
+  duration_ms: 3.336734
+  ...
+# Subtest: A9-I5 synthetic or self approve is ignored: notifications and the control surface cannot approve
+ok 29 - A9-I5 synthetic or self approve is ignored: notifications and the control surface cannot approve
+  ---
+  duration_ms: 1.634734
+  ...
+# Subtest: non-bridged methods fall through to the default handler (undefined)
+ok 30 - non-bridged methods fall through to the default handler (undefined)
+  ---
+  duration_ms: 0.231701
+  ...
+# Subtest: DOT-095 limits: an 8192-byte command is shown in full, 8193 bytes declines display_unavailable; 500 paths ok, 501 declines
+ok 31 - DOT-095 limits: an 8192-byte command is shown in full, 8193 bytes declines display_unavailable; 500 paths ok, 501 declines
+  ---
+  duration_ms: 27.581524
+  ...
+# Subtest: DOT-095 the display sent to the coordinator rebuilds to exactly the displayHash bound in the actionId (requestSource codex)
+ok 32 - DOT-095 the display sent to the coordinator rebuilds to exactly the displayHash bound in the actionId (requestSource codex)
+  ---
+  duration_ms: 0.939051
+  ...
+# Subtest: DOT-095 changing the command, cwd, network, an escalation or a path changes the displayHash and so the actionId
+ok 33 - DOT-095 changing the command, cwd, network, an escalation or a path changes the displayHash and so the actionId
+  ---
+  duration_ms: 1.389052
+  ...
+# Subtest: DOT-095 expired, display_unavailable and duplicate_request never accept, even with a valid K8 token port; no token is requested
+ok 34 - DOT-095 expired, display_unavailable and duplicate_request never accept, even with a valid K8 token port; no token is requested
+  ---
+  duration_ms: 1.82351
+  ...
+# Subtest: markExpired → expired even though account/read still says signed in; a completed sign-in clears it
+ok 35 - markExpired → expired even though account/read still says signed in; a completed sign-in clears it
+  ---
+  duration_ms: 909.127636
+  ...
+# Subtest: handshake: initialize (experimentalApi:false) → initialized → account/read; signed out is reported
+ok 36 - handshake: initialize (experimentalApi:false) → initialized → account/read; signed out is reported
+  ---
+  duration_ms: 920.406109
+  ...
+# Subtest: auth state is unknown/unavailable, never signed_in, before the runtime is ready
+ok 37 - auth state is unknown/unavailable, never signed_in, before the runtime is ready
+  ---
+  duration_ms: 1.238106
+  ...
+# Subtest: browser sign-in success: adapter opens the auth.openai.com URL itself; no URL, token or e-mail crosses the port
+ok 38 - browser sign-in success: adapter opens the auth.openai.com URL itself; no URL, token or e-mail crosses the port
+  ---
+  duration_ms: 11.480857
+  ...
+# Subtest: browser sign-in failure: back to signed_out with a retry message
+ok 39 - browser sign-in failure: back to signed_out with a retry message
+  ---
+  duration_ms: 5.597369
+  ...
+# Subtest: device code: verification URL and user code are returned for display; adapter opens the URL; cancel ends it
+ok 40 - device code: verification URL and user code are returned for display; adapter opens the URL; cancel ends it
+  ---
+  duration_ms: 7.336235
+  ...
+# Subtest: cancel: canceled, then not_found for the same id; state ends signed_out
+ok 41 - cancel: canceled, then not_found for the same id; state ends signed_out
+  ---
+  duration_ms: 12.846244
+  ...
+# Subtest: logout: account/logout, then a fresh account/read reports signed_out
+ok 42 - logout: account/logout, then a fresh account/read reports signed_out
+  ---
+  duration_ms: 4.959307
+  ...
+# Subtest: a non-auth.openai.com authUrl is refused: never opened, login cancelled, security log, still signed_out
+ok 43 - a non-auth.openai.com authUrl is refused: never opened, login cancelled, security log, still signed_out
+  ---
+  duration_ms: 4.83301
+  ...
+# Subtest: an auth.openai.com authUrl whose redirect_uri is not loopback /auth/callback is refused: reason redirect_uri, never opened
+ok 44 - an auth.openai.com authUrl whose redirect_uri is not loopback /auth/callback is refused: reason redirect_uri, never opened
+  ---
+  duration_ms: 4.112495
+  ...
+# Subtest: only browser and device_code logins exist: any other mode is refused without touching the wire
+ok 45 - only browser and device_code logins exist: any other mode is refused without touching the wire
+  ---
+  duration_ms: 3.051099
+  ...
+# Subtest: the pinned schema has 21 CodexErrorInfo alternatives (15 strings, 5 objects, 1 catch-all) and all are mapped
+ok 46 - the pinned schema has 21 CodexErrorInfo alternatives (15 strings, 5 objects, 1 catch-all) and all are mapped
+  ---
+  duration_ms: 6.322978
+  ...
+# Subtest: HTTP-carrying variants: 401→auth, 429→rate_limited, 5xx/null→transient, other 4xx→fatal
+ok 47 - HTTP-carrying variants: 401→auth, 429→rate_limited, 5xx/null→transient, other 4xx→fatal
+  ---
+  duration_ms: 0.874956
+  ...
+# Subtest: unauthorized and any 401 mark the session expired
+ok 48 - unauthorized and any 401 mark the session expired
+  ---
+  duration_ms: 0.164888
+  ...
+# Subtest: plan_limit and auth are never retryable; only transient and rate_limited are
+ok 49 - plan_limit and auth are never retryable; only transient and rate_limited are
+  ---
+  duration_ms: 0.116978
+  ...
+# Subtest: unknown, malformed or null codexErrorInfo is fatal (no silent retry)
+ok 50 - unknown, malformed or null codexErrorInfo is fatal (no silent retry)
+  ---
+  duration_ms: 0.134612
+  ...
+# Subtest: error notifications: willRetry:true is only RECOVERING; the final one is classified (V-run L26-37)
+ok 51 - error notifications: willRetry:true is only RECOVERING; the final one is classified (V-run L26-37)
+  ---
+  duration_ms: 0.13474
+  ...
+# Subtest: eslint.config.mjs is identical in packages/contracts and packages/codex-adapter, and bans `in` and for...in with a reason rule
+ok 52 - eslint.config.mjs is identical in packages/contracts and packages/codex-adapter, and bans `in` and for...in with a reason rule
+  ---
+  duration_ms: 2.210769
+  ...
+# live forced_login_method=chatgpt (origin sessionFlags); child env keys=CODEX_HOME,HOME,LANG,LC_ALL,LOGNAME,PATH,USER
+# live wire: 8 messages; out=initialize,initialized,account/read,account/read
+# Subtest: live 0.163.0: handshake and signed-out account/read
+ok 53 - live 0.163.0: handshake and signed-out account/read
+  ---
+  duration_ms: 1796.601609
+  ...
+# Subtest: env allowlist: OPENAI_*, AZURE_OPENAI_*, other CODEX_* and FOO never reach the child; CODEX_HOME is Dottie's; names only logged
+ok 54 - env allowlist: OPENAI_*, AZURE_OPENAI_*, other CODEX_* and FOO never reach the child; CODEX_HOME is Dottie's; names only logged
+  ---
+  duration_ms: 524.018203
+  ...
+# Subtest: proxy values are never logged: credentials in a proxy URL appear in no log or audit record; only names may
+ok 55 - proxy values are never logged: credentials in a proxy URL appear in no log or audit record; only names may
+  ---
+  duration_ms: 315.524546
+  ...
+  ---
+  duration_ms: 12.008611
+  ...
+# Subtest: refuses to run against the user's own ~/.codex (ADR-0004): no spawn
+ok 57 - refuses to run against the user's own ~/.codex (ADR-0004): no spawn
+  ---
+  duration_ms: 3.419245
+  ...
+# Subtest: bad sha256 refuses to launch: no spawn, breaker_open with halt integrity (§2.4), security log, no restart
+ok 58 - bad sha256 refuses to launch: no spawn, breaker_open with halt integrity (§2.4), security log, no restart
+  ---
+  duration_ms: 2.532226
+  ...
+# Subtest: ADR-0013: full-jitter backoff (base 500 ms), the 5th crash in 10 min opens the breaker, HALF-OPEN after 15 min, cool-off doubles to 2 h
+ok 59 - ADR-0013: full-jitter backoff (base 500 ms), the 5th crash in 10 min opens the breaker, HALF-OPEN after 15 min, cool-off doubles to 2 h
+  ---
+  duration_ms: 48.951708
+  ...
+# Subtest: backoff cap is 30 s on AC and 120 s on battery (power source is an injected input)
+ok 60 - backoff cap is 30 s on AC and 120 s on battery (power source is an injected input)
+  ---
+  duration_ms: 8.939269
+  ...
+# Subtest: a HALF-OPEN probe that stays healthy closes the breaker and resets the cool-off doubling
+ok 61 - a HALF-OPEN probe that stays healthy closes the breaker and resets the cool-off doubling
+  ---
+  duration_ms: 18.960473
+  ...
+# Subtest: env_unavailable (spawn failure) → waiting_for_env: no backoff timer, not counted; envAvailable() relaunches
+ok 62 - env_unavailable (spawn failure) → waiting_for_env: no backoff timer, not counted; envAvailable() relaunches
+  ---
+  duration_ms: 4.341748
+  ...
+# Subtest: retry() leaves the open breaker immediately and resets the history
+ok 63 - retry() leaves the open breaker immediately and resets the history
+  ---
+  duration_ms: 11.074608
+  ...
+# Subtest: hang detection while ready: missed heartbeats kill the child and count as a hang exit
+ok 64 - hang detection while ready: missed heartbeats kill the child and count as a hang exit
+  ---
+  duration_ms: 5.606226
+  ...
+# Subtest: the sha256 is re-verified on restart: a swapped binary stops supervision
+ok 65 - the sha256 is re-verified on restart: a swapped binary stops supervision
+  ---
+  duration_ms: 2.754476
+  ...
+# Subtest: a failed handshake (initialize → -32600 'Not initialized', no data, as on the 0.163.0 wire) kills the child and restarts with backoff
+ok 66 - a failed handshake (initialize → -32600 'Not initialized', no data, as on the 0.163.0 wire) kills the child and restarts with backoff
+  ---
+  duration_ms: 4.155662
+  ...
+# Subtest: a failed handshake (initialize → -32600 'Already initialized', no data, as on the 0.163.0 wire) kills the child and restarts with backoff
+ok 67 - a failed handshake (initialize → -32600 'Already initialized', no data, as on the 0.163.0 wire) kills the child and restarts with backoff
+  ---
+  duration_ms: 2.628802
+  ...
+# Subtest: a hung initialize times out, the child is killed and restarted
+ok 68 - a hung initialize times out, the child is killed and restarted
+  ---
+  duration_ms: 5.692944
+  ...
+# Subtest: a crash during account/read never leaves the state signed_in
+ok 69 - a crash during account/read never leaves the state signed_in
+  ---
+  duration_ms: 4.026603
+  ...
+# Subtest: stop(): stdin is closed, the child exits, no restart is scheduled
+ok 70 - stop(): stdin is closed, the child exits, no restart is scheduled
+  ---
+  duration_ms: 3.613467
+  ...
+# Subtest: forced login method: every spawn passes -c forced_login_method="chatgpt" after caller flags; stdio only
+ok 71 - forced login method: every spawn passes -c forced_login_method="chatgpt" after caller flags; stdio only
+  ---
+  duration_ms: 3.204754
+  ...
+# Subtest: forced login method: a caller flag that tries to override it is refused before any spawn
+ok 72 - forced login method: a caller flag that tries to override it is refused before any spawn
+  ---
+  duration_ms: 3.057123
+  ...
+# Subtest: every server request in the pinned ServerRequest.json has an explicit default answer, and nothing else does
+ok 73 - every server request in the pinned ServerRequest.json has an explicit default answer, and nothing else does
+  ---
+  duration_ms: 2.163326
+  ...
+# Subtest: each pinned server request gets exactly one schema-valid deny/-32601 reply over the wire, never an approval
+ok 74 - each pinned server request gets exactly one schema-valid deny/-32601 reply over the wire, never an approval
+  ---
+  duration_ms: 550.41326
+  ...
+# Subtest: legacy applyPatchApproval / execCommandApproval are denied (anomaly logged); token refresh and attestation get -32601 + security log
+ok 75 - legacy applyPatchApproval / execCommandApproval are denied (anomaly logged); token refresh and attestation get -32601 + security log
+  ---
+  duration_ms: 308.893707
+  ...
+# Subtest: the legacy denial body is valid against the pinned ReviewDecision schema; the CONTRACTS string "denied" is not
+ok 76 - the legacy denial body is valid against the pinned ReviewDecision schema; the CONTRACTS string "denied" is not
+  ---
+  duration_ms: 0.31173
+  ...
+# Subtest: an unknown server request gets -32601 and is logged
+ok 77 - an unknown server request gets -32601 and is logged
+  ---
+  duration_ms: 3.367646
+  ...
+# Subtest: success: gate read → thread/start (on-request, read-only) → turn/start; deltas, plan and final message stream as progress
+ok 78 - success: gate read → thread/start (on-request, read-only) → turn/start; deltas, plan and final message stream as progress
+  ---
+  duration_ms: 927.748781
+  ...
+# Subtest: agent-message deltas are throttled into progress (one update per period, the latest text)
+ok 79 - agent-message deltas are throttled into progress (one update per period, the latest text)
+  ---
+  duration_ms: 9.399275
+  ...
+# Subtest: gate: signed out → no thread/start, no turn/start; authState() is a fresh read
+ok 80 - gate: signed out → no thread/start, no turn/start; authState() is a fresh read
+  ---
+  duration_ms: 4.647963
+  ...
+# Subtest: gate at the last moment: signed out while thread/start is in flight → turn/start is never written
+ok 81 - gate at the last moment: signed out while thread/start is in flight → turn/start is never written
+  ---
+  duration_ms: 5.86602
+  ...
+# Subtest: the runtime not ready → transient failure, nothing written
+ok 82 - the runtime not ready → transient failure, nothing written
+  ---
+  duration_ms: 0.900115
+  ...
+# Subtest: tools: item/started → toolStarted (mayHaveSideEffects); approvals stay default-deny during a turn (bridge HELD)
+ok 83 - tools: item/started → toolStarted (mayHaveSideEffects); approvals stay default-deny during a turn (bridge HELD)
+  ---
+  duration_ms: 89.314722
+  ...
+# Subtest: 401 during a turn: retries show as reconnecting; the final failure is auth and marks the session expired (sticky)
+ok 84 - 401 during a turn: retries show as reconnecting; the final failure is auth and marks the session expired (sticky)
+  ---
+  duration_ms: 14.78413
+  ...
+# Subtest: plan_limit (usageLimitExceeded) is terminal: failed plan_limit, no retry, no auth change
+ok 85 - plan_limit (usageLimitExceeded) is terminal: failed plan_limit, no retry, no auth change
+  ---
+  duration_ms: 6.361383
+  ...
+# Subtest: a rejected turn/start (-32600, no data) is fatal, origin rpc_error, never retried; data is ignored even if present
+ok 86 - a rejected turn/start (-32600, no data) is fatal, origin rpc_error, never retried; data is ignored even if present
+  ---
+  duration_ms: 8.639705
+  ...
+# Subtest: retry rule: turn/completed{failed} rate_limited with an empty ledger stays rate_limited/turn_failed; the coordinator retry is a NEW turn (new turnId) on the same thread
+ok 87 - retry rule: turn/completed{failed} rate_limited with an empty ledger stays rate_limited/turn_failed; the coordinator retry is a NEW turn (new turnId) on the same thread
+  ---
+  duration_ms: 9.685574
+  ...
+# Subtest: retry rule: a transient failure after a side-effecting item started (ledger not empty) is reported fatal, never retryable
+ok 88 - retry rule: a transient failure after a side-effecting item started (ledger not empty) is reported fatal, never retryable
+  ---
+  duration_ms: 6.422776
+  ...
+# Subtest: retry rule: a web search does not touch the ledger, so a transient failure stays transient
+ok 89 - retry rule: a web search does not touch the ledger, so a transient failure stays transient
+  ---
+  duration_ms: 6.38954
+  ...
+# Subtest: shouldRetryTurn: only rate_limited/transient, only with an empty ledger, only while attempt < maxAttempts
+ok 90 - shouldRetryTurn: only rate_limited/transient, only with an empty ledger, only while attempt < maxAttempts
+  ---
+  duration_ms: 0.170072
+  ...
+# Subtest: idempotency: a second turn/start NEVER reaches the wire (same thread, same task, same key, same turnId, or mismatched clientUserMessageId)
+ok 91 - idempotency: a second turn/start NEVER reaches the wire (same thread, same task, same key, same turnId, or mismatched clientUserMessageId)
+  ---
+  duration_ms: 7.063827
+  ...
+# Subtest: idempotency: two runs racing for the same thread in one tick: the loser writes nothing (not even account/read); one thread/resume, one turn/start
+ok 92 - idempotency: two runs racing for the same thread in one tick: the loser writes nothing (not even account/read); one thread/resume, one turn/start
+  ---
+  duration_ms: 60.492519
+  ...
+# Subtest: a clarification answer (attempt reset to 1, new turnId) is a new turn on the same thread, not a duplicate
+ok 93 - a clarification answer (attempt reset to 1, new turnId) is a new turn on the same thread, not a duplicate
+  ---
+  duration_ms: 6.940006
+  ...
+# Subtest: cancel: turn/interrupt, then stopped:true only once turn/completed{interrupted} is observed; run resolves aborted
+ok 94 - cancel: turn/interrupt, then stopped:true only once turn/completed{interrupted} is observed; run resolves aborted
+  ---
+  duration_ms: 5.824304
+  ...
+# Subtest: cancel that is not confirmed in time → stopped:false stop_unconfirmed; the run keeps waiting for the real end
+ok 95 - cancel that is not confirmed in time → stopped:false stop_unconfirmed; the run keeps waiting for the real end
+  ---
+  duration_ms: 5.23611
+  ...
+# Subtest: cancel before dispatch (during thread/start) → stopped_before_dispatch; turn/start never written
+ok 96 - cancel before dispatch (during thread/start) → stopped_before_dispatch; turn/start never written
+  ---
+  duration_ms: 2.910142
+  ...
+# Subtest: AbortSignal: aborted before run → nothing written; aborted mid-turn → interrupt and aborted
+ok 97 - AbortSignal: aborted before run → nothing written; aborted mid-turn → interrupt and aborted
+  ---
+  duration_ms: 5.748637
+  ...
+# Subtest: crash mid-turn → unknown outcome (never success, never re-sent); after restart the retry uses thread/resume
+ok 98 - crash mid-turn → unknown outcome (never success, never re-sent); after restart the retry uses thread/resume
+  ---
+  duration_ms: 11.067676
+  ...
+# Subtest: restart recovery: records a previous process left dispatching/in flight become unknown; cancel says stop_unconfirmed
+ok 99 - restart recovery: records a previous process left dispatching/in flight become unknown; cancel says stop_unconfirmed
+  ---
+  duration_ms: 1.993522
+  ...
+# Subtest: fail closed: a thread/start echo with a different sandbox or approval policy refuses the task before any turn
+ok 100 - fail closed: a thread/start echo with a different sandbox or approval policy refuses the task before any turn
+  ---
+  duration_ms: 6.092341
+  ...
+# Subtest: no workspace path and no defaultCwd → refused before any thread call
+ok 101 - no workspace path and no defaultCwd → refused before any thread call
+  ---
+  duration_ms: 2.151591
+  ...
+# Subtest: resume sends excludeTurns:true; deprecationNotice and thread/goal/cleared are ignored harmlessly
+ok 102 - resume sends excludeTurns:true; deprecationNotice and thread/goal/cleared are ignored harmlessly
+  ---
+  duration_ms: 4.978596
+  ...
+# Subtest: restart reconcile (E09 v0.3.0): unknown records are cross-checked via thread/turns/list clientId; store first, never resent
+ok 103 - restart reconcile (E09 v0.3.0): unknown records are cross-checked via thread/turns/list clientId; store first, never resent
+  ---
+  duration_ms: 23.027783
+  ...
+# Subtest: restart reconcile: turns/list error or a truncated history → unavailable; checked once per child; legacy records skipped
+ok 104 - restart reconcile: turns/list error or a truncated history → unavailable; checked once per child; legacy records skipped
+  ---
+  duration_ms: 12.402039
+  ...
+# Subtest: 1s: an unloaded threadId is resumed (excludeTurns:true) even with resume:false, then the turn runs on it
+ok 105 - 1s: an unloaded threadId is resumed (excludeTurns:true) even with resume:false, then the turn runs on it
+  ---
+  duration_ms: 5.131834
+  ...
+# Subtest: 1s: a thread/resume echo with a different threadId fails closed (blocked_unavailable), 0 turn/start
+ok 106 - 1s: a thread/resume echo with a different threadId fails closed (blocked_unavailable), 0 turn/start
+  ---
+  duration_ms: 4.7006
+  ...
+# Subtest: 1s: a threadId already loaded in this process is not resumed again, whatever the resume flag
+ok 107 - 1s: a threadId already loaded in this process is not resumed again, whatever the resume flag
+  ---
+  duration_ms: 6.394081
+  ...
+# Subtest: 1s: after an App Server restart the same threadId is resumed again (the loaded set is per process)
+ok 108 - 1s: after an App Server restart the same threadId is resumed again (the loaded set is per process)
+  ---
+  duration_ms: 7.929094
+  ...
+# Subtest: LineSplitter: chunk boundaries, CRLF, blank lines
+ok 109 - LineSplitter: chunk boundaries, CRLF, blank lines
+  ---
+  duration_ms: 2.125029
+  ...
+# Subtest: LineSplitter drops an oversized line and recovers at the next newline
+ok 110 - LineSplitter drops an oversized line and recovers at the next newline
+  ---
+  duration_ms: 0.220947
+  ...
+# Subtest: parseWireLine classifies messages and tolerates unknown top-level fields (emittedAtMs)
+ok 111 - parseWireLine classifies messages and tolerates unknown top-level fields (emittedAtMs)
+  ---
+  duration_ms: 0.391312
+  ...
+# Subtest: connection: correlates out-of-order responses, maps errors, times out, rejects pending on exit
+ok 112 - connection: correlates out-of-order responses, maps errors, times out, rejects pending on exit
+  ---
+  duration_ms: 1.291102
+  ...
+# Subtest: connection: a throwing server-request handler still yields exactly one (error) reply
+ok 113 - connection: a throwing server-request handler still yields exactly one (error) reply
+  ---
+  duration_ms: 4.869532
+  ...
+# Subtest: restart policy (ADR-0013): exit classes, full jitter, AC/battery cap, breaker threshold, cool-off doubling
+ok 114 - restart policy (ADR-0013): exit classes, full jitter, AC/battery cap, breaker threshold, cool-off doubling
+  ---
+  duration_ms: 0.605855
+  ...
+# Subtest: ADR-0015 URL rule
+ok 115 - ADR-0015 URL rule
+  ---
+  duration_ms: 0.874445
+  ...
+# Subtest: auth.url_check reason codes (CONTRACTS §3.2): only a code, never the URL
+ok 116 - auth.url_check reason codes (CONTRACTS §3.2): only a code, never the URL
+  ---
+  duration_ms: 0.486856
+  ...
+# Subtest: redirect_uri (browser): only http://127.0.0.1|localhost:<port>/auth/callback; anything else is reason redirect_uri
+ok 117 - redirect_uri (browser): only http://127.0.0.1|localhost:<port>/auth/callback; anything else is reason redirect_uri
+  ---
+  duration_ms: 0.87998
+  ...
+# Subtest: account/read mapping: only a ChatGPT account is signed_in; e-mail never becomes the label
+ok 118 - account/read mapping: only a ChatGPT account is signed_in; e-mail never becomes the label
+  ---
+  duration_ms: 0.449668
+  ...
+# Subtest: env allowlist (POSIX): only OS essentials, LC_*, proxies (any case) and Dottie CODEX_HOME reach the child
+ok 119 - env allowlist (POSIX): only OS essentials, LC_*, proxies (any case) and Dottie CODEX_HOME reach the child
+  ---
+  duration_ms: 0.492341
+  ...
+# Subtest: env allowlist (Windows): OS essentials match case-insensitively; nothing unlisted passes
+ok 120 - env allowlist (Windows): OS essentials match case-insensitively; nothing unlisted passes
+  ---
+  duration_ms: 0.363029
+  ...
+# Subtest: env exclusions (E01 2026-10-19): identity, desktop-session and removed CPU/OS variables never reach the child on either platform
+ok 121 - env exclusions (E01 2026-10-19): identity, desktop-session and removed CPU/OS variables never reach the child on either platform
+  ---
+  duration_ms: 1.460655
+  ...
+# Subtest: ENV_ALLOWLIST.md (DOT-089 artifact) lists exactly the variables in env.ts
+ok 122 - ENV_ALLOWLIST.md (DOT-089 artifact) lists exactly the variables in env.ts
+  ---
+  duration_ms: 0.488177
+  ...
+# Subtest: env: the parent env is never copied wholesale; ~/.codex refused
+ok 123 - env: the parent env is never copied wholesale; ~/.codex refused
+  ---
+  duration_ms: 0.214584
+  ...
+# Subtest: args: forced_login_method="chatgpt" always comes after caller flags and cannot be overridden
+ok 124 - args: forced_login_method="chatgpt" always comes after caller flags and cannot be overridden
+  ---
+  duration_ms: 0.36172
+  ...
+# Subtest: security audit: every field goes through the injected Redactor; the fallback drops URLs, e-mails, JWTs and long tokens
+ok 125 - security audit: every field goes through the injected Redactor; the fallback drops URLs, e-mails, JWTs and long tokens
+  ---
+  duration_ms: 0.517974
+  ...
+# Subtest: classifyRpcError: a JSON-RPC error response is fatal / rpc_error and never marks auth expired (CONTRACTS §1.5)
+ok 126 - classifyRpcError: a JSON-RPC error response is fatal / rpc_error and never marks auth expired (CONTRACTS §1.5)
+  ---
+  duration_ms: 0.625552
+  ...
+# Subtest: ruling 2i harness: the injected "__proto__" really arrives as an own key on the parsed wire object
+ok 127 - ruling 2i harness: the injected "__proto__" really arrives as an own key on the parsed wire object
+  ---
+  duration_ms: 1.23162
+  ...
+# Subtest: ruling 2i: unknown fields on every response and notification are tolerated and never reach a port object
+ok 128 - ruling 2i: unknown fields on every response and notification are tolerated and never reach a port object
+  ---
+  duration_ms: 325.164592
+  ...
+# Subtest: ruling 2i: a failed turn whose error carries unknown fields maps to a fixed kind; nothing from the wire is forwarded
+ok 129 - ruling 2i: a failed turn whose error carries unknown fields maps to a fixed kind; nothing from the wire is forwarded
+  ---
+  duration_ms: 5.386645
+  ...
+# Subtest: ruling 2i: codexErrorInfo whose only key is a prototype name is "unknown" (fatal), never a lookup into a prototype
+ok 130 - ruling 2i: codexErrorInfo whose only key is a prototype name is "unknown" (fatal), never a lookup into a prototype
+  ---
+  duration_ms: 24.750255
+  ...
+# Subtest: ruling 2i (leak fix): item/started whose item.type is a prototype member name is an unknown item: no toolStarted, no progress, ledger untouched
+ok 131 - ruling 2i (leak fix): item/started whose item.type is a prototype member name is an unknown item: no toolStarted, no progress, ledger untouched
+  ---
+  duration_ms: 23.818767
+  ...
+# Subtest: ruling 2i: unknown fields NESTED in known approval members are dropped: the dialog request, display and audit carry known fields only
+ok 132 - ruling 2i: unknown fields NESTED in known approval members are dropped: the dialog request, display and audit carry known fields only
+  ---
+  duration_ms: 21.698493
+  ...
+# Subtest: ruling 2i: an unknown TOP-LEVEL approval key (ordinary, constructor, __proto__) is tolerated fail-closed: one decline, no dialog, nothing forwarded
+ok 133 - ruling 2i: an unknown TOP-LEVEL approval key (ordinary, constructor, __proto__) is tolerated fail-closed: one decline, no dialog, nothing forwarded
+  ---
+  duration_ms: 11.508334
+  ...
+# Subtest: ruling 2i: wire framing and account/read look at OWN keys only (an inherited member from a polluted Object.prototype is not on the wire)
+ok 134 - ruling 2i: wire framing and account/read look at OWN keys only (an inherited member from a polluted Object.prototype is not on the wire)
+  ---
+  duration_ms: 1.101587
+  ...
+# Subtest: ruling 2i: nested unknown fields never reach the bound args: the actionId is identical with and without them
+ok 135 - ruling 2i: nested unknown fields never reach the bound args: the actionId is identical with and without them
+  ---
+  duration_ms: 17.463798
+  ...
+# Subtest: ruling 2i: a completed turn carrying an (off-schema) error object forwards nothing from it
+ok 136 - ruling 2i: a completed turn carrying an (off-schema) error object forwards nothing from it
+  ---
+  duration_ms: 3.569946
+  ...
+# Subtest: ruling 2i: reply routing uses OWN keys only: a polluted Object.prototype.result / noReply never changes how a reply is written
+ok 137 - ruling 2i: reply routing uses OWN keys only: a polluted Object.prototype.result / noReply never changes how a reply is written
+  ---
+  duration_ms: 1.764201
+  ...
+1..137
+# tests 137
+# suites 0
+# pass 137
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1932.064156
