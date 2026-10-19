@@ -89,6 +89,21 @@ const objectShape: Check = (v, p, i) => {
 const req = (check: Check): Field => ({ check });
 const opt = (check: Check): Field => ({ check, optional: true });
 
+/**
+ * E01 ruling 2i: internal events are closed. Object.prototype member names (and `__proto__`) are never a valid key,
+ * not even in the maps that are open by contract (ObservedState's tool-specific scalars, `checks`,
+ * RedactedMetadata). Fixed list, so that a polluted runtime cannot change it.
+ */
+export const RESERVED_KEY_NAMES: ReadonlySet<string> = new Set([
+  '__proto__', 'constructor', 'hasOwnProperty', 'isPrototypeOf', 'propertyIsEnumerable', 'toLocaleString', 'toString', 'valueOf',
+  '__defineGetter__', '__defineSetter__', '__lookupGetter__', '__lookupSetter__',
+]);
+const reserved = (k: string, p: string, i: ValidationIssue[]): boolean => {
+  if (!RESERVED_KEY_NAMES.has(k)) return false;
+  i.push({ path: `${p}.${k}`, message: 'is a reserved prototype member name (ruling 2i)' });
+  return true;
+};
+
 function objectOf(fields: Readonly<Record<string, Field>>, open?: Check): Check {
   return (v, p, i) => {
     if (!isRecord(v)) {
@@ -105,7 +120,7 @@ function objectOf(fields: Readonly<Record<string, Field>>, open?: Check): Check 
     }
     for (const key of Object.keys(v)) {
       if (hasOwn(fields, key)) continue;
-      if (open) open(v[key], `${p}.${key}`, i);
+      if (open && !reserved(key, p, i)) open(v[key], `${p}.${key}`, i);
       else i.push({ path: `${p}.${key}`, message: 'is not a v2 field' });
     }
   };
@@ -121,7 +136,7 @@ const checksMap: Check = (v, p, i) => {
     i.push({ path: p, message: 'must be an object' });
     return;
   }
-  for (const [k, r] of Object.entries(v)) oneOf(CHECK_RESULTS)(r, `${p}.${k}`, i);
+  for (const [k, r] of Object.entries(v)) if (!reserved(k, p, i)) oneOf(CHECK_RESULTS)(r, `${p}.${k}`, i);
 };
 
 const observedState: Check = objectOf(
@@ -147,6 +162,7 @@ const redactedMetadata: Check = (v, p, i) => {
   }
   const entries = Object.entries(v);
   for (const [k, val] of entries) {
+    if (reserved(k, p, i)) continue;
     const ok = val === null || typeof val === 'string' || typeof val === 'boolean' || (typeof val === 'number' && Number.isFinite(val));
     if (!ok) i.push({ path: `${p}.${k}`, message: 'must be a string, number, boolean or null' });
   }

@@ -69,6 +69,15 @@ so no getters) and plain dense arrays (`isPlainArray`). Every required/allowed k
 supplies a missing field or array entry. Null-prototype objects are accepted and hash the same. No hash changed (75
 of 75); two `displaysInvalid` error strings changed.
 
+E01 ruling 2i (closed internal events; given 2026-10-19 11:23 CDT, not yet committed in dottie-e01, so no pin SHA:
+the pin stays at the last E01 commit mirrored). Internal Dottie events are closed. The envelope and every payload
+object reject unknown keys (prototype names included) without throwing. `test/closed-events.test.ts` is table-driven
+over every event type's valid fixtures: it injects an ordinary unknown key and every `Object.prototype` member name
+(as own keys) into every object node and expects exactly that path rejected. The three open-by-contract maps
+(ObservedState's tool-specific scalar keys, `observedState.checks`, `redactedMetadata`; §5/§3.2) stay open for
+ordinary keys. Prototype member names (`RESERVED_KEY_NAMES`) are now rejected there too ("reserved prototype member
+name"). No hash changed.
+
 When E01 lands a new ruling, update the mirror and this pin in the same commit. Where CONTRACTS leaves
 something open, the conservative reading is implemented and noted at the code site (search for
 `ruling` / `TODO(DOT-095)` / `TODO(E03 port`).
