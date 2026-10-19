@@ -51,10 +51,10 @@ describe('E07: *ForSmokeTest gating', () => {
 
   it('production define: helpers are not installed and assertSmokeMode throws even after markSmokeActive', async () => {
     const { aw, mw, launch } = await load(false);
-    expect('nudgeForSmokeTest' in aw.ApprovalWindow.prototype).toBe(false);
-    expect('hideForSmokeTest' in aw.ApprovalWindow.prototype).toBe(false);
-    expect('smokeWindowState' in aw.ApprovalWindow.prototype).toBe(false);
-    expect('hideForSmokeTest' in mw.MainWindow.prototype).toBe(false);
+    expect(Object.hasOwn(aw.ApprovalWindow.prototype, 'nudgeForSmokeTest')).toBe(false);
+    expect(Object.hasOwn(aw.ApprovalWindow.prototype, 'hideForSmokeTest')).toBe(false);
+    expect(Object.hasOwn(aw.ApprovalWindow.prototype, 'smokeWindowState')).toBe(false);
+    expect(Object.hasOwn(mw.MainWindow.prototype, 'hideForSmokeTest')).toBe(false);
     launch.markSmokeActive();
     expect(() => launch.assertSmokeMode()).toThrow('smoke mode is not active');
   });

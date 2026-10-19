@@ -55,6 +55,8 @@ describe('packaging guard (installer.nsh must never silently disappear)', () => 
     expect(smokeMarkerHits('function main(){return 1}')).toEqual([]);
     expect(smokeMarkerHits('function smokeBody(){} function smokeApproval(){}')).toEqual(['smokeBody', 'smokeApproval']);
     expect(smokeMarkerHits('proto.nudgeForSmokeTest = 1; const f = "dottie-smoke";')).toEqual(['ForSmokeTest', 'dottie-smoke']);
+    // Review follow-up: the gate helpers are markers too (none may survive in the production bundle).
+    expect(smokeMarkerHits('w.smokeWindowState(); markSmokeActive(); assertSmokeMode();')).toEqual(['smokeWindowState', 'markSmokeActive', 'assertSmokeMode']);
     expect(smokeMarkerHits('if (__DOTTIE_SMOKE__) {}')).toEqual(['__DOTTIE_SMOKE__']);
     const hits = await smokeMarkersInMainBundle(root, 'true');
     expect(hits.length).toBeGreaterThan(0);
