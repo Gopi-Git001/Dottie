@@ -18,6 +18,11 @@ export default [
           message:
             "The `in` operator also sees inherited (prototype) members (ruling 2i). Use Object.hasOwn(obj, key) (or hasOwn from canonical.ts). If you truly need `in`, disable this line with a reason: `// eslint-disable-next-line no-restricted-syntax -- <reason>`.",
         },
+        {
+          selector: 'ForInStatement',
+          message:
+            "`for...in` also walks inherited (prototype) enumerable keys (ruling 2i). Iterate own keys with Object.keys(obj) or Object.entries(obj) instead. If you truly need it, disable this line with a reason: `// eslint-disable-next-line no-restricted-syntax -- <reason>`.",
+        },
       ],
       // Every disable comment must say why (`-- reason`), name its rules, and actually suppress something.
       '@eslint-community/eslint-comments/require-description': ['error', { ignore: [] }],

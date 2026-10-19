@@ -100,10 +100,10 @@ uses `Object.hasOwn`, not `in`.
 Lint guard for 2i (E02 tooling, not an E01 ruling). `npm run lint` (ESLint 10, flat config `eslint.config.mjs`, identical in
 packages/contracts and packages/codex-adapter; `codex-adapter/test/lint-config.test.ts` fails on drift) bans the `in`
 operator in `src` and `test` via `no-restricted-syntax` on `BinaryExpression[operator='in']`, with a message pointing to
-`Object.hasOwn`. Every disable comment must name its rule(s), carry a reason (`-- why`), and actually suppress something
+`Object.hasOwn`, and bans `for...in` (`ForInStatement`), pointing to `Object.keys` / `Object.entries`. Every disable comment must name its rule(s), carry a reason (`-- why`), and actually suppress something
 (`@eslint-community/eslint-plugin-eslint-comments`: require-description, no-unlimited-disable, no-unused-disable;
 `reportUnusedDisableDirectives: error`). The one allowed disable is a test that checks INHERITED members on purpose
-(`wire-tolerance.test.ts`, proving Object.prototype was restored). `for…in` loops are not covered (not BinaryExpression).
+(`wire-tolerance.test.ts`, proving Object.prototype was restored).
 
 When E01 lands a new ruling, update the mirror and this pin in the same commit. Where CONTRACTS leaves
 something open, the conservative reading is implemented and noted at the code site (search for
