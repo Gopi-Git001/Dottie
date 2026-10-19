@@ -154,6 +154,11 @@ jobs:
             libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 \
             libasound2t64 libpango-1.0-0 libcairo2 libgtk-3-0t64 libx11-xcb1 libxss1 libxtst6
       - run: npm ci
+      - name: Make the Electron sandbox helper setuid root
+        run: |
+          sandbox="node_modules/electron/dist/chrome-sandbox"
+          sudo chown root:root "$sandbox"
+          sudo chmod 4755 "$sandbox"
       - name: smoke:ci under xvfb, in its own process group
         run: |
           set -uo pipefail
