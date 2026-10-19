@@ -25,19 +25,36 @@ jobs:
       - name: Self-test canaries fail the scan
         run: bash scripts/secret-scan-self-test.sh
       - name: Scan the tree and the event range
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BEFORE_SHA: ${{ github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
-          # pull_request: commits the PR added since the base.
+          # SHAs arrive in the environment and must be 40 hex digits before they
+          # are used. pull_request: commits the PR added since the base.
           # push: commits in this push. before is all zeros when the ref is new;
-          # FULL is every commit reachable from HEAD. An empty range fails the scan.
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            range="${{ github.event.pull_request.base.sha }}..${{ github.sha }}"
+          # FULL is every commit reachable from HEAD. An empty or invalid range fails.
+          sha_re='^[0-9a-f]{40}$'
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            if [[ ! "$BASE_SHA" =~ $sha_re || ! "$HEAD_SHA" =~ $sha_re ]]; then
+              echo "secret-scan: FAIL (history range is unresolvable)" >&2
+              exit 2
+            fi
+            range="${BASE_SHA}..${HEAD_SHA}"
           else
-            before="${{ github.event.before }}"
-            if [[ "$before" =~ ^0+$ ]]; then
+            if [[ ! "$HEAD_SHA" =~ $sha_re ]]; then
+              echo "secret-scan: FAIL (history range is unresolvable)" >&2
+              exit 2
+            fi
+            if [[ "$BEFORE_SHA" =~ ^0+$ ]]; then
               range="FULL"
+            elif [[ "$BEFORE_SHA" =~ $sha_re ]]; then
+              range="${BEFORE_SHA}..${HEAD_SHA}"
             else
-              range="${before}..${{ github.sha }}"
+              echo "secret-scan: FAIL (history range is unresolvable)" >&2
+              exit 2
             fi
           fi
           if [[ -z "$range" || "$range" == ".." ]]; then

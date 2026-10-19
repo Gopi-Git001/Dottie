@@ -4,6 +4,7 @@ import { copyFile, mkdir, readFile, rm } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { checkPackaging } from './check-packaging.mjs';
+import { smokeDefine } from './smoke-define.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
@@ -20,8 +21,10 @@ if (packagingProblems.length) {
 await rm(dist, { recursive: true, force: true });
 
 const common = { bundle: true, sourcemap: production ? false : 'linked', minify: production, logLevel: 'warning', legalComments: 'none' };
+// __DOTTIE_SMOKE__ is false for the packaged/production bundle so smoke code is eliminated.
+const define = smokeDefine(production);
 
-await build({ ...common, entryPoints: [join(root, 'src/main/main.ts')], outfile: join(dist, 'main/main.js'), platform: 'node', format: 'cjs', target: 'node22', external: ['electron'] });
+await build({ ...common, define, entryPoints: [join(root, 'src/main/main.ts')], outfile: join(dist, 'main/main.js'), platform: 'node', format: 'cjs', target: 'node22', external: ['electron'] });
 // Sandboxed preload: may only require('electron'); everything else must be bundled.
 await build({ ...common, entryPoints: [join(root, 'src/preload/preload.ts')], outfile: join(dist, 'preload/preload.js'), platform: 'browser', format: 'cjs', target: 'chrome130', external: ['electron'] });
 await build({ ...common, entryPoints: [join(root, 'src/renderer/main.ts')], outfile: join(dist, 'renderer/renderer.js'), platform: 'browser', format: 'iife', target: 'chrome130' });

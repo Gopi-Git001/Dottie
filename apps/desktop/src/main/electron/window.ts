@@ -4,6 +4,7 @@ import { IPC_EVENTS, validatePush } from '../../shared/ipc';
 import { RENDERER_ENTRY_URL, isTrustedRendererUrl } from '../ipc/trust';
 import type { QuitController } from '../lifecycle/quit';
 import { SECURE_WEB_PREFERENCES } from '../security';
+import { assertSmokeMode } from '../smoke/launch';
 
 export class MainWindow {
   private win: BrowserWindow | null = null;
@@ -57,11 +58,6 @@ export class MainWindow {
     void win.loadURL(`${RENDERER_ENTRY_URL}#${view}`);
   }
 
-  /** Smoke test only: hide the onboarding window so it cannot keep focus from the approval dialog. */
-  hideForSmokeTest(): void {
-    if (this.win && !this.win.isDestroyed() && this.win.isVisible()) this.win.hide();
-  }
-
   send(key: keyof typeof IPC_EVENTS, payload: unknown): void {
     const wc = this.webContents;
     if (!wc || wc.isLoading() || !isTrustedRendererUrl(wc.getURL())) return;
@@ -73,4 +69,16 @@ export class MainWindow {
     if (this.win && !this.win.isDestroyed()) this.win.destroy();
     this.win = null;
   }
+}
+
+type SmokeMainWindow = MainWindow & { hideForSmokeTest(): void };
+
+/** Dev/smoke bundle only. Throws unless this process entered smoke mode. Eliminated from production. */
+if (__DOTTIE_SMOKE__) {
+  const proto = MainWindow.prototype as SmokeMainWindow;
+  proto.hideForSmokeTest = function (this: MainWindow): void {
+    assertSmokeMode();
+    const w = (this as unknown as { win: BrowserWindow | null }).win;
+    if (w && !w.isDestroyed() && w.isVisible()) w.hide();
+  };
 }

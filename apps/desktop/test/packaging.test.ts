@@ -2,7 +2,7 @@ import { mkdtemp, cp, rm, writeFile, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { checkPackaging, NSIS_INCLUDE } from '../scripts/check-packaging.mjs';
+import { checkPackaging, NSIS_INCLUDE, productionSmokeProblems } from '../scripts/check-packaging.mjs';
 
 const root = join(__dirname, '..');
 const check = checkPackaging;
@@ -44,6 +44,10 @@ describe('packaging guard (installer.nsh must never silently disappear)', () => 
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
+  });
+
+  it('production main bundle has no smoke mode', async () => {
+    expect(await productionSmokeProblems(root)).toEqual([]);
   });
 
   it('fails when a script would delete the packaging dir', async () => {

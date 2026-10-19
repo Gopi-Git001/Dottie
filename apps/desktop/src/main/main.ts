@@ -19,9 +19,9 @@ import { AutoStartManager, launchedAtLogin } from './lifecycle/autostart';
 import { QuitController } from './lifecycle/quit';
 import { MemoryAuditSink, StubAuthAdapter, StubCoordinator, StubRuntimeStatus, StubVoiceService } from './services/stubs';
 import { SettingsStore } from './settings/store';
+import { markSmokeActive, smokeLaunch } from './smoke/launch';
 import { type ExpectedReply, type ReplyEntry, SmokeStepAssertion, SmokeStepTimeout, SmokeSteps, clickRepliesBlame, replySequenceBlame, shortActionId } from './smoke/steps';
 
-const SMOKE_TEST_ARG = '--dottie-smoke-test';
 const SMOKE_UI_ARG = '--dottie-smoke-ui';
 const NETWORK_POLL_MS = 15_000;
 
@@ -47,7 +47,6 @@ if (!app.requestSingleInstanceLock()) {
 
 async function bootstrap(): Promise<void> {
   const quit = new QuitController();
-  const smokeTest = process.argv.includes(SMOKE_TEST_ARG);
 
   // Second launch (e.g. Start menu while tray is running): focus the existing instance.
   let focusExisting: () => void = () => undefined;
@@ -176,13 +175,21 @@ async function bootstrap(): Promise<void> {
 
   coordinator.set('STANDBY', false);
 
-  if (smokeTest) {
-    await runSmokeTest(window, approvalWindow, coordinator, controller, router.channels.size, outcome);
-    const failed = process.exitCode === 1;
-    doQuit();
-    // app.quit() exits 0 regardless of process.exitCode; a failed smoke must exit non-zero.
-    if (failed) app.exit(1);
-    return;
+  // Smoke exists only in the dev bundle (`__DOTTIE_SMOKE__`). A packaged app never enters it:
+  // the production bundle drops this block, and a dev bundle that was packaged logs and continues.
+  if (__DOTTIE_SMOKE__) {
+    const launch = smokeLaunch(__DOTTIE_SMOKE__, app.isPackaged, process.argv);
+    if (launch === 'ignore') {
+      console.warn('[dottie] ignored an unsupported launch flag');
+    } else if (launch === 'enter') {
+      markSmokeActive();
+      await runSmokeTest(window, approvalWindow, coordinator, controller, router.channels.size, outcome);
+      const failed = process.exitCode === 1;
+      doQuit();
+      // app.quit() exits 0 regardless of process.exitCode; a failed smoke must exit non-zero.
+      if (failed) app.exit(1);
+      return;
+    }
   }
 
   const atLogin = launchedAtLogin(process.argv, app.getLoginItemSettings().wasOpenedAtLogin);
@@ -323,17 +330,17 @@ async function smokeBody(window: MainWindow, approvalWindow: ApprovalWindow, coo
           inlineEvalBlocked: (() => { try { eval('1'); return false; } catch { return true; } })(),
         }))()`,
       ));
-      const shot = process.env['DOTTIE_SMOKE_SCREENSHOT'];
-      if (shot) {
-        const { writeFile } = await import('node:fs/promises');
-        await writeFile(shot, (await wc.capturePage()).toPNG());
-      }
+      // Fixed name under the app temp dir. The path is not taken from the environment.
+      const shot = join(app.getPath('temp'), `dottie-smoke-${process.pid}.png`);
+      const { writeFile } = await import('node:fs/promises');
+      await writeFile(shot, (await wc.capturePage()).toPNG());
+      result['screenshot'] = shot;
       // The main window must not be able to use the approval channels.
       result['mainWindowGetApproval'] = (await js('renderer.mainWindowGetApproval', wc, `window.dottie.getApproval().then((r) => r.ok ? 'ok' : r.error.code)`));
     }
     // The onboarding window is shown first. On xvfb it often keeps focus, and ready-to-show
     // sometimes never fires, so the approval dialog stays hidden and Approve stays disabled.
-    window.hideForSmokeTest();
+    (window as MainWindow & { hideForSmokeTest(): void }).hideForSmokeTest();
     const out: Record<string, unknown> = {};
     result['approval'] = out; // filled in as it goes, so a failure report shows the partial output
     await smokeApproval(approvalWindow, coordinator, controller, out);
@@ -373,7 +380,7 @@ async function smokeApproval(approvalWindow: ApprovalWindow, coordinator: StubCo
   let earlyApprove: unknown = null;
   for (let i = 0; i < 60; i++) {
     // Once the window is visible and focused, stop. Another focus() would restart the 500 ms timer.
-    if (!approvalWindow.isAttentive()) approvalWindow.nudgeForSmokeTest();
+    if (!approvalWindow.isAttentive()) (approvalWindow as ApprovalWindow & { nudgeForSmokeTest(): void }).nudgeForSmokeTest();
     state = (await js('repeat.probe', wc, probe)) as typeof state;
     if (state.warning && state.approveDisabled === true && !disabledWithWarning) {
       disabledWithWarning = true;
@@ -415,7 +422,7 @@ async function smokeApproval(approvalWindow: ApprovalWindow, coordinator: StubCo
   const timer: Record<string, unknown> = { attentiveAt300: approvalWindow.isAttentive() };
   if (wc) {
     timer['earlyApprove'] = await js('timer.earlyApprove', wc, ipcApprove);
-    approvalWindow.hideForSmokeTest();
+    (approvalWindow as ApprovalWindow & { hideForSmokeTest(): void }).hideForSmokeTest();
     await sleep(700);
     timer['attentiveHidden'] = approvalWindow.isAttentive();
     timer['approveWhileHidden'] = await js('timer.approveWhileHidden', wc, ipcApprove);

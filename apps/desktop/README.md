@@ -19,7 +19,8 @@ npm run lint           # eslint (typescript-eslint strictTypeChecked + process-b
 npm run check          # typecheck + lint + test
 npm run build          # typecheck + esbuild bundles -> dist/{main,preload,renderer}
 npm start              # build:fast + launch Electron (dev)
-npm run smoke          # boots the app, opens onboarding, probes renderer isolation, prints DOTTIE_SMOKE_OK {...}, quits
+npm run smoke          # unpackaged only: boots the app, opens onboarding, probes renderer isolation, prints DOTTIE_SMOKE_OK {...}, quits
+                       #   writes dottie-smoke-<pid>.png under the app temp dir (not an env path)
 npm run smoke:ci       # DOT-098: runner with a hard timeout per run, keeps every run's log (also on timeout), no retries
                        #   node scripts/smoke-run.mjs --runs 100 --out /path/to/logs --timeout-ms 90000 --case-id DOT098-AC3
                        #   files: <YYYYMMDD>T<HHMMSS>-0500_<sha>_<caseId>_<artifact>[_runNNN].<ext>, header JSON on line 1
@@ -74,7 +75,7 @@ Both installers apply hardening fuses: `runAsNode` off, `NODE_OPTIONS` off, `--i
 ### Verified on Linux (this repo's CI box)
 
 - `electron-builder --win --dir` produces `release/win-unpacked/Dottie.exe`, with fuses applied and an asar of 32 entries (`dist/**`, `assets/**`, `package.json`, with no `node_modules` and no sourcemaps).
-- In `electron-builder --linux dir`, the packaged binary passes `--dottie-smoke-test --dottie-smoke-ui`. That covers asar paths, the `app://` protocol, the preload, and fuses (`ELECTRON_RUN_AS_NODE` is ignored).
+- A packaged build does not enter smoke mode. The production bundle strips it, and passing the smoke flag to a packaged app logs a redacted warning and continues as a normal launch. Unpackaged `npm run smoke` / `smoke:ci` still run it.
 - **Not verified:** NSIS `.exe` and MSIX `.appx` creation (both need Windows/wine), and every Windows runtime behaviour (tray, Run key, uninstaller prompt). These need the Windows build agent.
 
 ## Layout

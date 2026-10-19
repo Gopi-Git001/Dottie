@@ -80,7 +80,7 @@ nsis:
   installerIcon: assets/icons/app.ico
   uninstallerIcon: assets/icons/app.ico
 
-# Dev-only: lets us smoke-test the packaged asar + fuses on the Linux CI box (`electron-builder --linux dir`).
+# Linux dir target for inspecting the unpacked asar. Smoke mode does not run in a packaged build.
 linux:
   target: dir
   executableName: dottie

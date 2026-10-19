@@ -4,6 +4,7 @@ import { IPC_EVENTS, validatePush } from '../../shared/ipc';
 import { windowAttentive } from '../approval/approvalService';
 import { APP_ORIGIN } from '../ipc/trust';
 import { SECURE_WEB_PREFERENCES } from '../security';
+import { assertSmokeMode } from '../smoke/launch';
 
 export const APPROVAL_URL = `${APP_ORIGIN}${APPROVAL_PAGE}` as const;
 
@@ -86,26 +87,35 @@ export class ApprovalWindow {
     void win.loadURL(APPROVAL_URL);
   }
 
-  /**
-   * Smoke test only. ready-to-show does not always fire under xvfb, so approval.html can be
-   * loaded and probed while the window is still hidden and unfocused. Approve then stays
-   * disabled. Show and focus without reloading (show() reloads, which would reset the timers).
-   */
-  nudgeForSmokeTest(): void {
-    const w = this.win;
-    if (!w || w.isDestroyed()) return;
-    if (!w.isVisible()) w.show();
-    if (!w.isFocused()) w.focus();
-  }
-
-  /** Smoke test only: hide the window (fires the real 'hide' event). */
-  hideForSmokeTest(): void {
-    if (this.win && !this.win.isDestroyed()) this.win.hide();
-  }
-
   close(): void {
     if (this.win && !this.win.isDestroyed()) this.win.destroy();
     this.win = null;
     this.onAttention(false);
   }
+}
+
+type SmokeApprovalWindow = ApprovalWindow & {
+  nudgeForSmokeTest(): void;
+  hideForSmokeTest(): void;
+};
+
+/**
+ * Installed only when the dev/smoke bundle keeps `__DOTTIE_SMOKE__`. The production
+ * bundle drops this block, so the names are not in the packaged app. Calling either
+ * helper before smoke mode is entered throws.
+ */
+if (__DOTTIE_SMOKE__) {
+  const proto = ApprovalWindow.prototype as SmokeApprovalWindow;
+  proto.nudgeForSmokeTest = function (this: ApprovalWindow): void {
+    assertSmokeMode();
+    const w = (this as unknown as { win: BrowserWindow | null }).win;
+    if (!w || w.isDestroyed()) return;
+    if (!w.isVisible()) w.show();
+    if (!w.isFocused()) w.focus();
+  };
+  proto.hideForSmokeTest = function (this: ApprovalWindow): void {
+    assertSmokeMode();
+    const w = (this as unknown as { win: BrowserWindow | null }).win;
+    if (w && !w.isDestroyed()) w.hide();
+  };
 }

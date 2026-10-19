@@ -1,13 +1,17 @@
-// Packaging guard: fails the build if the NSIS include is missing, gutted, or no longer wired up.
-//
+// Packaging guard: fails the build if the NSIS include is missing, gutted, or no longer wired up,
+// and (CLI / unit test) fails if the production main bundle still contains smoke mode.
+import { build } from 'esbuild';
+import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { SMOKE_BUNDLE_MARKERS, smokeDefine } from './smoke-define.mjs';
+
 // Why: build/installer.nsh was deleted from the shared checkout twice (2026-10-19). Nothing in our
 // scripts or electron-builder removes it; the conventional name `build/` reads as a disposable
 // artifact dir to other tools and agents. The resources now live in `packaging/` (never cleaned:
 // scripts/build.mjs only removes dist/, electron-builder writes to release/) and this check runs
 // from scripts/build.mjs (so `npm run build`, `build:prod` and every `package:*`) and from vitest.
-import { readFile, readdir } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 export const PACKAGING_DIR = 'packaging';
 export const NSIS_INCLUDE = `${PACKAGING_DIR}/installer.nsh`;
@@ -49,11 +53,79 @@ export async function checkPackaging(root = join(dirname(fileURLToPath(import.me
   return problems;
 }
 
+/**
+ * Bundle main with the production define (`__DOTTIE_SMOKE__` false) and report smoke markers
+ * that survived. Syntax minify drops dead `if (false)` the same way the production bundle does.
+ * Identifiers are not renamed, so `smokeBody` is still visible if elimination fails.
+ * `defineExpression` is the JS expression esbuild substitutes (`'false'` or `'true'`).
+ * @param {string} root
+ * @param {string} [defineExpression]
+ * @returns {Promise<string[]>} marker strings still present
+ */
+export async function smokeMarkersInMainBundle(root = join(dirname(fileURLToPath(import.meta.url)), '..'), defineExpression = smokeDefine(true).__DOTTIE_SMOKE__) {
+  const dir = await mkdtemp(join(tmpdir(), 'dottie-prod-bundle-'));
+  const outfile = join(dir, 'main.js');
+  try {
+    await build({
+      bundle: true,
+      minifySyntax: true,
+      minifyIdentifiers: false,
+      minifyWhitespace: false,
+      sourcemap: false,
+      legalComments: 'none',
+      logLevel: 'silent',
+      define: { __DOTTIE_SMOKE__: defineExpression },
+      entryPoints: [join(root, 'src/main/main.ts')],
+      outfile,
+      platform: 'node',
+      format: 'cjs',
+      target: 'node22',
+      external: ['electron'],
+    });
+    const js = await readFile(outfile, 'utf8');
+    return SMOKE_BUNDLE_MARKERS.filter((marker) => js.includes(marker));
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+}
+
+/** Fully minified, same define as `node scripts/build.mjs --production`. @returns {Promise<string[]>} markers still present */
+export async function minifiedSmokeMarkers(root = join(dirname(fileURLToPath(import.meta.url)), '..')) {
+  const dir = await mkdtemp(join(tmpdir(), 'dottie-prod-min-'));
+  const outfile = join(dir, 'main.js');
+  try {
+    await build({
+      bundle: true,
+      minify: true,
+      sourcemap: false,
+      legalComments: 'none',
+      logLevel: 'silent',
+      define: smokeDefine(true),
+      entryPoints: [join(root, 'src/main/main.ts')],
+      outfile,
+      platform: 'node',
+      format: 'cjs',
+      target: 'node22',
+      external: ['electron'],
+    });
+    const js = await readFile(outfile, 'utf8');
+    return SMOKE_BUNDLE_MARKERS.filter((marker) => js.includes(marker));
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+}
+
+/** @returns {Promise<string[]>} problems (empty when the production bundle has no smoke markers) */
+export async function productionSmokeProblems(root = join(dirname(fileURLToPath(import.meta.url)), '..')) {
+  const hits = [...new Set([...(await smokeMarkersInMainBundle(root, 'false')), ...(await minifiedSmokeMarkers(root))])];
+  return hits.map((hit) => `production main bundle contains "${hit}"`);
+}
+
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
-  const problems = await checkPackaging();
+  const problems = [...(await checkPackaging()), ...(await productionSmokeProblems())];
   if (problems.length) {
     for (const p of problems) console.error(`packaging check: ${p}`);
     process.exit(1);
   }
-  console.log(`packaging check OK (${NSIS_INCLUDE})`);
+  console.log(`packaging check OK (${NSIS_INCLUDE}; production bundle has no smoke markers)`);
 }
