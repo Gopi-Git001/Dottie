@@ -1,34 +1,52 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # Dottie secret scan (E01 draft for DOT-003/DOT-083; co-owned by E08 + E07; see the dottie-evidence-pack skill).
 # Prints file:line and the NAME of the rule only, never the matched value. Exits 1 on any hit.
 # Needs ripgrep (rg). Missing rg, or rg exiting 2 or higher, fails the scan (fail closed).
 # rg exit 1 is the only "no matches" status.
-# Usage: scripts/secret-scan.sh [--history] [repo-root]
-#   --history  also scan every added line in origin/main..HEAD
+# Usage: scripts/secret-scan.sh [--history A..B|FULL] [repo-root]
+#   --history RANGE  also scan every added line in RANGE (two-dot, A..B).
+#                    FULL scans every commit reachable from HEAD (a new branch, whose
+#                    push has no "before" sha). An empty or unresolvable range fails.
 #
 # Allowlist: scripts/secret-scan.allow. A hit is ignored only when the path AND the full line
 # text match one entry. A different line in an allowlisted file, or the same line with any edit,
 # still fails. There is no path-wide or pattern-wide exclusion.
-set -uo pipefail
 HISTORY=0
+RANGE=""
 ROOT="."
-for arg in "$@"; do
+args=("$@")
+i=0
+while (( i < ${#args[@]} )); do
+  arg="${args[$i]}"
   case "$arg" in
-    --history) HISTORY=1 ;;
-    --) ;;
+    --history)
+      HISTORY=1
+      i=$((i + 1))
+      if (( i >= ${#args[@]} )); then
+        echo "secret-scan: FAIL (history range is missing)" >&2
+        exit 2
+      fi
+      RANGE="${args[$i]}"
+      ;;
+    --)
+      ;;
     -*)
       echo "secret-scan: FAIL (unknown option: $arg)" >&2
       exit 2
       ;;
     *) ROOT="$arg" ;;
   esac
+  i=$((i + 1))
 done
 
 # Resolve the script directory before cd. A relative BASH_SOURCE is based on the
 # caller's cwd; after cd it would point at the scan root (for example smoke-logs).
 source_path="${BASH_SOURCE[0]}"
 source_dir="${source_path%/*}"
-[[ "$source_dir" == "$source_path" ]] && source_dir="."
+if [[ "$source_dir" == "$source_path" ]]; then
+  source_dir="."
+fi
 SCRIPT_DIR=$(cd "$source_dir" && pwd) || {
   echo "secret-scan: FAIL (cannot locate scripts/)" >&2
   exit 2
@@ -40,9 +58,12 @@ if ! command -v rg >/dev/null 2>&1; then
   exit 2
 fi
 
-# --text (-a) searches binaries as text. dist/ is not excluded: a tracked dist file is in scope.
-# node_modules, .venv, and .git stay out.
-GLOBS=(--hidden --text -g '!.git/' -g '!**/node_modules/**' -g '!**/.venv/**')
+# --no-ignore: rg must not honor .gitignore. dist/, *.log and smoke-logs/ are ignored
+# there, so a token in a build output or a smoke log would otherwise pass and could be
+# uploaded. --hidden still searches dotfiles. --text searches binaries as text.
+# The only exclusions are .git/ (object store, not source) and node_modules/ (the
+# third-party install at runtime, not this repo).
+GLOBS=(--hidden --no-ignore --text -g '!.git/**' -g '!**/.git/**' -g '!**/node_modules/**')
 hits=0
 
 ALLOWLIST="${SCRIPT_DIR}/secret-scan.allow"
@@ -122,28 +143,67 @@ scan() { # name, pattern, paths...
   rm -f "$out"
 }
 
-# Added lines from origin/main..HEAD.
+# Added lines in the history range passed by the caller.
 # content file: one added line of text per record (this is what rg searches).
 # index file:  path<US>lineno on the same record. Paths are not searched: a name
 # such as task-….json contains "sk-" plus a long suffix and is not a secret value.
+# +++ / --- are file headers only inside the diff header block (right after
+# diff --git). An added line whose text starts with "++ " is a normal addition.
 extract_added_lines() {
-  local content_file="$1" index_file="$2" raw rc err
+  local content_file="$1" index_file="$2" raw rc err count left right
   if ! command -v git >/dev/null 2>&1; then
     echo "secret-scan: FAIL (git is not installed; history was not scanned)" >&2
     exit 2
   fi
-  if ! git rev-parse --verify --quiet origin/main >/dev/null; then
-    echo "secret-scan: FAIL (origin/main is not available; history was not scanned)" >&2
+  if [[ -z "$RANGE" ]]; then
+    echo "secret-scan: FAIL (history range is empty)" >&2
     exit 2
   fi
-  if ! git rev-parse --verify --quiet HEAD >/dev/null; then
-    echo "secret-scan: FAIL (HEAD is not available; history was not scanned)" >&2
+  local -a log_spec=()
+  if [[ "$RANGE" == "FULL" ]]; then
+    if ! git rev-parse --verify --quiet HEAD >/dev/null; then
+      echo "secret-scan: FAIL (history range is unresolvable: FULL)" >&2
+      exit 2
+    fi
+    log_spec=(HEAD)
+  else
+    if [[ "$RANGE" == *...* || "$RANGE" != *..* ]]; then
+      echo "secret-scan: FAIL (history range must be A..B, got: $RANGE)" >&2
+      exit 2
+    fi
+    left="${RANGE%%..*}"
+    right="${RANGE#*..}"
+    if [[ -z "$left" || -z "$right" ]]; then
+      echo "secret-scan: FAIL (history range is empty: $RANGE)" >&2
+      exit 2
+    fi
+    if ! git rev-parse --verify --quiet "${left}^{commit}" >/dev/null; then
+      echo "secret-scan: FAIL (history range is unresolvable: $left)" >&2
+      exit 2
+    fi
+    if ! git rev-parse --verify --quiet "${right}^{commit}" >/dev/null; then
+      echo "secret-scan: FAIL (history range is unresolvable: $right)" >&2
+      exit 2
+    fi
+    log_spec=("$RANGE")
+  fi
+  set +e
+  count=$(git rev-list --count "${log_spec[@]}")
+  rc=$?
+  set -e
+  if (( rc != 0 )); then
+    echo "secret-scan: FAIL (history range is unresolvable: $RANGE)" >&2
+    exit 2
+  fi
+  if [[ "$count" -eq 0 ]]; then
+    echo "secret-scan: FAIL (history range is empty: $RANGE)" >&2
     exit 2
   fi
   raw=$(mktemp)
   err=$(mktemp)
   set +e
-  git --no-pager -c core.quotepath=false log -p --format= --no-color origin/main..HEAD >"$raw" 2>"$err"
+  # --text: a binary added and later removed still contributes its added lines.
+  git --no-pager -c core.quotepath=false log -p --text --format= --no-color "${log_spec[@]}" >"$raw" 2>"$err"
   rc=$?
   set -e
   if (( rc != 0 )); then
@@ -154,7 +214,10 @@ extract_added_lines() {
   fi
   rm -f "$err"
   awk -v content_file="$content_file" -v index_file="$index_file" '
-    /^\+\+\+ / {
+    BEGIN { in_header = 0; path = ""; lineno = 0 }
+    /^diff --git / { in_header = 1; path = ""; next }
+    in_header && /^--- / { next }
+    in_header && /^\+\+\+ / {
       path = substr($0, 5)
       sub(/\r$/, "", path)
       if (path == "/dev/null") { path = ""; next }
@@ -166,6 +229,7 @@ extract_added_lines() {
       next
     }
     /^@@ / {
+      in_header = 0
       plus = $0
       sub(/^.*\+/, "", plus)
       sub(/[^0-9].*/, "", plus)

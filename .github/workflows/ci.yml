@@ -24,8 +24,27 @@ jobs:
       - run: sudo apt-get update -q && sudo apt-get install -y -q ripgrep
       - name: Self-test canaries fail the scan
         run: bash scripts/secret-scan-self-test.sh
-      - name: Scan the tree and origin/main..HEAD
-        run: bash scripts/secret-scan.sh --history .
+      - name: Scan the tree and the event range
+        run: |
+          set -euo pipefail
+          # pull_request: commits the PR added since the base.
+          # push: commits in this push. before is all zeros when the ref is new;
+          # FULL is every commit reachable from HEAD. An empty range fails the scan.
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            range="${{ github.event.pull_request.base.sha }}..${{ github.sha }}"
+          else
+            before="${{ github.event.before }}"
+            if [[ "$before" =~ ^0+$ ]]; then
+              range="FULL"
+            else
+              range="${before}..${{ github.sha }}"
+            fi
+          fi
+          if [[ -z "$range" || "$range" == ".." ]]; then
+            echo "secret-scan: FAIL (history range is empty)" >&2
+            exit 2
+          fi
+          bash scripts/secret-scan.sh --history "$range" .
 
   catalog-pin:
     runs-on: ubuntu-latest
