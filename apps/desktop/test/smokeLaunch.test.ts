@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { smokeLaunch } from '../src/main/smoke/launch';
+import { smokeLaunch, smokeScreenshotRequested, smokeShouldCapture } from '../src/main/smoke/launch';
 
 const FLAG = '--dottie-smoke-test';
 
@@ -19,5 +19,21 @@ describe('smoke launch gate', () => {
 
   it('enters only for an unpackaged build that still contains smoke', () => {
     expect(smokeLaunch(true, false, [FLAG])).toBe('enter');
+  });
+});
+
+describe('smoke screenshot', () => {
+  it('treats the flag or env 1 as a request, and a path as not a destination', () => {
+    expect(smokeScreenshotRequested(['--dottie-smoke-screenshot'], undefined)).toBe(true);
+    expect(smokeScreenshotRequested([], '1')).toBe(true);
+    expect(smokeScreenshotRequested([], undefined)).toBe(false);
+    expect(smokeScreenshotRequested([], '/tmp/anywhere.png')).toBe(false);
+  });
+
+  it('skips only the CI default, and still captures when a screenshot was requested', () => {
+    expect(smokeShouldCapture(true, false)).toBe(false);
+    expect(smokeShouldCapture(true, true)).toBe(true);
+    expect(smokeShouldCapture(false, false)).toBe(true);
+    expect(smokeShouldCapture(false, true)).toBe(true);
   });
 });

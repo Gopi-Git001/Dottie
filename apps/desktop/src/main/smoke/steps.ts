@@ -87,6 +87,14 @@ export class SmokeSteps {
 
   constructor(private readonly clock: StepClock = realClock) {}
 
+  /**
+   * The running step failed and the smoke is continuing (a non-fatal step). Clears it so a later
+   * failure is not blamed on this step. The step is not added to `completed`.
+   */
+  detach(): void {
+    this.current = null;
+  }
+
   /** Resolve with `work`'s value, or reject with SmokeStepTimeout(name) after `timeoutMs`. */
   run<T>(name: string, work: Promise<T>, timeoutMs: number): Promise<T> {
     this.current = name;

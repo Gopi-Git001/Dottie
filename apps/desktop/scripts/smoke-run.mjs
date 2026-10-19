@@ -74,7 +74,9 @@ const iso = (d) => {
 const stamp = (d) => iso(d).replace(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})\.\d{3}([+-])(\d{2}):(\d{2})$/, '$1$2$3T$4$5$6$7$8$9');
 const name = (d, artifact, ext, run) => `${stamp(d)}_${shortSha}_${caseId}_${artifact}${run === undefined ? '' : `_run${pad(run, 3)}`}.${ext}`;
 const header = (o) => ({ caseId, commit, dirtyTree: dirty, dirtyTreeScope: DIRTY_SCOPE, build: null, installerSha256: null, buildNote: 'n/a: unpackaged', ...o, runner: runnerId });
-const electronCmd = 'electron . --dottie-smoke-test --dottie-smoke-ui';
+const screenshot = args.includes('--screenshot') || process.env['DOTTIE_SMOKE_SCREENSHOT'] === '1';
+const electronArgs = ['.', '--dottie-smoke-test', '--dottie-smoke-ui', ...(screenshot ? ['--dottie-smoke-screenshot'] : [])];
+const electronCmd = `electron ${electronArgs.join(' ')}`;
 const KILL_GRACE_MS = 2000;
 /** The run in progress (for the abort handlers): its group pid, supervisor and .partial path. */
 let current = null;
@@ -117,7 +119,7 @@ function runOnce(i) {
   const file = createWriteStream(partial, { flags: 'a' });
   const started = startedAt.getTime();
   return new Promise((done) => {
-    const child = spawnGroup(electron, ['.', '--dottie-smoke-test', '--dottie-smoke-ui'], { cwd: appDir, stdio: ['ignore', 'pipe', 'pipe'] });
+    const child = spawnGroup(electron, electronArgs, { cwd: appDir, stdio: ['ignore', 'pipe', 'pipe'] });
     const supervisor = startSupervisor(child.pid, { graceMs: KILL_GRACE_MS, logPath: partial });
     current = { pgid: child.pid, supervisor, partial, file };
     let text = '';

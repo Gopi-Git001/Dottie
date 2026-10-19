@@ -24,3 +24,21 @@ export function markSmokeActive(): void {
 export function assertSmokeMode(): void {
   if (!__DOTTIE_SMOKE__ || !active) throw new Error('smoke mode is not active');
 }
+
+const SCREENSHOT_FLAG = '--dottie-smoke-screenshot';
+
+/**
+ * A screenshot was asked for. The env value must be exactly `1`. A path is not a
+ * destination: the file is always the pinned temp path.
+ */
+export function smokeScreenshotRequested(argv: readonly string[], envValue: string | undefined): boolean {
+  return argv.includes(SCREENSHOT_FLAG) || envValue === '1';
+}
+
+/**
+ * CI skips capturePage unless a screenshot was requested. Every other launch takes one.
+ * capturePage under xvfb can throw UnknownVizError; the caller must not abort the smoke on that.
+ */
+export function smokeShouldCapture(inCi: boolean, requested: boolean): boolean {
+  return requested || !inCi;
+}

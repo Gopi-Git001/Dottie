@@ -38,6 +38,15 @@ describe('SmokeSteps (DOT-098)', () => {
     expect(s.completed).toEqual([]);
   });
 
+  it('detach clears a failed step so a later failure is not blamed on it', async () => {
+    const s = new SmokeSteps();
+    await expect(s.run('renderer.screenshot', Promise.reject(new Error('UnknownVizError')), 5_000)).rejects.toThrow('UnknownVizError');
+    expect(s.position()).toBe('renderer.screenshot');
+    expect(s.completed).toEqual([]);
+    s.detach();
+    expect(s.position()).toBe('before:first-step');
+  });
+
   it('waitFor polls until the check yields a value, else fails with the step name', async () => {
     const s = new SmokeSteps();
     let n = 0;

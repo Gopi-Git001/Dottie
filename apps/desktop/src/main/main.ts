@@ -19,7 +19,7 @@ import { AutoStartManager, launchedAtLogin } from './lifecycle/autostart';
 import { QuitController } from './lifecycle/quit';
 import { MemoryAuditSink, StubAuthAdapter, StubCoordinator, StubRuntimeStatus, StubVoiceService } from './services/stubs';
 import { SettingsStore } from './settings/store';
-import { markSmokeActive, smokeLaunch } from './smoke/launch';
+import { markSmokeActive, smokeLaunch, smokeScreenshotRequested, smokeShouldCapture } from './smoke/launch';
 import { type ExpectedReply, type ReplyEntry, SmokeStepAssertion, SmokeStepTimeout, SmokeSteps, clickRepliesBlame, replySequenceBlame, shortActionId } from './smoke/steps';
 
 const SMOKE_UI_ARG = '--dottie-smoke-ui';
@@ -330,11 +330,32 @@ async function smokeBody(window: MainWindow, approvalWindow: ApprovalWindow, coo
           inlineEvalBlocked: (() => { try { eval('1'); return false; } catch { return true; } })(),
         }))()`,
       ));
-      // Fixed name under the app temp dir. The path is not taken from the environment.
-      const shot = join(app.getPath('temp'), `dottie-smoke-${process.pid}.png`);
-      const { writeFile } = await import('node:fs/promises');
-      await writeFile(shot, (await wc.capturePage()).toPNG());
-      result['screenshot'] = shot;
+      // b0ee837 called capturePage only when DOTTIE_SMOKE_SCREENSHOT was a path, and CI never set
+      // that variable. 65f9ebb always captured, to a pinned temp file. On the CI xvfb that call
+      // threw UnknownVizError (after:renderer.probe) and aborted before smokeApproval. Five local
+      // xvfb+openbox runs of the same commit still wrote the PNG, so the call is flaky, not dead.
+      // CI skips it unless a screenshot was requested. A failure is the named step
+      // renderer.screenshot and does not stop the approval steps. The path is never taken from
+      // the environment.
+      const requested = smokeScreenshotRequested(process.argv, process.env['DOTTIE_SMOKE_SCREENSHOT']);
+      if (smokeShouldCapture(process.env['CI'] === 'true', requested)) {
+        const shot = join(app.getPath('temp'), `dottie-smoke-${process.pid}.png`);
+        try {
+          result['screenshot'] = await smokeSteps.run('renderer.screenshot', (async () => {
+            const png = (await wc.capturePage()).toPNG();
+            const { writeFile } = await import('node:fs/promises');
+            await writeFile(shot, png);
+            return shot;
+          })(), STEP_MS);
+        } catch (e) {
+          smokeSteps.detach();
+          const error = e instanceof Error ? e.message : String(e);
+          result['screenshot'] = { step: 'renderer.screenshot', ok: false, fatal: false, error };
+          console.log(`DOTTIE_SMOKE_STEP ${JSON.stringify({ step: 'renderer.screenshot', ok: false, fatal: false, error })}`);
+        }
+      } else {
+        result['screenshot'] = { step: 'renderer.screenshot', skipped: true, reason: 'ci-default' };
+      }
       // The main window must not be able to use the approval channels.
       result['mainWindowGetApproval'] = (await js('renderer.mainWindowGetApproval', wc, `window.dottie.getApproval().then((r) => r.ok ? 'ok' : r.error.code)`));
     }
