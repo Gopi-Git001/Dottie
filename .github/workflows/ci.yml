@@ -176,7 +176,10 @@ jobs:
           : >"$outer"
           # New session: pid == pgid. GitHub's runner cleans its own group; this group
           # is the one a job timeout or cancel must kill itself.
-          setsid xvfb-run -a npm run smoke:ci >"$outer" 2>&1 &
+          # smoke-run.mjs: --case-id and --runner must match [A-Za-z0-9-]+.
+          # A raw Actions URL is rejected, and it would put a host and user in the header.
+          # actions-runs-<id> is this workflow run, which is where the log artifact is uploaded.
+          setsid xvfb-run -a npm run smoke:ci -- --case-id SMK-DESK-01 --runner "actions-runs-${{ github.run_id }}" >"$outer" 2>&1 &
           leader=$!
           echo "$leader" >"$pgid_file"
           kill_group() {
@@ -220,6 +223,21 @@ jobs:
               kill -KILL -- "-$pgid" 2>/dev/null || true
             fi
           fi
+      - name: Smoke log header records the case and this run
+        working-directory: .
+        run: |
+          python3 - <<'PY'
+          import json, pathlib, sys
+          root = pathlib.Path("apps/desktop/smoke-logs")
+          logs = sorted(p for p in root.glob("*/*_SMK-DESK-01_smoke-log_run001.log") if p.is_file())
+          if not logs:
+              sys.exit("smoke log with case SMK-DESK-01 was not written")
+          header = json.loads(logs[-1].read_text(encoding="utf-8").splitlines()[0])
+          expect = "actions-runs-${{ github.run_id }}"
+          if header.get("caseId") != "SMK-DESK-01" or header.get("runner") != expect:
+              sys.exit(f"header caseId={header.get('caseId')!r} runner={header.get('runner')!r}, expected SMK-DESK-01 and {expect}")
+          print(f"smoke header ok: caseId={header['caseId']} runner={header['runner']} file={logs[-1]}")
+          PY
       - name: Secret-scan smoke logs before upload
         id: smoke-log-scan
         if: always()
