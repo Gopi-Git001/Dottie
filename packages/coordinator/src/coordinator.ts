@@ -1346,7 +1346,7 @@ export class Coordinator {
     const ack = raced === 'timeout' ? undefined : raced.ack;
     const completedBeforeStop = raced !== 'timeout' && raced.result?.status === 'completed';
     if (raced === 'timeout') this.logger.log('warn', 'coordinator.cancel.unconfirmed', { taskId: task.taskId, timeoutMs: this.config.cancelAckTimeoutMs });
-    const status = decideStopStatus({ dispatched: true, ack, completedBeforeStop, sideEffects: task.ledger.summary() });
+    const status = decideStopStatus({ dispatched: true, ack, completedBeforeStop, sideEffects: task.ledger.summary(), toolsInFlight: task.ledger.toolsInFlight });
     return this.finishCancel(task, status);
   }
 
@@ -1543,7 +1543,7 @@ export class Coordinator {
     if (task.cancelOwner !== 'flow') return;
     // Between turns no Codex turn is in flight, so the stop is observed by the coordinator itself.
     const status = task.dispatched
-      ? decideStopStatus({ dispatched: true, ack: { stopped: true, detail: 'no turn in flight' }, completedBeforeStop: false, sideEffects: task.ledger.summary() })
+      ? decideStopStatus({ dispatched: true, ack: { stopped: true, detail: 'no turn in flight' }, completedBeforeStop: false, sideEffects: task.ledger.summary(), toolsInFlight: task.ledger.toolsInFlight })
       : 'stopped_before_dispatch';
     return this.finishCancel(task, status);
   }

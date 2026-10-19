@@ -1,0 +1,35 @@
+# {"caseId": "DOT-061-2j-mutation", "commit": "799370b", "build": null, "installerSha256": null, "startedAt": null, "finishedAt": null, "runner": "named host: grok-box (linux)", "command": "python3 /tmp/d19/mutj.py (J1-J12 + R9 re-run)", "exitCode": 0, "result": "13/13 killed", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "tree": "799370b src (restored, cmp-checked)"}
+J1 (a) null + committed allowed: KILLED (1 failing tests, sweep hits in 0 file(s), rc=1)
+    not ok 256 - 2j (a): null observedState only with certainty possible; null with committed is rejected; non-null entries unchanged
+J2 (b) stopStatus rule removed: KILLED (1 failing tests, sweep hits in 0 file(s), rc=1)
+    not ok 257 - 2j (b): a TaskCancelled with a null entry cannot be stopped_no_side_effects or completed_before_stop, and sideEffects must be possible or committed
+J3 (b) only stopped_no_side_effects banned (completed_before_stop allowed): KILLED (1 failing tests, sweep hits in 0 file(s), rc=1)
+    not ok 257 - 2j (b): a TaskCancelled with a null entry cannot be stopped_no_side_effects or completed_before_stop, and sideEffects must be possible or committed
+J4 (b) sideEffects >= possible rule removed: KILLED (1 failing tests, sweep hits in 0 file(s), rc=1)
+    not ok 257 - 2j (b): a TaskCancelled with a null entry cannot be stopped_no_side_effects or completed_before_stop, and sideEffects must be possible or committed
+J5 (b) sideEffects none-only check flipped to allow none: KILLED (1 failing tests, sweep hits in 0 file(s), rc=1)
+    not ok 257 - 2j (b): a TaskCancelled with a null entry cannot be stopped_no_side_effects or completed_before_stop, and sideEffects must be possible or committed
+J6 (d) observedState key made optional: KILLED (1 failing tests, sweep hits in 0 file(s), rc=1)
+    not ok 258 - 2j (d): a missing observedState key (or undefined) is rejected; null must be explicit
+J7 truth table: toolsInFlight ignored: KILLED (2 failing tests, sweep hits in 1 file(s), rc=1)
+    not ok 260 - 2j truth table: decideStopStatus never gives completed_before_stop or stopped_no_side_effects while a side-effecting tool is still in flight
+    not ok 262 - 2j coordinator: the run completed but the tool never reported (cancel during VERIFYING) is NOT completed_before_stop: stop_unconfirmed, unknown, never "finis
+J8 coordinator runCancel passes toolsInFlight false: KILLED (1 failing tests, sweep hits in 1 file(s), rc=1)
+    not ok 262 - 2j coordinator: the run completed but the tool never reported (cancel during VERIFYING) is NOT completed_before_stop: stop_unconfirmed, unknown, never "finis
+J9 (c) "unknown" wording removed: KILLED (4 failing tests, sweep hits in 0 file(s), rc=1)
+    not ok 259 - 2j (c): cancelReport names a still-running tool as unknown and never as done, for every stop status it can get
+    not ok 261 - 2j coordinator: stop while a tool is still running, every ack timing (0 ms, just under the timeout, stopped:false, never) meets (a)-(d)
+    not ok 262 - 2j coordinator: the run completed but the tool never reported (cancel during VERIFYING) is NOT completed_before_stop: stop_unconfirmed, unknown, never "finis
+J10 ledger reports a running tool as committed: KILLED (6 failing tests, sweep hits in 3 file(s), rc=1)
+    not ok 77 - cancel while a side-effecting tool is still in flight reports "possible", not clean and not committed
+    not ok 151 - ruling 1j (c): a CANCELLED prior is not retryable: nothing starts, TaskFinished{failed, retry_not_allowed}, silent
+    not ok 261 - 2j coordinator: stop while a tool is still running, every ack timing (0 ms, just under the timeout, stopped:false, never) meets (a)-(d)
+J11 ledger omits observedState for a running tool (missing key, not explicit null): KILLED (12 failing tests, sweep hits in 3 file(s), rc=1)
+    not ok 5 - /workspace/dottie-e03/packages/coordinator/dist/test/cancellation.test.js
+    not ok 151 - C-25 (D14): the same after a ledger:possible attempt (catalogued side-effecting tool started, never reported) → priorSideEffect possible
+    not ok 152 - ruling 1j (c): a CANCELLED prior is not retryable: nothing starts, TaskFinished{failed, retry_not_allowed}, silent
+J12 ledger snapshot aliases internal entries (no copy): KILLED (1 failing tests, sweep hits in 0 file(s), rc=1)
+    not ok 264 - 2j ledger: snapshot() hands out copies; changing an entry it returned never changes the next snapshot or the report
+R9 observedState passed through from the port: KILLED (1 failing tests, sweep hits in 1 file(s), rc=1)
+    not ok 254 - 2i port results: extra fields on a Codex tool result (top level, error, observedState object-valued) are dropped and never reach ToolResult / TaskCancelled; 
+TOTAL 13/13 killed

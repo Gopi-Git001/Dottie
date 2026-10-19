@@ -22,6 +22,11 @@ export class SideEffectLedger {
     else if (result.sideEffect === 'unknown') this.actions.push({ toolId: result.toolId, observedState: result.observedState, certainty: 'possible' });
   }
 
+  /** Side-effecting tools that started and have not reported a result (their TaskCancelled entry is observedState null). */
+  get toolsInFlight(): boolean {
+    return this.inFlight.size > 0;
+  }
+
   /** committed > possible > none. In-flight side-effecting tools count as possible. */
   summary(): SideEffectSummary {
     if (this.actions.some(a => a.certainty === 'committed')) return 'committed';
@@ -45,11 +50,15 @@ export interface StopInputs {
   readonly ack: CancelAck | undefined;
   readonly completedBeforeStop: boolean;
   readonly sideEffects: SideEffectSummary;
+  /** E01 2j: a side-effecting tool started and never reported (its committedActions entry is observedState null). */
+  readonly toolsInFlight: boolean;
 }
 
 export function decideStopStatus(i: StopInputs): StopStatus {
   if (!i.dispatched) return 'stopped_before_dispatch';
-  if (i.completedBeforeStop) return 'completed_before_stop';
+  // E01 2j: a run that completed while a side-effecting tool never reported did not complete that tool as far as we
+  // know; its entry is observedState null, so the stop can't be called completed_before_stop: it is unconfirmed.
+  if (i.completedBeforeStop) return i.toolsInFlight ? 'stop_unconfirmed' : 'completed_before_stop';
   if (!i.ack || !i.ack.stopped) return 'stop_unconfirmed';
   if (i.sideEffects !== 'none') return 'stopped_after_side_effects';
   return 'stopped_no_side_effects';
@@ -63,7 +72,7 @@ export function isCleanStop(status: StopStatus, sideEffects: SideEffectSummary):
 function describe(actions: readonly CommittedAction[], certainty: CommittedAction['certainty']): string {
   return actions
     .filter(a => a.certainty === certainty)
-    .map(a => (a.observedState === null ? `${a.toolId} (still running when the stop was requested)` : a.toolId))
+    .map(a => (a.observedState === null ? `${a.toolId} (still running when the stop was requested; its result is unknown)` : a.toolId))
     .join('; ');
 }
 
