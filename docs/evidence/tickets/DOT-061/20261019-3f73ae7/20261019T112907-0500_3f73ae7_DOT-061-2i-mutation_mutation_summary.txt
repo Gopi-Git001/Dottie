@@ -1,0 +1,29 @@
+# {"caseId": "DOT-061-2i-mutation", "commit": "3f73ae7", "build": null, "installerSha256": null, "startedAt": null, "finishedAt": null, "runner": "named host: grok-box (linux)", "command": "python3 /tmp/d18/mutr.py (R1-R12)", "exitCode": 0, "result": "12/12 killed", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "tree": "3f73ae7 src (restored, cmp-checked)"}
+R1 envelope not closed: KILLED (1 failing tests, sweep hits in 0 file(s), rc=1)
+    not ok 251 - 2i envelope: an unknown OWN envelope key is rejected, prototype names included; no throw
+R2 envelope closed by object lookup (constructor/__proto__ look known): KILLED (1 failing tests, sweep hits in 0 file(s), rc=1)
+    not ok 251 - 2i envelope: an unknown OWN envelope key is rejected, prototype names included; no throw
+R3 nested objects not closed (checkClosed ignores extra keys): KILLED (2 failing tests, sweep hits in 0 file(s), rc=1)
+    not ok 156 - validator (D14): possibleRepeat is accepted on a non-read ApprovalRequested and rejected on read, malformed, or the old priorOutcome shape
+    not ok 253 - 2i payload (kept): an unknown payload key, also nested (toolError, workspaceScope, committedActions, candidates, observedState non-scalar), is rejected; obse
+R4 observedState extras of any type accepted: KILLED (1 failing tests, sweep hits in 0 file(s), rc=1)
+    not ok 253 - 2i payload (kept): an unknown payload key, also nested (toolError, workspaceScope, committedActions, candidates, observedState non-scalar), is rejected; obse
+R5 committedActions items not closed: KILLED (1 failing tests, sweep hits in 0 file(s), rc=1)
+    not ok 253 - 2i payload (kept): an unknown payload key, also nested (toolError, workspaceScope, committedActions, candidates, observedState non-scalar), is rejected; obse
+R6 candidates items not closed: KILLED (1 failing tests, sweep hits in 0 file(s), rc=1)
+    not ok 253 - 2i payload (kept): an unknown payload key, also nested (toolError, workspaceScope, committedActions, candidates, observedState non-scalar), is rejected; obse
+R7 workspaceScope not closed (any object): KILLED (1 failing tests, sweep hits in 0 file(s), rc=1)
+    not ok 253 - 2i payload (kept): an unknown payload key, also nested (toolError, workspaceScope, committedActions, candidates, observedState non-scalar), is rejected; obse
+R8 tool error passed through from the port: KILLED (1 failing tests, sweep hits in 1 file(s), rc=1)
+    not ok 254 - 2i port results: extra fields on a Codex tool result (top level, error, observedState object-valued) are dropped and never reach ToolResult / TaskCancelled; 
+R9 observedState passed through from the port: KILLED (1 failing tests, sweep hits in 1 file(s), rc=1)
+    not ok 254 - 2i port results: extra fields on a Codex tool result (top level, error, observedState object-valued) are dropped and never reach ToolResult / TaskCancelled; 
+R10 observedState non-scalar extras kept: KILLED (1 failing tests, sweep hits in 1 file(s), rc=1)
+    not ok 254 - 2i port results: extra fields on a Codex tool result (top level, error, observedState object-valued) are dropped and never reach ToolResult / TaskCancelled; 
+R11 workspaceScope passed through from the policy port: KILLED (1 failing tests, sweep hits in 1 file(s), rc=1)
+    not ok 255 - 2i port results: an extra field on the policy workspaceScope, a Codex approval request or a Codex run result never reaches TaskRequested / ApprovalRequested 
+R12 coordinator adds an extra envelope key to every event (sweep must catch): KILLED (47 failing tests, sweep hits in 21 file(s), rc=1)
+    not ok 4 - actionId: a valid hex id flows end to end: approve → dispatched; deny → declined; expiry → declined
+    not ok 9 - binding (§2.1, 1q): a non-retry confirmation binds possibleRepeat null and retryOfTaskId null; args.displayHash == top-level displayHash == hash of the emitted
+    not ok 10 - binding (§2.1): a clean-failure retry with a policy-required approval binds retryOfTaskId with possibleRepeat null
+TOTAL 12/12 killed
