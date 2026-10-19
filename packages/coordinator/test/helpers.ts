@@ -104,10 +104,14 @@ export class FakeCodex implements CodexPort {
     void p.then(() => this.inFlight--, () => this.inFlight--);
     return p;
   }
+  /** Cancel-ack delay on the fixture's FakeClock (cancel truth table: 0 ms, just under cancelAckTimeoutMs, never). */
+  cancelAckDelayMs = 0;
+  clock: FakeClock | undefined;
   cancel(taskId: string): Promise<CancelAck> {
     this.cancels.push(taskId);
     const ack = this.cancelAck;
-    return ack === 'never' ? new Promise<CancelAck>(() => {}) : Promise.resolve(ack);
+    if (ack === 'never') return new Promise<CancelAck>(() => {});
+    return this.cancelAckDelayMs > 0 && this.clock ? this.clock.sleep(this.cancelAckDelayMs).then(() => ack) : Promise.resolve(ack);
   }
 }
 
@@ -281,6 +285,7 @@ export async function fixture(opts: { config?: Partial<CoordinatorConfig>; polic
   const actionIds = opts.actionIds === undefined ? new RecordingActionIdPort() : opts.actionIds;
   const ids = seqIds();
   if (opts.auth) codex.auth = opts.auth;
+  codex.clock = clock;
   const c = new Coordinator(
     { codex, speech, events: sink, logger: log, clock, ids, random: () => 0, toolHost: tools, ...(actionIds ? { actionIds } : {}), ...(opts.policy ? { policy: opts.policy } : {}), ...(opts.verifier ? { verifier: opts.verifier } : {}), ...(opts.toolCatalog ? { toolCatalog: opts.toolCatalog } : {}), ...(opts.approvalDisplays ? { approvalDisplays: opts.approvalDisplays } : {}) },
     opts.config,

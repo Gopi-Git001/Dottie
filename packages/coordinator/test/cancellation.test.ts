@@ -19,10 +19,10 @@ test('report text never claims a clean stop when side effects exist (all combina
       assert.equal(isCleanStop(status, se), false);
     }
   }
-  assert.equal(decideStopStatus({ dispatched: true, ack: { stopped: true }, completedBeforeStop: false, sideEffects: 'committed' }), 'stopped_after_side_effects');
-  assert.equal(decideStopStatus({ dispatched: true, ack: { stopped: true }, completedBeforeStop: false, sideEffects: 'possible' }), 'stopped_after_side_effects');
-  assert.equal(decideStopStatus({ dispatched: true, ack: undefined, completedBeforeStop: false, sideEffects: 'none' }), 'stop_unconfirmed');
-  assert.equal(decideStopStatus({ dispatched: true, ack: { stopped: false }, completedBeforeStop: false, sideEffects: 'none' }), 'stop_unconfirmed');
+  assert.equal(decideStopStatus({ dispatched: true, ack: { stopped: true }, completedBeforeStop: false, sideEffects: 'committed', toolsInFlight: false }), 'stopped_after_side_effects');
+  assert.equal(decideStopStatus({ dispatched: true, ack: { stopped: true }, completedBeforeStop: false, sideEffects: 'possible', toolsInFlight: false }), 'stopped_after_side_effects');
+  assert.equal(decideStopStatus({ dispatched: true, ack: undefined, completedBeforeStop: false, sideEffects: 'none', toolsInFlight: false }), 'stop_unconfirmed');
+  assert.equal(decideStopStatus({ dispatched: true, ack: { stopped: false }, completedBeforeStop: false, sideEffects: 'none', toolsInFlight: false }), 'stop_unconfirmed');
 });
 
 test('cancel before any side effect: clean stop, propagated to Codex, reported as clean', async () => {

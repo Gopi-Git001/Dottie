@@ -535,6 +535,17 @@ export function validateEvent(input: unknown): ValidationResult {
       if (payload['reason'] !== undefined && payload['approved'] === true) errors.push('payload.reason requires approved:false');
       if (payload['decision'] !== undefined && payload['reason'] !== undefined) errors.push('payload.decision and payload.reason are mutually exclusive');
     }
+    if (type === 'TaskCancelled' && isPlainArray(payload['committedActions'])) {
+      // E01 2j: observedState null (explicit; a missing key is rejected above) marks a tool still running at the stop.
+      // It claims no effect and no verification, so only certainty 'possible'; and the stop can't be called clean or
+      // completed, and the task's sideEffects are at least 'possible'.
+      const running = (payload['committedActions'] as unknown[]).filter(a => isRecord(a) && Object.hasOwn(a, 'observedState') && a['observedState'] === null) as Record<string, unknown>[];
+      for (const a of running) if (a['certainty'] !== 'possible') errors.push(`payload.committedActions: ${String(a['toolId'])} has observedState null, so certainty must be 'possible' (ruling 2j)`);
+      if (running.length > 0) {
+        if (payload['stopStatus'] === 'stopped_no_side_effects' || payload['stopStatus'] === 'completed_before_stop') errors.push(`payload.stopStatus ${String(payload['stopStatus'])} is not allowed with a still-running tool (observedState null, ruling 2j)`);
+        if (payload['sideEffects'] !== 'possible' && payload['sideEffects'] !== 'committed') errors.push('payload.sideEffects must be possible or committed with a still-running tool (observedState null, ruling 2j)');
+      }
+    }
     if (type === 'TaskFinished' && payload['verified'] === true && payload['outcome'] !== 'succeeded') errors.push('payload.verified:true only with outcome succeeded');
     if (type === 'TaskFinished' && (TASK_OUTCOMES as readonly unknown[]).includes(payload['outcome'])) {
       const reason = payload['reason'];
