@@ -1,0 +1,53 @@
+# DOT-065 checks, base 079b635 (079b635b8f2e4be91f4819cd6694f10454a7a3ec), run 2026-10-19 11:55 CDT on the box
+
+$ rg -n "NEEDS_APPROVAL|ATTEMPTED" docs/plans/e04-tools-plan.md
+198:| v1 error `NEEDS_APPROVAL` | `APPROVAL_REQUIRED` |
+199:| v1 side effect `ATTEMPTED` | `unknown` (the enum value is removed) |
+
+$ rg -n "^### Vocabulary mapping" docs/plans/e04-tools-plan.md
+190:### Vocabulary mapping (DOT-065; E08 to review the RiskClass row)
+
+$ rg -n "RiskClass \`" docs/plans/e04-tools-plan.md
+194:| RiskClass `read` | severity floor `low`, category `read` |
+195:| RiskClass `reversible` | `medium`, category `local_change` |
+196:| RiskClass `sensitive` | `high`, category set per tool: `delete` (delete_file), `overwrite` (write/copy/move with overwrite), `install_or_elevate`, `security_setting`, `external_send`/`external_upload`, `purchase` (→ `critical`). Every spec §10 "always confirm" category needs approval regardless of severity |
+197:| RiskClass `forbidden` | no ApprovalRequested; `DENIED_BY_POLICY` (e.g. `credential_access`, deny-listed reads) |
+
+$ rg -n "^ErrorCode" -A3 docs/plans/e04-tools-plan.md
+208:ErrorCode = Literal["DENIED_BY_POLICY", "PERMISSION_REQUIRED", "APPROVAL_REQUIRED", "AMBIGUOUS", "NOT_FOUND",
+209-                    "TIMEOUT", "PRECONDITION_FAILED", "POSTCONDITION_FAILED", "POSTCONDITION_UNKNOWN",
+210-                    "CANCELLED", "USER_DECLINED", "INVALID_ARGUMENT", "INTERNAL"]
+211-
+
+$ rg -n "dynamic preferred" docs/plans/e04-tools-plan.md; echo "exit=$?"
+exit=1
+
+$ rg -n "ADR-0008|ADR-0016" docs/plans/e04-tools-plan.md
+3:- Owner: E04 (Windows Integration Specialist). v2 prepared Mon 2026-10-19 00:36–01:30 CDT (UTC-5). v1 (Sun 2026-10-18) is kept verbatim at `docs/history/e04-tools-plan.v1-2026-10-18.md`. ADR-0008 and ADR-0012 cite v1 line numbers, so those citations point at that file.
+11:- Skills followed: `e04-windows-bot-characterization-tests` (DOT-030 method), `e04-windows-mcp-tool-server-desktop-spike` (W1-S2/DOT-031), `e04-windows-scoped-path-resolver` (file tools, DOT-069), `e04-windows-shell-runner-tree-cancel` (its "decide first" gate applies, because ADR-0016 is undecided), plus the shared `dottie-uia-tool-verifier-recipe`. Skill text that conflicts with CONTRACTS v2 is listed in (e) §E.
+21:2. **Hosting:** the v1 preference for dynamic tools is withdrawn. ADR-0008 applies (MCP stdio, decided by W1-S2), because `dynamicTools` exists only in the `--experimental` 0.163.0 schema.
+22:3. **Shell:** ADR-0016 applies. Codex exec is the default single path, and DOT-033/tests 31–36 are **blocked** until W1-S1.
+43:| Shell ownership (our runner vs Codex exec) | **Default decided, evidence pending** | ADR-0016 (Proposed): Codex sandboxed exec is the only V1 shell path. The E04 runner is built only if W1-S1 shows Codex exec can't meet spec §11, and then Codex shell is disabled. Both together is forbidden. DOT-033 blocked | The W1-S1 result on <test-pc> (E02 + E04; E01 decides). Which 0.163.0 config switch disables Codex exec is UNVERIFIED (E02) |
+45:| Client tool calls (`item/tool/call`) vs MCP | **Rule decided, outcome pending** | ADR-0008 (Proposed): MCP stdio `dottie-tools` in Dottie's CODEX_HOME. Dynamic tools need `experimentalApi:true` (stable schema lacks `dynamicTools`). W1-S2 runs both hosts, and MCP wins if both pass | W1-S2 desktop-reach evidence (E02 + E04 + E11, DOT-005). How MCP tool approvals surface for a local stdio server (E02) |
+46:| Approval token shape | **Decided** | ADR-0009 CR2 (`actionId` composition incl. the four-field window identity), CR3 (`secure_ui` click only), CR5, CR6 (single-use K8 token re-checked by the tool server → `DENIED_BY_POLICY`); E01 ruling 8 | Token format and control-channel messages (E08 + E03, with ADR-0008); canonical-JSON test vector (E08) |
+73:| R7 | Shell: **one path** (ADR-0016). The E04 runner exists only if W1-S1 fails Codex exec | ADR-0016; DOT-033 |
+176:- ADR-0006: a Python worker, `dottie_tools`, with an embedded and signed Python. ADR-0008: MCP stdio server `dottie-tools`, registered in Dottie's `%LOCALAPPDATA%\Dottie\codex\config.toml` (ADR-0014). It is a child of app-server (ARCH §4).
+186:- `adapters/{windows,explorer,files,apps,shell*,browser,office,input}/`. `shell` stays empty until ADR-0016 decides.
+258:**DOT-031 ★** (E04 + E11): the `dottie-tools` server (host per ADR-0008) exposes the allowlisted tools with the v2 result. The first tool is `explorer.open_known_folder{folder}`. Depends on DOT-005 (W1-S2), DOT-030, DOT-014 (policy gate), DOT-007 (contracts package).
+417:| 31–36 | shell runner | **blocked on ADR-0016** |
+428:3. **The W1-S1 outcome** picks the shell path. E02 + E04 run it; E01 decides (ADR-0016).
+
+$ rg -n "docs/e04/" packages/tools/README.md docs/plans/e04-tools-plan.md; echo "exit=$?"
+exit=1
+
+$ test -e docs/history/e04-tools-plan.v1-2026-10-18.md && echo v1-exists
+v1-exists
+
+$ cd packages/tools && python3 -m pytest -p no:cacheprovider 2>&1 | tail -1
+748 passed, 4 xfailed in 0.70s
+
+$ rg -n -e "\.(local|corp|lan)\b" -e "DESKTOP-[A-Z0-9]{4,}" -e "auth\.json" -e "sk-[A-Za-z0-9]{20}" -e "C:\\\\Users\\\\[A-Za-z]" docs/plans/e04-tools-plan.md packages/tools/README.md (secret sweep; case-sensitive so 'desktop-spike' etc. don't match)
+exit=1
+
+$ rg -c "<test-pc>" docs/plans/e04-tools-plan.md
+7
