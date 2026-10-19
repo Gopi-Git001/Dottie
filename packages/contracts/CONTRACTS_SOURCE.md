@@ -59,6 +59,16 @@ including `ui.Click`, `window.`, `UI.x`, `Window.close` and the valid `ui.click`
 null = display_unavailable). Vectors: 5 negatives (those five methods) and 2 positives (`uix.click`, `file.read`).
 No existing hash changed (73 of 73). E03's `hasUiActionPrefix` is case-sensitive and should take the `i` flag.
 
+Plain-object hardening (E03 report, 2026-10-19): the validators used `in` for required keys, so a display whose fields
+were all inherited (`Object.create({kind, ...})`) validated while `canonicalJson` refused it. Now
+`validateApprovalDisplay` (nested `app` included), `validateEvent` and `computeActionId` take only plain data
+objects (`isPlainObject`: prototype `Object.prototype` or null, no symbol keys, own enumerable data properties only,
+so no getters) and plain dense arrays (`isPlainArray`). Every required/allowed key check uses `hasOwn`. A JSON-parsed
+`"__proto__"` key is an unknown own key and is rejected. A key named like an `Object.prototype` member (`constructor`,
+`toString`) is no longer treated as a known event field. A polluted `Object.prototype` / `Array.prototype` never
+supplies a missing field or array entry. Null-prototype objects are accepted and hash the same. No hash changed (75
+of 75); two `displaysInvalid` error strings changed.
+
 When E01 lands a new ruling, update the mirror and this pin in the same commit. Where CONTRACTS leaves
 something open, the conservative reading is implemented and noted at the code site (search for
 `ruling` / `TODO(DOT-095)` / `TODO(E03 port`).

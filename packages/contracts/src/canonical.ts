@@ -84,7 +84,7 @@ export function canonicalJson(value: unknown): string {
       if (Array.isArray(value)) {
         const out: string[] = [];
         for (let i = 0; i < value.length; i++) {
-          if (!(i in value)) throw new CanonicalError('sparse array');
+          if (!hasOwn(value, i)) throw new CanonicalError('sparse array');
           out.push(canonicalJson(value[i]));
         }
         return `[${out.join(',')}]`;
@@ -158,13 +158,50 @@ export interface ActionBinding {
   readonly requestSource: RequestSource;
 }
 
+/**
+ * A plain data object (E03 report, 2026-10-19): prototype Object.prototype or null, no symbol keys, and every own key
+ * an enumerable DATA property (no getters/setters, nothing non-enumerable). Inherited fields
+ * (`Object.create({kind, ...})`), class instances, arrays, Maps, Dates and boxed values are not plain. A JSON-parsed
+ * `"__proto__"` key is an ordinary own data property (JSON.parse does not set the prototype). The validators therefore
+ * see it as an unknown key, and it never pollutes a prototype. The validators use this together with `hasOwn` for
+ * every required/allowed key check, so what they accept is exactly what canonicalJson hashes.
+ */
+export function isPlainObject(v: unknown): v is Record<string, unknown> {
+  if (typeof v !== 'object' || v === null || Array.isArray(v)) return false;
+  const proto = Object.getPrototypeOf(v) as unknown;
+  if (proto !== Object.prototype && proto !== null) return false;
+  if (Object.getOwnPropertySymbols(v).length > 0) return false;
+  for (const k of Object.getOwnPropertyNames(v)) {
+    const d = Object.getOwnPropertyDescriptor(v, k);
+    if (d === undefined || !d.enumerable || !hasOwn(d, 'value')) return false;
+  }
+  return true;
+}
+/**
+ * A plain data array: prototype Array.prototype, dense (no holes, which forEach would skip and canonicalJson rejects),
+ * and no own keys besides the indices and `length`; every index is an enumerable data property.
+ */
+export function isPlainArray(v: unknown): v is unknown[] {
+  if (!Array.isArray(v) || Object.getPrototypeOf(v) !== Array.prototype) return false;
+  if (Object.getOwnPropertySymbols(v).length > 0) return false;
+  const names = Object.getOwnPropertyNames(v);
+  if (names.length !== v.length + 1) return false;
+  for (let i = 0; i < v.length; i++) {
+    const d = Object.getOwnPropertyDescriptor(v, i);
+    if (d === undefined || !d.enumerable || !hasOwn(d, 'value')) return false;
+  }
+  return true;
+}
+/** Own-property test that works for null-prototype objects and ignores inherited keys (`Object.hasOwn`). */
+export const hasOwn = (o: object, k: PropertyKey): boolean => Object.prototype.hasOwnProperty.call(o, k);
+
 /** The exact object hashed for an actionId: every key present (null when it doesn't apply) plus `purpose`. */
 export const PRE_DISPATCH_CONFIRMATION_METHOD = 'dottie.pre_dispatch_confirmation';
 
 export function actionIdObject(b: ActionBinding & { readonly purpose?: typeof ACTION_ID_PURPOSE }): Record<string, unknown> {
-  if (typeof b !== 'object' || b === null) throw new CanonicalError('binding is not an object');
+  if (!isPlainObject(b)) throw new CanonicalError('binding is not a plain object');
   for (const k of Object.keys(b)) if (!(ACTION_ID_KEYS as readonly string[]).includes(k)) throw new CanonicalError(`unknown binding key ${k}`);
-  if ('purpose' in b && b.purpose !== ACTION_ID_PURPOSE) throw new CanonicalError('wrong purpose');
+  if (hasOwn(b, 'purpose') && b.purpose !== ACTION_ID_PURPOSE) throw new CanonicalError('wrong purpose');
   const o: Record<string, unknown> = {
     purpose: ACTION_ID_PURPOSE,
     method: b.method,

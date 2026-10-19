@@ -26,6 +26,7 @@ import {
   VERIFIER_OUTCOMES,
   type ApprovalCategory,
 } from './enums.js';
+import { hasOwn, isPlainArray, isPlainObject } from './canonical.js';
 import { DISPLAY_KIND_SOURCE, DISPLAY_KINDS, validateApprovalDisplay, type DisplayKind } from './display.js';
 import { EVENT_SCHEMA, EVENT_TYPES, EVENT_VERSION, REDACTED_METADATA_MAX_BYTES, REDACTED_METADATA_MAX_KEYS, type AnyEvent, type EventType } from './events.js';
 
@@ -42,9 +43,8 @@ type Check = (value: unknown, path: string, issues: ValidationIssue[]) => void;
 
 const ISO_WITH_OFFSET = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,9})?(Z|[+-]\d{2}:\d{2})$/;
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
+/** Plain data objects only (E03 report): prototype Object.prototype or null, own enumerable data keys (isPlainObject). */
+const isRecord = isPlainObject;
 
 const str: Check = (v, p, i) => {
   if (typeof v !== 'string') i.push({ path: p, message: 'must be a string' });
@@ -71,8 +71,8 @@ const oneOf =
 const arrayOf =
   (item: Check): Check =>
   (v, p, i) => {
-    if (!Array.isArray(v)) {
-      i.push({ path: p, message: 'must be an array' });
+    if (!isPlainArray(v)) {
+      i.push({ path: p, message: 'must be a plain dense array' });
       return;
     }
     v.forEach((el, idx) => item(el, `${p}[${idx}]`, i));
@@ -84,7 +84,7 @@ interface Field {
 }
 /** Shape only; the X5 display rules run in invariants() after the category rules, so those keep their own messages. */
 const objectShape: Check = (v, p, i) => {
-  if (typeof v !== 'object' || v === null || Array.isArray(v)) i.push({ path: p, message: 'must be an object' });
+  if (!isPlainObject(v)) i.push({ path: p, message: 'must be a plain object' });
 };
 const req = (check: Check): Field => ({ check });
 const opt = (check: Check): Field => ({ check, optional: true });
@@ -96,7 +96,7 @@ function objectOf(fields: Readonly<Record<string, Field>>, open?: Check): Check 
       return;
     }
     for (const [name, field] of Object.entries(fields)) {
-      const value = v[name];
+      const value = hasOwn(v, name) ? v[name] : undefined;
       if (value === undefined) {
         if (!field.optional) i.push({ path: `${p}.${name}`, message: 'is required' });
         continue;
@@ -104,7 +104,7 @@ function objectOf(fields: Readonly<Record<string, Field>>, open?: Check): Check 
       field.check(value, `${p}.${name}`, i);
     }
     for (const key of Object.keys(v)) {
-      if (key in fields) continue;
+      if (hasOwn(fields, key)) continue;
       if (open) open(v[key], `${p}.${key}`, i);
       else i.push({ path: `${p}.${key}`, message: 'is not a v2 field' });
     }
@@ -265,13 +265,13 @@ function invariants(type: EventType, envelope: Record<string, unknown>, payload:
       // Rulings 1o/1q (CONTRACTS dd082ec): advisory metadata keys, no text. awaitingClarification is a boolean and true
       // only while LISTENING (ADR-0010); false or absent is valid in any state. turnsSoFar is a number.
       const md = payload['redactedMetadata'] as Record<string, unknown>;
-      if ('awaitingClarification' in md && typeof md['awaitingClarification'] !== 'boolean') {
+      if (hasOwn(md, 'awaitingClarification') && typeof md['awaitingClarification'] !== 'boolean') {
         i.push({ path: 'payload.redactedMetadata.awaitingClarification', message: 'must be a boolean (ruling 1o)' });
       }
       if (md['awaitingClarification'] === true && payload['state'] !== 'LISTENING') {
         i.push({ path: 'payload.redactedMetadata.awaitingClarification', message: "true only with state 'LISTENING' (ruling 1q, ADR-0010)" });
       }
-      if ('turnsSoFar' in md && typeof md['turnsSoFar'] !== 'number') {
+      if (hasOwn(md, 'turnsSoFar') && typeof md['turnsSoFar'] !== 'number') {
         i.push({ path: 'payload.redactedMetadata.turnsSoFar', message: 'must be a number (ruling 1o)' });
       }
       break;
