@@ -1,6 +1,6 @@
 /**
  * Codex App Server wire framing: one JSON object per line over stdio, no "jsonrpc" field (CONTRACTS §1.1).
- * Unknown top-level fields (e.g. `emittedAtMs`) are tolerated.
+ * Unknown top-level fields (e.g. `emittedAtMs`) are tolerated and dropped; members are read by OWN key only (ruling 2i).
  */
 import { hasDuplicateKeys } from '@dottie/contracts';
 
@@ -28,20 +28,20 @@ export function parseWireLine(line: string): Incoming {
   if (typeof msg !== 'object' || msg === null || Array.isArray(msg)) return { kind: 'invalid', reason: 'not_object' };
   const m = msg as Record<string, unknown>;
   const hasMethod = typeof m['method'] === 'string';
-  if (hasMethod && 'id' in m) {
+  if (hasMethod && Object.hasOwn(m, 'id')) {
     if (!isId(m['id'])) return { kind: 'invalid', reason: 'bad_id' };
     return { kind: 'request', id: m['id'], method: m['method'] as string, params: m['params'], duplicateKeys: hasDuplicateKeys(line) };
   }
   if (hasMethod) return { kind: 'notification', method: m['method'] as string, params: m['params'] };
-  if ('error' in m) {
+  if (Object.hasOwn(m, 'error')) {
     const e = m['error'] as Record<string, unknown> | null;
     const id = m['id'] === null ? null : isId(m['id']) ? m['id'] : undefined;
     if (id === undefined || typeof e !== 'object' || e === null || typeof e['code'] !== 'number') {
       return { kind: 'invalid', reason: 'bad_error' };
     }
-    return { kind: 'error', id, code: e['code'], message: typeof e['message'] === 'string' ? e['message'] : '', ...('data' in e ? { data: e['data'] } : {}) };
+    return { kind: 'error', id, code: e['code'], message: typeof e['message'] === 'string' ? e['message'] : '', ...(Object.hasOwn(e, 'data') ? { data: e['data'] } : {}) };
   }
-  if ('result' in m && isId(m['id'])) return { kind: 'response', id: m['id'], result: m['result'] };
+  if (Object.hasOwn(m, 'result') && isId(m['id'])) return { kind: 'response', id: m['id'], result: m['result'] };
   return { kind: 'invalid', reason: 'unrecognized' };
 }
 

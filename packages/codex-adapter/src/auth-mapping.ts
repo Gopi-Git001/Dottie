@@ -30,7 +30,7 @@ export function planLabel(plan: unknown): string {
 export function mapAccountRead(result: unknown): MappedAccount {
   if (typeof result !== 'object' || result === null) throw new MalformedAccountRead('account/read result is not an object');
   const r = result as Record<string, unknown>;
-  if (!('account' in r)) throw new MalformedAccountRead('account/read result has no account field');
+  if (!Object.hasOwn(r, 'account')) throw new MalformedAccountRead('account/read result has no account field');
   const account = r['account'];
   if (account === null) {
     // requiresOpenaiAuth:false with no account means a non-OpenAI provider is configured; Dottie supports ChatGPT only.
