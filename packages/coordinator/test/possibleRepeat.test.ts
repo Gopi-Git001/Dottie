@@ -169,7 +169,7 @@ test('C-25 (D14): a read-category retry gets no possibleRepeat (no warning), but
   await flush();
   const inTurn = requestsFor(f, retryTaskId)[1]!;
   assert.equal(inTurn.category, 'read');
-  assert.ok(!('possibleRepeat' in inTurn), 'read approvals inside the retry carry no warning either');
+  assert.ok(!Object.hasOwn(inTurn, 'possibleRepeat'), 'read approvals inside the retry carry no warning either');
   f.c.resolveApproval(approval(inTurn.actionId, true, f), 'secure_ui');
   await f.drain();
   allValid(f);
