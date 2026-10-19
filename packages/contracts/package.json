@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "check": "tsc --noEmit && tsc -p tsconfig.codex-generated.json",
+    "check": "tsc --noEmit && tsc -p tsconfig.codex-generated.json && eslint .",
     "test": "npm run build && node --test dist/test/*.test.js",
     "test:node20": "npm run build && npx -y node@20 --test dist/test/*.test.js",
     "codex:fetch": "node scripts/codex-fetch.mjs",
