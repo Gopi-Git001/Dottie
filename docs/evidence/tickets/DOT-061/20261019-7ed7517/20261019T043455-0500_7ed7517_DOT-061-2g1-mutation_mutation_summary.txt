@@ -1,0 +1,50 @@
+# {"caseId": "DOT-061-2g1-mutation", "commit": "7ed7517", "build": null, "installerSha256": null, "startedAt": null, "finishedAt": null, "runner": "named host: grok-box (linux)", "command": "python3 /tmp/d16/muth.py (H1-H13)", "exitCode": 0, "result": "13/13 killed", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "tree": "7ed7517 src (restored, cmp-checked)"}
+H1 TaskCancelled routed into onTaskFinished: KILLED (4 failing)
+    not ok 238 - 2g.1: a TaskCancelled reaches onTaskCancelled exactly once (the emitted envelope) and never onTaskFinished; activeTaskId is already null inside the listener
+    not ok 239 - 2g.1: a cancel while a pre-dispatch approval is pending also reaches only onTaskCancelled, once, with activeTaskId null
+    not ok 241 - 2g.1: shutdown with a running and a queued task: two TaskCancelled, each delivered once to onTaskCancelled only
+    not ok 242 - 2g.1: unsubscribe works for both; a throwing listener is logged and isolated (others still hear it, the task still ends)
+H2 union: TaskCancelled delivered to onTaskFinished and onTaskCancelled: KILLED (4 failing)
+    not ok 238 - 2g.1: a TaskCancelled reaches onTaskCancelled exactly once (the emitted envelope) and never onTaskFinished; activeTaskId is already null inside the listener
+    not ok 239 - 2g.1: a cancel while a pre-dispatch approval is pending also reaches only onTaskCancelled, once, with activeTaskId null
+    not ok 241 - 2g.1: shutdown with a running and a queued task: two TaskCancelled, each delivered once to onTaskCancelled only
+    not ok 242 - 2g.1: unsubscribe works for both; a throwing listener is logged and isolated (others still hear it, the task still ends)
+H3 TaskCancelled delivered twice: KILLED (4 failing)
+    not ok 238 - 2g.1: a TaskCancelled reaches onTaskCancelled exactly once (the emitted envelope) and never onTaskFinished; activeTaskId is already null inside the listener
+    not ok 239 - 2g.1: a cancel while a pre-dispatch approval is pending also reaches only onTaskCancelled, once, with activeTaskId null
+    not ok 241 - 2g.1: shutdown with a running and a queued task: two TaskCancelled, each delivered once to onTaskCancelled only
+    not ok 242 - 2g.1: unsubscribe works for both; a throwing listener is logged and isolated (others still hear it, the task still ends)
+H4 TaskFinished delivered twice: KILLED (2 failing)
+    not ok 240 - 2g.1: a TaskFinished reaches onTaskFinished exactly once and never onTaskCancelled; activeTaskId is already null inside the listener
+    not ok 242 - 2g.1: unsubscribe works for both; a throwing listener is logged and isolated (others still hear it, the task still ends)
+H5 TaskFinished routed into onTaskCancelled: KILLED (2 failing)
+    not ok 240 - 2g.1: a TaskFinished reaches onTaskFinished exactly once and never onTaskCancelled; activeTaskId is already null inside the listener
+    not ok 242 - 2g.1: unsubscribe works for both; a throwing listener is logged and isolated (others still hear it, the task still ends)
+H6 TaskCancelled emitted (and delivered) before the active task is cleared: KILLED (5 failing)
+    not ok 233 - 2g: null after TaskCancelled; updated before it is emitted; TaskCancelled is emitted exactly once
+    not ok 234 - 2g: a cancel during the pending pre-dispatch approval also ends null before TaskCancelled
+    not ok 236 - 2g: a terminal event for a queued task never clears the running task; the next task becomes active only after the first ends
+    not ok 238 - 2g.1: a TaskCancelled reaches onTaskCancelled exactly once (the emitted envelope) and never onTaskFinished; activeTaskId is already null inside the listener
+H7 TaskFinished emitted (and delivered) before the active task is cleared: KILLED (3 failing)
+    not ok 232 - 2g: null after TaskFinished; the snapshot is updated before the terminal event is emitted (no stale id)
+    not ok 235 - 2g: a refused retry (fresh taskId, immediate TaskFinished retry_not_allowed) ends null, never stale
+    not ok 240 - 2g.1: a TaskFinished reaches onTaskFinished exactly once and never onTaskCancelled; activeTaskId is already null inside the listener
+H8 cleared but onStateChange not notified (clear, emit, no notify): KILLED (5 failing)
+    not ok 231 - 2g: activeTaskId equals the task while its pre-dispatch approval is pending, set before any TaskProgress
+    not ok 232 - 2g: null after TaskFinished; the snapshot is updated before the terminal event is emitted (no stale id)
+    not ok 233 - 2g: null after TaskCancelled; updated before it is emitted; TaskCancelled is emitted exactly once
+    not ok 234 - 2g: a cancel during the pending pre-dispatch approval also ends null before TaskCancelled
+H9 terminal listeners called before the EventSink emit: KILLED (1 failing)
+    not ok 238 - 2g.1: a TaskCancelled reaches onTaskCancelled exactly once (the emitted envelope) and never onTaskFinished; activeTaskId is already null inside the listener
+H10 a throwing terminal listener is not isolated: KILLED (1 failing)
+    not ok 242 - 2g.1: unsubscribe works for both; a throwing listener is logged and isolated (others still hear it, the task still ends)
+H11 onTaskCancelled unsubscribe is a no-op: KILLED (1 failing)
+    not ok 242 - 2g.1: unsubscribe works for both; a throwing listener is logged and isolated (others still hear it, the task still ends)
+H12 onTaskFinished unsubscribe is a no-op: KILLED (1 failing)
+    not ok 242 - 2g.1: unsubscribe works for both; a throwing listener is logged and isolated (others still hear it, the task still ends)
+H13 no delivery at all: KILLED (5 failing)
+    not ok 238 - 2g.1: a TaskCancelled reaches onTaskCancelled exactly once (the emitted envelope) and never onTaskFinished; activeTaskId is already null inside the listener
+    not ok 239 - 2g.1: a cancel while a pre-dispatch approval is pending also reaches only onTaskCancelled, once, with activeTaskId null
+    not ok 240 - 2g.1: a TaskFinished reaches onTaskFinished exactly once and never onTaskCancelled; activeTaskId is already null inside the listener
+    not ok 241 - 2g.1: shutdown with a running and a queued task: two TaskCancelled, each delivered once to onTaskCancelled only
+TOTAL 13/13 killed

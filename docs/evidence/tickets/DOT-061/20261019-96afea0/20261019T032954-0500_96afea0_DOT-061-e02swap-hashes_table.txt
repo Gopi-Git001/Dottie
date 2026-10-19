@@ -1,0 +1,96 @@
+# {"caseId": "DOT-061-e02swap-hashes", "commit": "96afea0", "build": null, "installerSha256": null, "startedAt": null, "finishedAt": null, "runner": "named host: grok-box (linux)", "command": "node hashtable.mjs (dist of 96afea0; every vector through contractsActionIdPort)", "exitCode": 0, "durationMs": null, "result": "83 checks, 0 differences", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "tree": "committed tree 96afea0"}
+# script: import { readFileSync } from 'node:fs';
+# script: const { contractsActionIdPort: p } = await import(process.cwd() + '/dist/src/actionIdPort.js');
+# script: const V = JSON.parse(readFileSync('test/fixtures/e02/vectors.json', 'utf8'));
+# script: const dec = v => Array.isArray(v) ? v.map(dec) : v && typeof v === 'object' ? (Object.keys(v).length === 1 && '$number' in v ? ({ NaN: NaN, Infinity: Infinity, '-Infinity': -Infinity, '-0': -0 })[v.$number] : Object.keys(v).length === 1 && '$bigint' in v ? BigInt(v.$bigint) : Object.fromEntries(Object.entries(v).map(([k, x]) => [k, dec(x)]))) : v;
+# script: let n = 0, bad = 0;
+# script: const row = (sec, name, exp, got) => { n++; const ok = exp === got; if (!ok) bad++; console.log(`${ok ? 'MATCH' : 'DIFF '} ${sec.padEnd(15)} ${got}  ${name}`); };
+# script: for (const v of V.actionId) row('actionId', v.name, v.actionId, p.computeActionId(dec(v.input)));
+# script: for (const v of V.displays) row('displayHash', v.name, v.displayHash, p.computeDisplayHash(v.display));
+# script: for (const v of V.displayCuts) row('displayCuts', v.name, v.displayHash, p.computeDisplayHash(v.display));
+# script: for (const v of V.actionIdInvalid) { let t = 'NO-THROW'; try { p.computeActionId(dec(v.input)); } catch (e) { t = e.name; } n++; if (t !== 'CanonicalError') bad++; console.log(`${t === 'CanonicalError' ? 'REJECT' : 'DIFF  '} actionIdInvalid ${v.name} -> ${t}`); }
+# script: console.log(`TOTAL ${n} checks, ${bad} differences`);
+MATCH actionId        b07386ab1015ba4a8ca6f48e2bcfe39722c84daece2179e00143eb8605381466  codex command approval
+MATCH actionId        7481a3647f5fca8522b97dde145ced39393b67463dd2627bbae78270beed2f0a  all optional ids null
+MATCH actionId        22e4c17f269fb107a551bfb2d40f09f5790ad10102fcea1a4b3b4cf39d3a119a  ui_action tool call with window target
+MATCH actionId        402c4d42a6f50066bf4b98d3d3eb8e5f74963e52a0da91386e86e6aa3365f3a3  tool delete call
+MATCH actionId        f5cfd29b6e9f127f727f5684238610dcfd663fbbbadc15879ffbf994dd8739ca  changed requestSource only (ruling 1r)
+MATCH actionId        85e9e9b16018564aaeb01782d5aab7f0fb4446f85c4351c897a3b88e3671d33d  navigate with requestSource codex instead of tool_host (K8 wrong_action)
+MATCH actionId        8db6818aa04d5db18eae73182eda88218f29ec812325bc4ab45420a1e151cf09  changed requestId
+MATCH actionId        bed1b5eefbb867cc44e5549658a2f76155e81c34a35ed84657c6adcb32aaa759  changed taskId
+MATCH actionId        ed34f3006d73dca809991b217aac38e226c93244fd85c34badc1dca26b3445cc  changed arg
+MATCH actionId        d045711245a504a68631261466f39d681027c9fe5b0c0be9703ab5eda176644d  changed display only: command
+MATCH actionId        ce96cd81a94475f271d0fce68b0a327c4e11d5cc61e25d0d11318a06ca24e81e  changed display only: cwd
+MATCH actionId        53df736f99f8d235105c88db2dcf529a0b1f75557fc207a220ec85c8522b60e3  changed display only: network
+MATCH actionId        56a41bc835bdf12643747630f7d020be8764608472bef2aead0202a131022399  changed display only: escalation
+MATCH actionId        0a1d41a8eb46aeea0614b20279537850392091334967ee4aaf59a422c358388a  changed display only: file-change path
+MATCH actionId        e481a033aa5d4db69eb3616559060ddc1ebde2b501b1f22dfa98349f19b972c8  codex file change approval
+MATCH actionId        bef9ebf8fe7bf1283884551c8b1a4cb87c8630bec0559c2cb84c942a0a7b76df  integer arg
+MATCH actionId        bef9ebf8fe7bf1283884551c8b1a4cb87c8630bec0559c2cb84c942a0a7b76df  the same arg as a string hashes the same (scalar leaves are strings)
+MATCH actionId        c95085229aab3dd9dd9e4f13bfd36213a9203322a69d1b9224bdbcea1a806a95  pre_dispatch_confirmation
+MATCH actionId        2c0890f2775d3767d574ef9bf2337a74c23e2f2f379511761ecc8828bd798947  pre_dispatch_confirmation possible repeat
+MATCH actionId        60c4800f5ffc2455f389b2901814b27a9752380f21b15129317bcc938a5415ea  pre_dispatch_confirmation clean-failure retry
+MATCH actionId        03ad85598d638720ba66f318b5960b7ef01556b36586593e9b9246cb617e8a7f  pre_dispatch_confirmation display summary changed alone
+MATCH actionId        89b8d67898be9813ea132ed4ce0cde4332b0789d26b270037f9509f5bf66c2f1  pre_dispatch_confirmation args summary changed alone
+MATCH actionId        086df4468b250df47761550c2b0f1b7e4d98d3877aceb313f36cfcfd3ddcbc37  navigate tool call
+MATCH displayHash     fbfb108e2a915c30f29b414022e62a8ee343d40ed904622fbef19b3ed397fc44  codex command
+MATCH displayHash     9b9b078365a4e667139c22262a07ec439005e536ac4fb2a42d938f8a09a85d7c  codex command, other command
+MATCH displayHash     5a28fcf38783b0d19882f815d3cc5a69d3c7b13ee7d1a146deeb8dca659c04a5  codex command, other cwd
+MATCH displayHash     c7b09d32a8aba1056d6c92ffea85a9117e4e8449abd1adf652d0adf461f12c75  codex command, network requested
+MATCH displayHash     b19a95ab13d931e8548c64a92ca5aa892c8b5e5aa6db1a541475e889fc9b3f8b  codex command, escalation only
+MATCH displayHash     de178bc4bfb639b9a9ea6c86ede00d04bbd312f745c1ae59382fbe73f3c82837  codex command, reason (untrusted)
+MATCH displayHash     6fcfc65f8d9593f042ad355f36dcf77b5e9602c0c81552ab2d57f117081b2f27  codex command, reason at 500 code points (ellipsis)
+MATCH displayHash     0521d16854f8e96c94cdb6cf9c1f9acfbf8fd1a0ea902281ff4bf4f4840fcbd3  codex command, multi-line
+MATCH displayHash     e63ce7e02638afc33d732a7d26836c9b7b4b2cd20c1b59fc9d0c791e3db44d07  codex command, 8192 bytes
+MATCH displayHash     e1e6ff286821f08839a7819ce692ab9599015303aa709c4b1b7173048f8baeee  codex command, 8191 bytes multibyte
+MATCH displayHash     4c38b0fe33b3289a66213f394e12f793bb2148e3f4ccf2d57c33861095965141  codex command, 8192 bytes multibyte
+MATCH displayHash     3be0d1e79586e7c41bcc6e736c84358e6131653a9ad656472a27bb0ac3b25b2e  codex command, LF
+MATCH displayHash     97ab016c10bb02add65b3e2d6f40e6b8fe7955e92e876b4d7cfaf66defff6110  codex command, CRLF
+MATCH displayHash     9edbf17ef72f0f834df38b8c4b794706b38e7c64ce1f1f1ac7cc68a5e53dcdda  codex command, ESC + lone CR + U+202E
+MATCH displayHash     35d80a6dfa2c255a7f59868e01c51cd58c943fde392dd7f9dfa9272cf2f197a2  codex file change
+MATCH displayHash     0fdf5e90be69d2b8a49863635fb3fa006d42e9c202ddee3bd3862a71fb628e58  codex file change, other path
+MATCH displayHash     09dd67342758ea351465ea855e41196a5b8c4bf257d5e615f0a7a0d95fa2efcd  codex file change, 500 paths
+MATCH displayHash     d3b76f20ebb85ac790ee0ddab9d5adb3a9e0e6a91b14909ecc91fd2e857dd312  codex command, workingDirectory 4096 bytes
+MATCH displayHash     e8734ef77bfd9af7dfdcef792167a29d1775b97fb277d1870c78ba342fdf01f8  codex command, 32 escalations of 256 code points
+MATCH displayHash     1f0ed8818fd97226068bdaf815605af647c04df4595f633102f5b503e0fe2649  codex file change, path 4096 bytes
+MATCH displayHash     1425a5c9ac34bb20f202f70c65cd45219155e2c6b637fe7a2866dff92cf76f14  tool delete, one path
+MATCH displayHash     6a9788fc4bd1256aa8974604f71ed2bc7d715c615ad6e6f0bf8d4e37b90ea3db  tool delete, path with U+202E (bound, kept)
+MATCH displayHash     c900910b3ed10ac39849496ae002d671dc5ee815532b71e67afa7ec52111491e  tool delete, three paths
+MATCH displayHash     794c252dff844e513d0e35e653a37dbe18d55bd7cb9c50c29a511ef9815a0ec6  tool local_change paths
+MATCH displayHash     b9458fb71d4a3f8b5d2957ebf09b22a9c28dcde91e8554f7fbf38a9f8c01df28  tool external_send
+MATCH displayHash     cbd715e33859cf20f5bfa89b4c68f9347ba84d5e2685387f2740e326b395c033  tool external_upload
+MATCH displayHash     f665901c6845f72fe86f6c529417b8901046dd80ee5bd6cec9d70e77fd775d01  tool purchase
+MATCH displayHash     c7e0a47112ec42f7cff07558b2905dfdbb376781cd561dd4c3cff0ff681905b1  tool install_or_elevate
+MATCH displayHash     d9c861066d511f6b7f95bb1f1c1f0811cbd39aee0a7d8eb843938ea76c612c3a  tool security_setting
+MATCH displayHash     e571b332c617844d5c7f182bf218e36e1bdacf1d51ffbb37677a1186248a6d5e  ui_action in an app
+MATCH displayHash     1af4547418602b5bb9ad80149f7e006109da68aa851d288109cfda4c8deb5a8d  pre_dispatch absent
+MATCH displayHash     f203b61e871f93deb947e6426d9405fff04f095f5f5014d0e593363f00eef8f9  pre_dispatch possible repeat
+MATCH displayHash     3ecef892426bc977e128f438a41992cc1ad54be9d16ac0d00de7c8cb3c4ce523  pre_dispatch clean-failure retry
+MATCH displayHash     1c1aa21dacb5cc514667d42333da6b6c56f112932414bcf8f8ee6bcb30b41629  pre_dispatch display summary changed
+MATCH displayCuts     b887016e8dd31cbabc1bdbc0ba33489d9705a66a2513030ee98c623e8afc90fa  summaryUntrusted at max-1 (499)
+MATCH displayCuts     2c3735b7a2092d256e75b69fd22d0f83568dd48310fa4c59a9c8751040bc82de  summaryUntrusted at max (500)
+MATCH displayCuts     bd017d9c6e38b09b70126dd11539dccc557563de1db1c68094f57c28280009c9  summaryUntrusted at max+1 (501): 499 + U+2026
+MATCH displayCuts     2c3735b7a2092d256e75b69fd22d0f83568dd48310fa4c59a9c8751040bc82de  summaryUntrusted 501 with one U+202E: stripped to 500, not cut
+MATCH displayCuts     35ca0c194b7f076855e39876d4b1155795d0b6d3377facf23ea6f4f1f2533ff5  summaryUntrusted 501 astral code points (U+1F600): 499 + U+2026
+MATCH displayCuts     7a2c77ed360c6be5f0031c642cd0e940cc5e5d6ae146fe63e5c0baa1e799a198  app.windowTitle at max-1 (255)
+MATCH displayCuts     e8d99eb9067d534ec4712a9dbdeee3addfb42e79834c1def771db8472a5d6800  app.windowTitle at max (256)
+MATCH displayCuts     7f655c6ff53627bc6318b7167f9bdc6469bedc66710cf8e631e00e48985877ee  app.windowTitle at max+1 (257): 255 + U+2026
+MATCH displayCuts     f1b7172d957df50deaaac60a2897deaf9ccbc108a58f3d9e1bc3429f436000fc  app.windowTitle 257 with U+202E kept (bound, cut not stripped)
+REJECT actionIdInvalid missing turnId -> CanonicalError
+REJECT actionIdInvalid empty taskId -> CanonicalError
+REJECT actionIdInvalid non-integer arg -> CanonicalError
+REJECT actionIdInvalid NaN arg -> CanonicalError
+REJECT actionIdInvalid negative zero arg -> CanonicalError
+REJECT actionIdInvalid wrong purpose -> CanonicalError
+REJECT actionIdInvalid unknown binding key -> CanonicalError
+REJECT actionIdInvalid pre-dispatch args.displayHash differs from the top-level displayHash (ruling 1q) -> CanonicalError
+REJECT actionIdInvalid pre-dispatch with no displayHash in args (ruling 1q) -> CanonicalError
+REJECT actionIdInvalid generic call with displayHash in args (ruling 1q) -> CanonicalError
+REJECT actionIdInvalid null requestSource (ruling 1u) -> CanonicalError
+REJECT actionIdInvalid missing requestSource (ruling 1r) -> CanonicalError
+REJECT actionIdInvalid unknown requestSource -> CanonicalError
+REJECT actionIdInvalid pre-dispatch method with requestSource codex (ruling 1r) -> CanonicalError
+REJECT actionIdInvalid coordinator requestSource on a generic call (ruling 1r) -> CanonicalError
+REJECT actionIdInvalid missing displayHash -> CanonicalError
+REJECT actionIdInvalid uppercase displayHash -> CanonicalError
+TOTAL 83 checks, 0 differences

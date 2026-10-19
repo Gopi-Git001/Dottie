@@ -1,0 +1,7 @@
+{"t":"2026-10-18T13:39:25.318Z","dir":">>","msg":{"method":"initialize","id":1,"params":{"clientInfo":{"name":"dottie_week1_probe","title":"Dottie Week-1 Probe","version":"0.0.1"}}}}
+{"t":"2026-10-18T13:39:25.390Z","dir":"<<","msg":{"id":1,"result":{"userAgent":"dottie_week1_probe/0.163.0 (Debian 13.0.0; x86_64) dumb (dottie_week1_probe; 0.0.1)","codexHome":"/tmp/codexsmoke/home2","platformFamily":"unix","platformOs":"linux"}}}
+{"t":"2026-10-18T13:39:25.390Z","dir":">>","msg":{"method":"initialized","params":{}}}
+{"t":"2026-10-18T13:39:25.391Z","dir":">>","msg":{"method":"account/read","id":2,"params":{"refreshToken":false}}}
+{"t":"2026-10-18T13:39:25.392Z","dir":"<<","msg":{"method":"remoteControl/status/changed","params":{"status":"disabled","serverName":"<redacted>","installationId":"<redacted>","environmentId":null},"emittedAtMs":1792330765389}}
+{"t":"2026-10-18T13:39:25.394Z","dir":"<<","msg":{"id":2,"result":{"account":null,"requiresOpenaiAuth":true,"workspaceRouting":null}}}
+{"t":"2026-10-18T13:39:25.405Z","dir":"exit","msg":{"code":0}}

@@ -1,0 +1,12 @@
+{"caseId":"DOT099-FU1-RUNNER-SIGINT","commit":"c5a9f3db36816eeef708e49cbc38a6a369aae3f0","dirtyTree":false,"dirtyTreeScope":"repo, excluding docs/evidence/","build":null,"installerSha256":null,"buildNote":"n/a: unpackaged","startedAt":"2026-10-19T06:14:50.087-05:00","finishedAt":"2026-10-19T06:14:53.144-05:00","command":"node scripts/smoke-run.mjs --runs 1 --timeout-ms 90000 --out /workspace/smoke-logs/c5a9f3d/runner-sigINT --case-id DOT099-FU1-RUNNER-SIGINT","exitCode":1,"durationMs":3057,"result":"fail","runner":"linux-box"}
+{
+  "runs": 1,
+  "ok": 0,
+  "failed": 1,
+  "timedOut": 0,
+  "failedSteps": [],
+  "msMin": 3055,
+  "msMedian": 3055,
+  "msMax": 3055,
+  "logs": "/workspace/smoke-logs/c5a9f3d/runner-sigINT"
+}

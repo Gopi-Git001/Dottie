@@ -1,0 +1,12 @@
+{"caseId":"DOT098-AC3","commit":"13f4e3d9b3b6dbff55c3860509a94483f1c3c82c","dirtyTree":false,"build":null,"installerSha256":null,"startedAt":"2026-10-19T05:22:19.894-05:00","finishedAt":"2026-10-19T05:33:17.432-05:00","command":"node scripts/smoke-run.mjs --runs 100 --case-id DOT098-AC3 --out /workspace/smoke-logs/13f4e3d/runner-100 --timeout-ms 90000","exitCode":0,"durationMs":657538,"result":"pass","runner":"linux-box"}
+{
+  "runs": 100,
+  "ok": 100,
+  "failed": 0,
+  "timedOut": 0,
+  "failedSteps": [],
+  "msMin": 6508,
+  "msMedian": 6572,
+  "msMax": 6677,
+  "logs": "/workspace/smoke-logs/13f4e3d/runner-100"
+}

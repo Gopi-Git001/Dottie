@@ -1,0 +1,118 @@
+# CODEOWNERS. Every role reviews through the single GitHub account @Gopi-Git001.
+# This repo is user-owned, so there are no @dottie/eNN teams. The comment on each line
+# names the role(s). GitHub reads only the handle; one handle cannot force two approvals.
+# E07 and E08 both reviewing is still required by the PR template (spec §7).
+# Later lines override earlier ones.
+#
+# E01 docs/contracts and everything shared
+# E02 Codex adapter/contracts
+# E03 coordinator
+# E04 tools
+# E05 voice
+# E06 desktop
+# E07 QA tests/
+# E08 security
+# E09 observability
+# E11 verifier
+
+# E01 — everything shared
+*                                            @Gopi-Git001
+
+# E06 desktop
+/apps/desktop/                               @Gopi-Git001
+
+# E06 desktop, E08 security, E07 QA — IPC is a permission boundary
+/apps/desktop/src/main/ipc/                  @Gopi-Git001
+
+# E06 desktop, E08 security, E07 QA — approval UI is permissions
+/apps/desktop/src/main/approval/             @Gopi-Git001
+
+# E06 desktop, E08 security, E07 QA — security.ts
+/apps/desktop/src/main/security.ts           @Gopi-Git001
+
+# E06 desktop, E08 security, E07 QA — shell hardening and the protocol
+/apps/desktop/src/main/electron/             @Gopi-Git001
+
+# E06 desktop, E08 security, E07 QA — preload is the IPC trust boundary
+/apps/desktop/src/preload/                   @Gopi-Git001
+
+# E06 desktop, E09 observability — lifecycle / supervisor
+/apps/desktop/src/main/lifecycle/            @Gopi-Git001
+
+# E06 desktop, E08 security — packaging (was apps/desktop/build/; resources live in packaging/)
+/apps/desktop/electron-builder.yml           @Gopi-Git001
+/apps/desktop/packaging/                     @Gopi-Git001
+
+# E06 desktop, E07 QA, E08 security — desktop tests
+/apps/desktop/test/                          @Gopi-Git001
+
+# E01 shared contracts, E02 Codex adapter/contracts
+/packages/contracts/                         @Gopi-Git001
+
+# E08 security, E01 shared — tool catalog and its pin (permissions)
+# E07 QA as well: the catalog is a permission surface
+/packages/contracts/tool-catalog.json        @Gopi-Git001
+/packages/contracts/tool-catalog.json.sha256 @Gopi-Git001
+
+# E01 shared contracts, E02 Codex adapter/contracts, E07 QA, E08 security — contract tests
+/packages/contracts/test/                    @Gopi-Git001
+
+# E02 Codex adapter/contracts, E07 QA, E08 security — auth and the approvals bridge
+/packages/codex-adapter/                     @Gopi-Git001
+
+# E03 coordinator, E07 QA, E08 security — includes the auth gate
+/packages/coordinator/                       @Gopi-Git001
+
+# E08 security, E03 coordinator, E07 QA — default-deny permissions
+/packages/policy/                            @Gopi-Git001
+
+# E04 tools, E08 security, E07 QA — scoped tools and approvals
+/packages/tools/                             @Gopi-Git001
+
+# E11 verifier, E04 tools
+/packages/verifier/                          @Gopi-Git001
+
+# E11 verifier, E04 tools, E07 QA, E08 security — verifier tests
+/packages/verifier/tests/                    @Gopi-Git001
+
+# E05 voice (E10 audio DSP co-owns the pipeline)
+/packages/voice/                             @Gopi-Git001
+
+# E09 observability
+/packages/observability/                     @Gopi-Git001
+
+# E07 QA, E08 security — tests/
+/tests/                                      @Gopi-Git001
+
+# E07 QA, E11 verifier, E08 security — Windows end-to-end
+/tests/e2e-windows/                          @Gopi-Git001
+
+# E01 docs/contracts and shared docs
+/docs/                                       @Gopi-Git001
+/docs/contracts/                             @Gopi-Git001
+/docs/product-decisions.md                   @Gopi-Git001
+
+# E08 security, E07 QA — security docs (permissions)
+/docs/security/                              @Gopi-Git001
+
+# E07 QA, E08 security — QA docs
+/docs/qa/                                    @Gopi-Git001
+
+# E07 QA, E08 security — evidence
+/docs/evidence/                              @Gopi-Git001
+
+# E05 voice, E10 audio DSP
+/docs/voice/                                 @Gopi-Git001
+
+# E02 Codex adapter/contracts, E07 QA, E08 security — auth probe
+/scripts/week1-probe/                        @Gopi-Git001
+
+# E01 shared, E07 QA, E08 security — CI and ownership
+/.github/                                    @Gopi-Git001
+
+# E08 security, E07 QA — secret scan and its exact-line allowlist
+/scripts/secret-scan.sh                      @Gopi-Git001
+/scripts/secret-scan.allow                   @Gopi-Git001
+
+# E01 shared, E08 security
+/.gitignore                                  @Gopi-Git001

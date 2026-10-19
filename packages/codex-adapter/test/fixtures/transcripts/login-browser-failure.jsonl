@@ -1,0 +1,7 @@
+# Browser sign-in the user abandons: the login server reports failure (failure shape: V-run L13).
+>> {"method":"account/login/start","params":{"type":"chatgpt"}}
+<< {"id":"$","result":{"type":"chatgpt","loginId":"22222222-2222-4222-8222-222222222222","authUrl":"https://auth.openai.com/oauth/authorize?response_type=code&redirect_uri=http%3A%2F%2F127.0.0.1%3A1455%2Fauth%2Fcallback&state=<redacted>"}}
+## wait user-gives-up
+<< {"method":"account/login/completed","params":{"loginId":"22222222-2222-4222-8222-222222222222","success":false,"error":"Login server error: Login was not completed","onboardingEntrypoint":null},"emittedAtMs":1792330220398}
+>> {"method":"account/read","params":{"refreshToken":false}}
+<< {"id":"$","result":{"account":null,"requiresOpenaiAuth":true,"workspaceRouting":null}}

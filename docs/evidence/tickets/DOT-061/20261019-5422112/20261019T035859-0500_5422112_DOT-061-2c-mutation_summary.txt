@@ -1,0 +1,26 @@
+# {"caseId": "DOT-061-2c-mutation", "commit": "5422112", "build": null, "installerSha256": null, "startedAt": null, "finishedAt": "2026-10-19T03:58:59-05:00", "runner": "named host: grok-box (linux)", "command": "python3 /tmp/d14/mutc.py (C1-C6) then /tmp/d14/mutc2.py (C2 after the contrast test)", "exitCode": 0, "durationMs": null, "result": "pass", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "tree": "5422112 tree (C2 re-run with the contrast test), restored after each"}
+C1 desktop display_unavailable settled as denied (pre-2c behaviour): KILLED (2 failing)
+    not ok 218 - 2c (a) codex: a desktop display_unavailable answers the Codex request exactly once with display_unavailable; no coordinator ApprovalResolved, no "you decline
+    not ok 220 - 2c (c) pre_dispatch: a desktop display_unavailable ends the task declined{approval_unavailable} with zero Codex dispatch; no coordinator ApprovalResolved, no
+C2 any decline settled as display_unavailable: SURVIVED (0 failing)
+C3 coordinator echoes an ApprovalResolved: KILLED (4 failing)
+    not ok 20 - Codex join (1o c / 1p): a joined request is declined at once with duplicate_request; only the first can be approved; each request answered exactly once; joine
+    not ok 121 - approval: a spoken "no" is accepted as a denial; silence expires to denial
+    not ok 218 - 2c (a) codex: a desktop display_unavailable answers the Codex request exactly once with display_unavailable; no coordinator ApprovalResolved, no "you decline
+    not ok 220 - 2c (c) pre_dispatch: a desktop display_unavailable ends the task declined{approval_unavailable} with zero Codex dispatch; no coordinator ApprovalResolved, no
+C4 a settled actionId can be approved again: KILLED (7 failing)
+    not ok 12 - binding (§2.1 required tests): changing possibleRepeat, retryOfTaskId or the displayed summary between display and approval invalidates the approval; nothing 
+    not ok 42 - DOT-060 AC 10 (E01 1m): the C-08 timeout emits ApprovalResolved{approved:false, decision:expired} exactly once per request, before TaskFinished (fake clock)
+    not ok 120 - approval: secure UI approves; voice cannot approve under the default fail-closed policy; single use
+    not ok 187 - E01 1m (2): the C-08 timeout emits ApprovalResolved{approved:false} exactly once, before TaskFinished; a late approve has no effect
+C5 pre_dispatch display_unavailable spoken as a user decline: KILLED (2 failing)
+    not ok 28 - DOT-060 AC 11 (1r follow-up): a clean-failure retry (possibleRepeat null) whose display.retryOfTaskId differs from the utterance retryOfTaskId emits no Approv
+    not ok 220 - 2c (c) pre_dispatch: a desktop display_unavailable ends the task declined{approval_unavailable} with zero Codex dispatch; no coordinator ApprovalResolved, no
+C6 pre_dispatch display_unavailable dispatched anyway: KILLED (3 failing)
+    not ok 28 - DOT-060 AC 11 (1r follow-up): a clean-failure retry (possibleRepeat null) whose display.retryOfTaskId differs from the utterance retryOfTaskId emits no Approv
+    not ok 46 - E01 1n: a desktop ApprovalResolved{approved:false, reason:display_unavailable} declines (fail closed)
+    not ok 220 - 2c (c) pre_dispatch: a desktop display_unavailable ends the task declined{approval_unavailable} with zero Codex dispatch; no coordinator ApprovalResolved, no
+TOTAL 5/6 killed
+C2 any decline settled as display_unavailable: KILLED (1 failing)
+    not ok 221 - 2c contrast: a plain secure-UI "no" (no reason) is still the user's decline: Codex gets denied, a pre-dispatch confirmation ends declined without approval_un
+TOTAL 1/1 killed

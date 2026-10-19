@@ -1,0 +1,39 @@
+{
+  "name": "@dottie/contracts",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Dottie shared contracts v2 (arch/CONTRACTS.md, ADR-0012): event envelope, payloads, enums, port types, runtime validation; plus the Codex App Server schema generated from the pinned binary (ADR-0003). DOT-007, owner E02.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
+    },
+    "./codex-pin.json": "./codex-pin.json",
+    "./fixtures/action-id/vectors.json": "./fixtures/action-id/vectors.json",
+    "./schemas/*.json": "./schemas/*.json",
+    "./fixtures/records/cases.json": "./fixtures/records/cases.json"
+  },
+  "scripts": {
+    "build": "tsc",
+    "check": "tsc --noEmit && tsc -p tsconfig.codex-generated.json",
+    "test": "npm run build && node --test dist/test/*.test.js",
+    "test:node20": "npm run build && npx -y node@20 --test dist/test/*.test.js",
+    "codex:fetch": "node scripts/codex-fetch.mjs",
+    "codex:codegen": "node scripts/codex-codegen.mjs",
+    "codex:check": "node scripts/codex-codegen.mjs --check",
+    "vectors": "node scripts/action-id-vectors.mjs",
+    "vectors:check": "node scripts/action-id-vectors.mjs --check",
+    "schemas": "npm run build && node scripts/json-schemas.mjs",
+    "schemas:check": "npm run build && node scripts/json-schemas.mjs --check"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "typescript": "^6.0.3"
+  }
+}

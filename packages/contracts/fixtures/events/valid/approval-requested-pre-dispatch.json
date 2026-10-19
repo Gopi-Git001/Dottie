@@ -1,0 +1,30 @@
+{
+  "schema": "dottie.event",
+  "version": 2,
+  "type": "ApprovalRequested",
+  "eventId": "evt-approvalrequested",
+  "correlationId": "corr-1",
+  "timestamp": "2026-10-18T14:03:00.123-05:00",
+  "payload": {
+    "taskId": "task-1",
+    "actionId": "3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f",
+    "summary": "Delete old.log in Downloads",
+    "risk": "high",
+    "expiry": "2026-10-18T14:05:00-05:00",
+    "category": "delete",
+    "display": {
+      "kind": "pre_dispatch",
+      "category": "delete",
+      "risk": "high",
+      "possibleRepeat": "possible",
+      "retryOfTaskId": "task-0",
+      "summaryUntrusted": "Delete old.log in Downloads"
+    },
+    "possibleRepeat": {
+      "priorTaskId": "task-0",
+      "priorSideEffect": "possible"
+    },
+    "requestSource": "coordinator"
+  },
+  "taskId": "task-1"
+}

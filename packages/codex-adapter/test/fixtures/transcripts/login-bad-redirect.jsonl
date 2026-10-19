@@ -1,0 +1,8 @@
+# Genuine auth.openai.com host but the redirect_uri points off-box (synthetic). Dottie must not open it, must
+# cancel the login and stay signed out (E01 2026-10-19, CONTRACTS §3.2 reason redirect_uri).
+>> {"method":"account/login/start","params":{"type":"chatgpt"}}
+<< {"id":"$","result":{"type":"chatgpt","loginId":"66666666-6666-4666-8666-666666666666","authUrl":"https://auth.openai.com/oauth/authorize?response_type=code&redirect_uri=https%3A%2F%2Fevil.example%2Fauth%2Fcallback&state=x"}}
+>> {"method":"account/login/cancel","params":{"loginId":"66666666-6666-4666-8666-666666666666"}}
+<< {"id":"$","result":{"status":"canceled"}}
+>> {"method":"account/read","params":{"refreshToken":false}}
+<< {"id":"$","result":{"account":null,"requiresOpenaiAuth":true}}

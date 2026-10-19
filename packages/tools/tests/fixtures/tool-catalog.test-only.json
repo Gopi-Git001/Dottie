@@ -1,0 +1,8 @@
+{
+  "_fixture": "TEST-ONLY: never copy into packages/contracts/tool-catalog.json",
+  "catalogs": {
+    "mutating": [
+      {"toolId": "explorer.open_known_folder", "category": "local_change", "scope": "files.write"}
+    ]
+  }
+}

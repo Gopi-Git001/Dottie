@@ -1,0 +1,16 @@
+{
+  "schema": "dottie.event",
+  "version": 2,
+  "type": "TaskFinished",
+  "eventId": "evt-taskfinished",
+  "correlationId": "corr-1",
+  "timestamp": "2026-10-18T14:03:00.123-05:00",
+  "payload": {
+    "taskId": "task-2",
+    "verified": false,
+    "outcome": "declined",
+    "reason": "approval_unavailable",
+    "summary": "Not started: the approval could not be requested."
+  },
+  "taskId": "task-2"
+}

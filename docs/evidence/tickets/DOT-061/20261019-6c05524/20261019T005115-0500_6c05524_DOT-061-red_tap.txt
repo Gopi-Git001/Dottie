@@ -1,0 +1,497 @@
+# {"caseId": "DOT-061-red", "commit": "6c05524", "build": null, "installerSha256": null, "startedAt": "2026-10-19T00:51:15-05:00", "finishedAt": "2026-10-19T00:51:17-05:00", "runner": "named host: grok-box (linux)", "command": "cd packages/coordinator && npm test", "exitCode": 1, "durationMs": null, "result": "fail", "platform": "Linux box (Node v20.19.2); NOT Windows evidence", "tree": "dirty: packages/coordinator untracked on branch owned by E06; HEAD 6c05524 does not contain this code"}
+# note: RED run (tests written before fix). 59 tests: 42 pass, 8 fail, 9 cancelled. The hung-read test hangs forever (the bug itself), cancelling the rest of authGate.test; see _red-isolated. durationMs not recorded.
+TAP version 13
+# Subtest: DOT-061: signed_in dispatches exactly once
+ok 1 - DOT-061: signed_in dispatches exactly once
+  ---
+  duration_ms: 8.494521
+  ...
+# Subtest: DOT-061: auth state 'unknown' blocks dispatch (0 run() calls, blocked_auth)
+not ok 2 - DOT-061: auth state 'unknown' blocks dispatch (0 run() calls, blocked_auth)
+  ---
+  duration_ms: 2.366311
+  location: '/workspace/dottie/packages/coordinator/dist/test/authGate.test.js:30:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    unknown: run() must not be called
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    assertBlocked (file:///workspace/dottie/packages/coordinator/dist/test/authGate.test.js:11:12)
+    TestContext.<anonymous> (file:///workspace/dottie/packages/coordinator/dist/test/authGate.test.js:35:15)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: DOT-061: auth state 'unavailable' blocks dispatch (0 run() calls, blocked_auth)
+not ok 3 - DOT-061: auth state 'unavailable' blocks dispatch (0 run() calls, blocked_auth)
+  ---
+  duration_ms: 2.804851
+  location: '/workspace/dottie/packages/coordinator/dist/test/authGate.test.js:30:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    unavailable: run() must not be called
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    assertBlocked (file:///workspace/dottie/packages/coordinator/dist/test/authGate.test.js:11:12)
+    TestContext.<anonymous> (file:///workspace/dottie/packages/coordinator/dist/test/authGate.test.js:35:15)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: DOT-061: auth state 'signing_in' blocks dispatch (0 run() calls, blocked_auth)
+not ok 4 - DOT-061: auth state 'signing_in' blocks dispatch (0 run() calls, blocked_auth)
+  ---
+  duration_ms: 1.377784
+  location: '/workspace/dottie/packages/coordinator/dist/test/authGate.test.js:30:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    signing_in: run() must not be called
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    assertBlocked (file:///workspace/dottie/packages/coordinator/dist/test/authGate.test.js:11:12)
+    TestContext.<anonymous> (file:///workspace/dottie/packages/coordinator/dist/test/authGate.test.js:35:15)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: DOT-061: auth state 'expired' blocks dispatch (0 run() calls, blocked_auth)
+not ok 5 - DOT-061: auth state 'expired' blocks dispatch (0 run() calls, blocked_auth)
+  ---
+  duration_ms: 2.198184
+  location: '/workspace/dottie/packages/coordinator/dist/test/authGate.test.js:30:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    expired: TaskRequested is never sent when not signed in (CONTRACTS §3)
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    assertBlocked (file:///workspace/dottie/packages/coordinator/dist/test/authGate.test.js:16:12)
+    TestContext.<anonymous> (file:///workspace/dottie/packages/coordinator/dist/test/authGate.test.js:35:15)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: DOT-061: auth state 'unsupported' blocks dispatch (0 run() calls, blocked_auth)
+not ok 6 - DOT-061: auth state 'unsupported' blocks dispatch (0 run() calls, blocked_auth)
+  ---
+  duration_ms: 1.212328
+  location: '/workspace/dottie/packages/coordinator/dist/test/authGate.test.js:30:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    unsupported: run() must not be called
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    assertBlocked (file:///workspace/dottie/packages/coordinator/dist/test/authGate.test.js:11:12)
+    TestContext.<anonymous> (file:///workspace/dottie/packages/coordinator/dist/test/authGate.test.js:35:15)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: DOT-061: auth state 'signed_out' blocks dispatch (0 run() calls, blocked_auth)
+not ok 7 - DOT-061: auth state 'signed_out' blocks dispatch (0 run() calls, blocked_auth)
+  ---
+  duration_ms: 2.010743
+  location: '/workspace/dottie/packages/coordinator/dist/test/authGate.test.js:30:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    signed_out: TaskRequested is never sent when not signed in (CONTRACTS §3)
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    assertBlocked (file:///workspace/dottie/packages/coordinator/dist/test/authGate.test.js:16:12)
+    TestContext.<anonymous> (file:///workspace/dottie/packages/coordinator/dist/test/authGate.test.js:35:15)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: DOT-061: an auth read that throws synchronously blocks dispatch
+not ok 8 - DOT-061: an auth read that throws synchronously blocks dispatch
+  ---
+  duration_ms: 1.005986
+  location: '/workspace/dottie/packages/coordinator/dist/test/authGate.test.js:38:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    sync throw: run() must not be called
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    assertBlocked (file:///workspace/dottie/packages/coordinator/dist/test/authGate.test.js:11:12)
+    TestContext.<anonymous> (file:///workspace/dottie/packages/coordinator/dist/test/authGate.test.js:43:11)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: DOT-061: an auth read that rejects blocks dispatch
+not ok 9 - DOT-061: an auth read that rejects blocks dispatch
+  ---
+  duration_ms: 4.017649
+  location: '/workspace/dottie/packages/coordinator/dist/test/authGate.test.js:45:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    rejected: run() must not be called
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    assertBlocked (file:///workspace/dottie/packages/coordinator/dist/test/authGate.test.js:11:12)
+    TestContext.<anonymous> (file:///workspace/dottie/packages/coordinator/dist/test/authGate.test.js:50:11)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: DOT-061: a hung auth read blocks after authReadTimeoutMs, and a late signed_in does not dispatch
+not ok 10 - DOT-061: a hung auth read blocks after authReadTimeoutMs, and a late signed_in does not dispatch
+  ---
+  duration_ms: 2.724772
+  location: '/workspace/dottie/packages/coordinator/dist/test/authGate.test.js:52:1'
+  failureType: 'cancelledByParent'
+  error: 'Promise resolution is still pending but the event loop has already resolved'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    process.emit (node:events:524:28)
+  ...
+# Subtest: DOT-061: a slow read that answers signed_in inside the bound dispatches
+not ok 11 - DOT-061: a slow read that answers signed_in inside the bound dispatches
+  ---
+  duration_ms: 0
+  location: '/workspace/dottie/packages/coordinator/dist/test/authGate.test.js:68:1'
+  failureType: 'cancelledByParent'
+  error: 'Promise resolution is still pending but the event loop has already resolved'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    process.emit (node:events:524:28)
+  ...
+# Subtest: DOT-061: auth flipping during CONFIRMING (between check and dispatch) blocks dispatch
+not ok 12 - DOT-061: auth flipping during CONFIRMING (between check and dispatch) blocks dispatch
+  ---
+  duration_ms: 0
+  location: '/workspace/dottie/packages/coordinator/dist/test/authGate.test.js:75:1'
+  failureType: 'cancelledByParent'
+  error: 'Promise resolution is still pending but the event loop has already resolved'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    process.emit (node:events:524:28)
+  ...
+# Subtest: DOT-061: a sign-out notification that lands while the auth read is in flight wins
+not ok 13 - DOT-061: a sign-out notification that lands while the auth read is in flight wins
+  ---
+  duration_ms: 0
+  location: '/workspace/dottie/packages/coordinator/dist/test/authGate.test.js:89:1'
+  failureType: 'cancelledByParent'
+  error: 'Promise resolution is still pending but the event loop has already resolved'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    process.emit (node:events:524:28)
+  ...
+# Subtest: DOT-061: every retry re-checks auth; expiry during backoff stops the retry
+not ok 14 - DOT-061: every retry re-checks auth; expiry during backoff stops the retry
+  ---
+  duration_ms: 0
+  location: '/workspace/dottie/packages/coordinator/dist/test/authGate.test.js:101:1'
+  failureType: 'cancelledByParent'
+  error: 'Promise resolution is still pending but the event loop has already resolved'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    process.emit (node:events:524:28)
+  ...
+# Subtest: DOT-061: a queued task is gated at its own dispatch time
+not ok 15 - DOT-061: a queued task is gated at its own dispatch time
+  ---
+  duration_ms: 0
+  location: '/workspace/dottie/packages/coordinator/dist/test/authGate.test.js:113:1'
+  failureType: 'cancelledByParent'
+  error: 'Promise resolution is still pending but the event loop has already resolved'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    process.emit (node:events:524:28)
+  ...
+# Subtest: DOT-061: completing sign-in afterwards resumes nothing (user re-issues the command)
+not ok 16 - DOT-061: completing sign-in afterwards resumes nothing (user re-issues the command)
+  ---
+  duration_ms: 0
+  location: '/workspace/dottie/packages/coordinator/dist/test/authGate.test.js:126:1'
+  failureType: 'cancelledByParent'
+  error: 'Promise resolution is still pending but the event loop has already resolved'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    process.emit (node:events:524:28)
+  ...
+# Subtest: DOT-061: boot with an unconfirmed auth state rests in AUTH_REQUIRED, not STANDBY
+not ok 17 - DOT-061: boot with an unconfirmed auth state rests in AUTH_REQUIRED, not STANDBY
+  ---
+  duration_ms: 0
+  location: '/workspace/dottie/packages/coordinator/dist/test/authGate.test.js:137:1'
+  failureType: 'cancelledByParent'
+  error: 'Promise resolution is still pending but the event loop has already resolved'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    process.emit (node:events:524:28)
+  ...
+# Subtest: DOT-061: plan_limit is never retried: one run, no RECOVERING, outcome failed, no API-key fallback
+not ok 18 - DOT-061: plan_limit is never retried: one run, no RECOVERING, outcome failed, no API-key fallback
+  ---
+  duration_ms: 0
+  location: '/workspace/dottie/packages/coordinator/dist/test/authGate.test.js:150:1'
+  failureType: 'cancelledByParent'
+  error: 'Promise resolution is still pending but the event loop has already resolved'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    process.emit (node:events:524:28)
+  ...
+# Subtest: report text never claims a clean stop when side effects exist (all combinations)
+ok 19 - report text never claims a clean stop when side effects exist (all combinations)
+  ---
+  duration_ms: 1.875526
+  ...
+# Subtest: cancel before any side effect: clean stop, propagated to Codex, reported as clean
+ok 20 - cancel before any side effect: clean stop, propagated to Codex, reported as clean
+  ---
+  duration_ms: 8.476452
+  ...
+# Subtest: cancel AFTER an external side effect is never reported as clean
+ok 21 - cancel AFTER an external side effect is never reported as clean
+  ---
+  duration_ms: 1.978927
+  ...
+# Subtest: cancel while a side-effecting tool is still in flight reports "possible", not clean and not committed
+ok 22 - cancel while a side-effecting tool is still in flight reports "possible", not clean and not committed
+  ---
+  duration_ms: 4.980531
+  ...
+# Subtest: unacknowledged cancel reports stop_unconfirmed; later side effects are surfaced, not swallowed
+ok 23 - unacknowledged cancel reports stop_unconfirmed; later side effects are surfaced, not swallowed
+  ---
+  duration_ms: 2.851372
+  ...
+# Subtest: cancel during VERIFYING reports that the task had already completed
+ok 24 - cancel during VERIFYING reports that the task had already completed
+  ---
+  duration_ms: 1.963055
+  ...
+# Subtest: cancel while an approval is pending denies the action and stops cleanly
+ok 25 - cancel while an approval is pending denies the action and stops cleanly
+  ---
+  duration_ms: 1.536456
+  ...
+# Subtest: cancel during backoff (RECOVERING) stops without another attempt
+ok 26 - cancel during backoff (RECOVERING) stops without another attempt
+  ---
+  duration_ms: 1.119933
+  ...
+# Subtest: stop speaking during execution halts TTS only; the task keeps running and finishes
+ok 27 - stop speaking during execution halts TTS only; the task keeps running and finishes
+  ---
+  duration_ms: 1.3493
+  ...
+# Subtest: stop speaking during the result response returns to standby without any cancel event
+ok 28 - stop speaking during the result response returns to standby without any cancel event
+  ---
+  duration_ms: 1.993536
+  ...
+# Subtest: new task during execution (queue policy): queued, not merged, runs after the first; overflow rejected
+ok 29 - new task during execution (queue policy): queued, not merged, runs after the first; overflow rejected
+  ---
+  duration_ms: 2.028257
+  ...
+# Subtest: new task during execution (cancel_then_start policy): first is cancelled honestly, then second runs
+ok 30 - new task during execution (cancel_then_start policy): first is cancelled honestly, then second runs
+  ---
+  duration_ms: 4.252312
+  ...
+# Subtest: shutdown during execution cancels first, records the stop, then reaches SHUTDOWN
+ok 31 - shutdown during execution cancels first, records the stop, then reaches SHUTDOWN
+  ---
+  duration_ms: 1.796175
+  ...
+# Subtest: every event the coordinator emits validates against contract v1 and carries ids + timestamps
+ok 32 - every event the coordinator emits validates against contract v1 and carries ids + timestamps
+  ---
+  duration_ms: 9.756425
+  ...
+# Subtest: inbound E05/E06 events validate too
+ok 33 - inbound E05/E06 events validate too
+  ---
+  duration_ms: 0.303002
+  ...
+# Subtest: validator rejects unknown versions, unknown types, missing fields, bad enums and bad timestamps
+ok 34 - validator rejects unknown versions, unknown types, missing fields, bad enums and bad timestamps
+  ---
+  duration_ms: 0.299361
+  ...
+# Subtest: happy path walks the spec state sequence and reports a verified outcome
+ok 35 - happy path walks the spec state sequence and reports a verified outcome
+  ---
+  duration_ms: 13.720699
+  ...
+# Subtest: tool-reported success without verification is not reported as success
+ok 36 - tool-reported success without verification is not reported as success
+  ---
+  duration_ms: 2.067141
+  ...
+# Subtest: injected verifier decides the postcondition
+ok 37 - injected verifier decides the postcondition
+  ---
+  duration_ms: 4.275361
+  ...
+# Subtest: invalid inputs are rejected and logged, never silently applied
+ok 38 - invalid inputs are rejected and logged, never silently applied
+  ---
+  duration_ms: 3.84759
+  ...
+# Subtest: mute blocks wake; mute during a task is deferred and applied when the task ends
+ok 39 - mute blocks wake; mute during a task is deferred and applied when the task ends
+  ---
+  duration_ms: 1.985641
+  ...
+# Subtest: expired sign-in: wake still works, dispatch is blocked truthfully, reconnect returns to STANDBY
+ok 40 - expired sign-in: wake still works, dispatch is blocked truthfully, reconnect returns to STANDBY
+  ---
+  duration_ms: 1.275871
+  ...
+# Subtest: auth expiring mid-task goes to AUTH_REQUIRED and is not retried
+ok 41 - auth expiring mid-task goes to AUTH_REQUIRED and is not retried
+  ---
+  duration_ms: 1.402568
+  ...
+# Subtest: transient failures retry with exponential backoff, resume the same thread, then succeed
+ok 42 - transient failures retry with exponential backoff, resume the same thread, then succeed
+  ---
+  duration_ms: 2.468789
+  ...
+# Subtest: retries are bounded by maxAttempts
+ok 43 - retries are bounded by maxAttempts
+  ---
+  duration_ms: 2.688819
+  ...
+# Subtest: never retries after a side effect was committed (or may have been)
+ok 44 - never retries after a side effect was committed (or may have been)
+  ---
+  duration_ms: 3.29469
+  ...
+# Subtest: fatal errors are not retried
+ok 45 - fatal errors are not retried
+  ---
+  duration_ms: 0.776668
+  ...
+# Subtest: approval: secure UI approves; voice cannot approve under the default fail-closed policy; single use
+ok 46 - approval: secure UI approves; voice cannot approve under the default fail-closed policy; single use
+  ---
+  duration_ms: 1.315804
+  ...
+# Subtest: approval: a spoken "no" is accepted as a denial; silence expires to denial
+ok 47 - approval: a spoken "no" is accepted as a denial; silence expires to denial
+  ---
+  duration_ms: 2.1457
+  ...
+# Subtest: pre-dispatch CONFIRMING: decline finishes as declined without contacting Codex
+ok 48 - pre-dispatch CONFIRMING: decline finishes as declined without contacting Codex
+  ---
+  duration_ms: 2.117418
+  ...
+# Subtest: idle faults: recoverable -> RECOVERING -> STANDBY; fatal -> ERROR -> RECOVERING -> STANDBY
+ok 49 - idle faults: recoverable -> RECOVERING -> STANDBY; fatal -> ERROR -> RECOVERING -> STANDBY
+  ---
+  duration_ms: 0.309048
+  ...
+# Subtest: empty transcription prompts and returns to standby without creating a task
+ok 50 - empty transcription prompts and returns to standby without creating a task
+  ---
+  duration_ms: 0.520213
+  ...
+# Subtest: normalisation ignores case, punctuation, spacing and a leading wake word
+ok 51 - normalisation ignores case, punctuation, spacing and a leading wake word
+  ---
+  duration_ms: 2.607361
+  ...
+# Subtest: guard: same requestId always duplicate; same text only within the window; allowRepeat bypasses text only
+ok 52 - guard: same requestId always duplicate; same text only within the window; allowRepeat bypasses text only
+  ---
+  duration_ms: 6.883598
+  ...
+# Subtest: coordinator: replayed UtteranceReady and double-wake resubmission produce exactly one Codex run
+ok 53 - coordinator: replayed UtteranceReady and double-wake resubmission produce exactly one Codex run
+  ---
+  duration_ms: 14.353438
+  ...
+# Subtest: transition table covers every state and only targets known states
+ok 54 - transition table covers every state and only targets known states
+  ---
+  duration_ms: 2.169204
+  ...
+# Subtest: spec happy path (with and without CONFIRMING) is valid
+ok 55 - spec happy path (with and without CONFIRMING) is valid
+  ---
+  duration_ms: 0.146976
+  ...
+# Subtest: every additional state is reachable from the main loop and can leave (except SHUTDOWN)
+ok 56 - every additional state is reachable from the main loop and can leave (except SHUTDOWN)
+  ---
+  duration_ms: 0.266335
+  ...
+# Subtest: a running task can never be silently abandoned
+ok 57 - a running task can never be silently abandoned
+  ---
+  duration_ms: 0.125325
+  ...
+# Subtest: StateMachine applies exactly the table: exhaustive pairwise check
+ok 58 - StateMachine applies exactly the table: exhaustive pairwise check
+  ---
+  duration_ms: 0.749578
+  ...
+# Subtest: invalid transitions are rejected, logged, recorded and not applied
+ok 59 - invalid transitions are rejected, logged, recorded and not applied
+  ---
+  duration_ms: 0.237327
+  ...
+1..59
+# tests 59
+# suites 0
+# pass 42
+# fail 8
+# cancelled 9
+# skipped 0
+# todo 0
+# duration_ms 187.312901

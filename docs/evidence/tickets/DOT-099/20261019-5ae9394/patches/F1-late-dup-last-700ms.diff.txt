@@ -1,0 +1,12 @@
+diff --git a/apps/desktop/src/main/main.ts b/apps/desktop/src/main/main.ts
+index 74ddc74..e886c65 100644
+--- a/apps/desktop/src/main/main.ts
++++ b/apps/desktop/src/main/main.ts
+@@ -516,6 +516,7 @@ async function smokeApproval(approvalWindow: ApprovalWindow, coordinator: StubCo
+     : null;
+   out['boundPath'] = boundProbe;
+   await clickThatCloses('bound.decline', '9'.repeat(64), wc, `document.getElementById('decline').click()`, replies, closed);
++  setTimeout(() => { const last = coordinator.resolutions[coordinator.resolutions.length - 1]; if (last) coordinator.resolutions.push(last); }, 400); // FAULT F1 (never commit): dup of 9 ~700 ms after close
+   // DOT-098 (E07 recheck): ONE check on the full ordered reply sequence (actionId, approved, count).
+   // Runs after the last click's settle window, so a late duplicate from any click is counted too.
+   out['replySequence'] = replyEntries(coordinator).map((r) => `${shortActionId(r.actionId)}/${String(r.approved)}`);

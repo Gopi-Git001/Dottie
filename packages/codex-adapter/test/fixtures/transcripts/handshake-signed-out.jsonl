@@ -1,0 +1,8 @@
+# Handshake + signed-out read. Server messages copied from arch/evidence/linux-smoke/appserver-0.163.0-unauth.jsonl.txt
+# (V-run L3-8), redacted: userAgent host, codexHome path, serverName, installationId.
+>> {"method":"initialize","params":{"clientInfo":{"name":"dottie","title":"Dottie","version":"0.1.0-test"},"capabilities":{"experimentalApi":false,"requestAttestation":false}}}
+<< {"id":"$","result":{"userAgent":"dottie/0.163.0 (<redacted-os>; x86_64) dumb (dottie; 0.1.0-test)","codexHome":"/redacted/codex-home","platformFamily":"unix","platformOs":"linux"}}
+>> {"method":"initialized"}
+>> {"method":"account/read","params":{"refreshToken":false}}
+<< {"method":"remoteControl/status/changed","params":{"status":"disabled","serverName":"<redacted-host>","installationId":"00000000-0000-4000-8000-000000000000","environmentId":null},"emittedAtMs":1792330220394}
+<< {"id":"$","result":{"account":null,"requiresOpenaiAuth":true,"workspaceRouting":null}}

@@ -1,0 +1,37 @@
+{
+ "header": {
+  "caseId": "DOT-064-baseline",
+  "commit": "9220bf4",
+  "build": null,
+  "installerSha256": null,
+  "startedAt": "2026-10-19T01:33:49-05:00",
+  "finishedAt": "2026-10-19T01:33:50-05:00",
+  "runner": "named host: grok-box (linux)",
+  "command": "cd src/verifier && python3 -m pytest -q -p no:cacheprovider",
+  "exitCode": 0,
+  "durationMs": 822,
+  "result": "pass",
+  "platform": "Linux box (Linux fakes only, no Windows build); NOT Windows evidence",
+  "tree": "committed tree 9220bf4 (src/verifier tracked); run from git archive, so no uncommitted change can be in it",
+  "srcVerifierContentSha256": "e68e4f3e8bc10d13f046c35a29b58fa1ab71eed6453e9a58601ad7499866ab1b"
+ },
+ "ticket": "DOT-064",
+ "metric": "pytest passed, src/verifier (Linux fakes)",
+ "acceptance": "arch/BACKLOG.md DOT-064 acceptance 4: green with >= baseline passed; the count must never drop below the recorded baseline",
+ "previousBaseline": {
+  "passed": 400,
+  "source": "docs/evidence/tickets/DOT-064/20261019-6c05524 (sealed, commit c24eb44 via addendum 1); the interim 426-passed run at 410b59e was reported but not recorded as a pack"
+ },
+ "newBaseline": {
+  "passed": 455,
+  "failed": 0,
+  "evidence": "20261019T013349-0500_9220bf4_DOT-064-pytest_log.txt"
+ },
+ "direction": "up",
+ "allowed": true,
+ "lintBaseline": {
+  "findings": 0,
+  "ruff": "0.17.1"
+ },
+ "notRecordedIn": "arch/BACKLOG.md (DOT-064 acceptance 4) is owned by E01; arch/ is not edited by E11. E01 raises the floor citing this pack."
+}

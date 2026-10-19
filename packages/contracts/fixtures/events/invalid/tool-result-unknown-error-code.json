@@ -1,0 +1,40 @@
+{
+  "errorPath": "payload.error.code",
+  "event": {
+    "schema": "dottie.event",
+    "version": 2,
+    "type": "ToolResult",
+    "eventId": "evt-toolresult",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-18T14:03:00.123-05:00",
+    "payload": {
+      "taskId": "task-1",
+      "toolId": "files.find",
+      "observedState": {
+        "outcome": "unverified",
+        "decision": "ask_user",
+        "checks": {},
+        "sideEffect": "none",
+        "question": "Which report?",
+        "candidates": [
+          {
+            "id": "c1",
+            "label": "report.docx"
+          },
+          {
+            "id": "c2",
+            "label": "report (1).docx"
+          }
+        ]
+      },
+      "verified": false,
+      "error": {
+        "code": "INVALID_ARGS",
+        "message": "Malformed targetId",
+        "retryable": false
+      },
+      "sideEffect": "none"
+    },
+    "taskId": "task-1"
+  }
+}

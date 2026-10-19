@@ -1,0 +1,31 @@
+{
+  "errorPath": "payload.display.app.processImage",
+  "event": {
+    "schema": "dottie.event",
+    "version": 2,
+    "type": "ApprovalRequested",
+    "eventId": "evt-approvalrequested",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-18T14:03:00.123-05:00",
+    "payload": {
+      "taskId": "task-1",
+      "actionId": "3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f",
+      "summary": "Close a Notepad window",
+      "risk": "medium",
+      "expiry": "2026-10-18T14:05:00-05:00",
+      "category": "local_change",
+      "display": {
+        "kind": "ui_action",
+        "category": "local_change",
+        "method": "window.close",
+        "app": {
+          "appName": "Notepad",
+          "windowTitle": "notes.txt - Notepad",
+          "processImage": "C:\\Windows\\notepad.exe"
+        }
+      },
+      "requestSource": "tool_host"
+    },
+    "taskId": "task-1"
+  }
+}

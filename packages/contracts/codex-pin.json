@@ -1,0 +1,32 @@
+{
+  "name": "openai/codex",
+  "tag": "rust-v0.163.0",
+  "version": "0.163.0",
+  "tagObject": "129b8ec7ee6f4511557a4856279f529025c25af4",
+  "commit": "83086188ae0614bd882818ff1aa23f3194962012",
+  "publishedAt": "2026-10-15T21:30:38Z",
+  "releaseUrl": "https://github.com/openai/codex/releases/tag/rust-v0.163.0",
+  "note": "Machine-readable pin used by the codegen scripts and the adapter's launch-time sha256 check. The human-readable record is E01's docs/dependencies.md (DOT-009). Asset digests are the GitHub releases API `digest` values (arch/evidence/codex-0.163.0-windows-assets.sha256 for Windows).",
+  "assets": {
+    "codex-x86_64-unknown-linux-musl.tar.gz": "beb339e8ecd9ba057a6bb2dc81ad8ca474812edfbf0fc5056ca818797648dde4",
+    "codex-x86_64-pc-windows-msvc.exe": "2692c8c7bb2cf8b0aefe638741fc90236f4b824c59578ce84994f9de58200993",
+    "codex-x86_64-pc-windows-msvc.exe.zip": "dabdb4d16aaf10fea40b74811c96efddcd9138f122163b69ed604fcb3eb704c3",
+    "codex-app-server-x86_64-pc-windows-msvc.exe": "0628f6a5d5e304b7970dc0f53abd4a3ff084e9e14b79429ac0ebf92e37329412",
+    "codex-app-server-x86_64-pc-windows-msvc.exe.zip": "c12aef2643b5e8b93b8626e4fe81df7fd6793ed597e60790fdd4837a6d45122c",
+    "codex-app-server-package-x86_64-pc-windows-msvc.tar.gz": "abee5d71e80c4707b26f4c3c7b65b0f736ed3b7e7918b4f9b14a94ad89ff781c"
+  },
+  "binaries": {
+    "linux-x64": {
+      "asset": "codex-x86_64-unknown-linux-musl.tar.gz",
+      "file": "codex-x86_64-unknown-linux-musl",
+      "sha256": "399ff69c431c066e40de318fba45c2b07f45a76b19939d247ee4828fc70c4215",
+      "provenance": "sha256 of the file extracted from the asset after the asset matched its API digest (box, 2026-10-19; same value as arch/evidence/linux-smoke/codex-0.163.0-linux.sha256)"
+    },
+    "win32-x64": {
+      "asset": "codex-x86_64-pc-windows-msvc.exe",
+      "file": "codex-x86_64-pc-windows-msvc.exe",
+      "sha256": "2692c8c7bb2cf8b0aefe638741fc90236f4b824c59578ce84994f9de58200993",
+      "provenance": "GitHub releases API digest of the bare .exe asset. Which Windows artifact ships is open (ADR-0003, W1-S1)"
+    }
+  }
+}

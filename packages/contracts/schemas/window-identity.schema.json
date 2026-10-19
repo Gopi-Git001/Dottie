@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:dottie:contracts:window-identity:v1",
+  "title": "WindowIdentity (CONTRACTS §3.3)",
+  "$comment": "TS-only rules (validateWindowIdentity): hwnd <= 2^64-1, pid <= 2^32-1, processStartTime <= 2^63-1; windowClass is 1-256 UTF-16 code units (JSON Schema counts code points) with no lone surrogate. Any failure = the window has no identity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "hwnd",
+    "pid",
+    "windowClass",
+    "processStartTime"
+  ],
+  "properties": {
+    "hwnd": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*$",
+      "not": {
+        "pattern": "\\n"
+      },
+      "maxLength": 20
+    },
+    "pid": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*$",
+      "not": {
+        "pattern": "\\n"
+      },
+      "maxLength": 10
+    },
+    "windowClass": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "processStartTime": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*$",
+      "not": {
+        "pattern": "\\n"
+      },
+      "maxLength": 19
+    }
+  }
+}

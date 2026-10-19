@@ -1,0 +1,11 @@
+# {"caseId": "DOT-061-red-isolated", "commit": "6c05524", "build": null, "installerSha256": null, "startedAt": "2026-10-19T00:51:18-05:00", "finishedAt": "2026-10-19T00:51:31-05:00", "runner": "named host: grok-box (linux)", "command": "node --test --test-name-pattern=<name> dist/test/authGate.test.js (per test, timeout-bounded)", "exitCode": 1, "durationMs": null, "result": "fail", "platform": "Linux box (Node v20.19.2); NOT Windows evidence", "tree": "dirty: packages/coordinator untracked on branch owned by E06; HEAD 6c05524 does not contain this code"}
+# note: each test that was cancelled in the red run, rerun alone. 'slow read' and 'completing sign-in resumes nothing' are positive controls that held before the fix.
+hung auth read => # pass 0 # fail 0    error: 'Promise resolution is still pending but the event loop has already resolved'
+slow read => # pass 1 # fail 0  
+flipping during CONFIRMING => # pass 0 # fail 1    error: |-
+sign-out notification => # pass 0 # fail 1    error: |-
+every retry re-checks => # pass 0 # fail 1    error: |-
+queued task is gated => # pass 0 # fail 1    error: |-
+completing sign-in => # pass 1 # fail 0  
+boot with an unconfirmed => # pass 0 # fail 1    error: |-
+plan_limit is never => # pass 0 # fail 1    error: |-

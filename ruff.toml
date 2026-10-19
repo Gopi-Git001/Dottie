@@ -1,0 +1,14 @@
+# Repo-wide ruff config (E01, 2026-10-19). Same pin as packages/verifier (DOT-064): ruff 0.17.1.
+# This applies to every Python file without a closer config. packages/verifier keeps its own frozen rule
+# set in its pyproject.toml (ruff uses the nearest config); that set now also selects E501 at 100.
+# Verifier lint is report-only in CI until DOT-086 (55 findings on 2026-10-19: 53 E501, 1 F401, 1 PLR0402).
+required-version = "==0.17.1"
+line-length = 100
+target-version = "py311"
+# Frozen evidence artifacts are not reformatted (dottie-evidence-pack: evidence must match what ran):
+# docs/evidence/W1/linux-smoke/probe_unauth.py (30 findings) and docs/voice/e10-sim/ (2 findings; needs the MDC mirror).
+extend-exclude = ["**/node_modules", "**/dist", "docs/evidence/**", "docs/voice/e10-sim/**"]
+
+[lint]
+# ruff defaults plus E501 (line too long) at line-length 100.
+select = ["E4", "E7", "E9", "F", "E501"]

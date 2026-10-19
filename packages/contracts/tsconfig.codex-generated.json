@@ -1,0 +1,13 @@
+{
+  "//": "Type-checks the checked-in generate-ts output. ts-rs emits extensionless relative imports, so this uses Bundler resolution and never emits.",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "types": []
+  },
+  "include": ["codex-generated/ts/**/*.ts"]
+}

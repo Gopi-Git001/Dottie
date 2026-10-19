@@ -1,0 +1,126 @@
+# {"caseId": "DOT-061-bind-mutation", "commit": "3029c7b", "build": null, "installerSha256": null, "startedAt": null, "finishedAt": null, "runner": "named host: grok-box (linux)", "command": "python3 mut5.py (+ mut5b.py B12 rerun after test fix); backups compared with cmp after the run", "exitCode": 0, "durationMs": null, "result": "22/22 killed (B12 after test fix)", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "tree": "working copy == 3029c7b"}
+B1 possibleRepeat dropped from args: KILLED (4 failing)
+    not ok 1 - actionId: the CONFIRMING path gets its id from the ActionIdPort with the CR2 binding; IdSource is never asked for one
+    not ok 9 - binding (§2.1, 1q): a non-retry confirmation binds possibleRepeat null and retryOfTaskId null; args.displayHash == top-level displayHash == hash of the emitted display
+    not ok 10 - binding (§2.1): a clean-failure retry with a policy-required approval binds retryOfTaskId with possibleRepeat null
+    not ok 11 - binding (§2.1): a possible-repeat retry binds possibleRepeat = priorSideEffect and retryOfTaskId = the prior task, in args and display
+B2 retryOfTaskId dropped from args: KILLED (4 failing)
+    not ok 1 - actionId: the CONFIRMING path gets its id from the ActionIdPort with the CR2 binding; IdSource is never asked for one
+    not ok 9 - binding (§2.1, 1q): a non-retry confirmation binds possibleRepeat null and retryOfTaskId null; args.displayHash == top-level displayHash == hash of the emitted display
+    not ok 10 - binding (§2.1): a clean-failure retry with a policy-required approval binds retryOfTaskId with possibleRepeat null
+    not ok 11 - binding (§2.1): a possible-repeat retry binds possibleRepeat = priorSideEffect and retryOfTaskId = the prior task, in args and display
+B3 displayHash dropped from args: KILLED (3 failing)
+    not ok 1 - actionId: the CONFIRMING path gets its id from the ActionIdPort with the CR2 binding; IdSource is never asked for one
+    not ok 9 - binding (§2.1, 1q): a non-retry confirmation binds possibleRepeat null and retryOfTaskId null; args.displayHash == top-level displayHash == hash of the emitted display
+    not ok 11 - binding (§2.1): a possible-repeat retry binds possibleRepeat = priorSideEffect and retryOfTaskId = the prior task, in args and display
+B4 top-level displayHash null: KILLED (2 failing)
+    not ok 1 - actionId: the CONFIRMING path gets its id from the ActionIdPort with the CR2 binding; IdSource is never asked for one
+    not ok 9 - binding (§2.1, 1q): a non-retry confirmation binds possibleRepeat null and retryOfTaskId null; args.displayHash == top-level displayHash == hash of the emitted display
+B5 possibleRepeat even on read / no repeat: KILLED (8 failing)
+    not ok 1 - actionId: the CONFIRMING path gets its id from the ActionIdPort with the CR2 binding; IdSource is never asked for one
+    not ok 4 - actionId: a valid hex id flows end to end: approve → dispatched; deny → declined; expiry → declined
+    not ok 9 - binding (§2.1, 1q): a non-retry confirmation binds possibleRepeat null and retryOfTaskId null; args.displayHash == top-level displayHash == hash of the emitted display
+    not ok 10 - binding (§2.1): a clean-failure retry with a policy-required approval binds retryOfTaskId with possibleRepeat null
+    not ok 124 - C-25 (D14): a read-category retry gets no possibleRepeat (no warning), but still goes through approval
+    not ok 141 - C-25 (D14, E01 rule 1): a clean-failure retry gets no forced approval; a policy-produced approval for it carries no possibleRepeat
+    not ok 151 - E01 retry set: a 'declined' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+    not ok 166 - E01 1m (2): the C-08 timeout emits ApprovalResolved{approved:false} exactly once, before TaskFinished; a late approve has no effect
+B6 display hash failure ignored: KILLED (4 failing)
+    not ok 5 - actionId: no ActionIdPort wired (default until DOT-090) → fail closed: no ApprovalRequested, declined, warning without args
+    not ok 13 - binding (X5 fail closed): displayHash no displayHash method → no ApprovalRequested, declined approval_unavailable, nothing dispatched, copy never says the user declined
+    not ok 14 - binding (X5 fail closed): displayHash throws → no ApprovalRequested, declined approval_unavailable, nothing dispatched, copy never says the user declined
+    not ok 15 - binding (X5 fail closed): displayHash malformed output → no ApprovalRequested, declined approval_unavailable, nothing dispatched, copy never says the user declined
+B7 Codex display missing -> generic fallback: KILLED (18 failing)
+    not ok 16 - Codex display (1o): no adapter params → declined display_unavailable, no ApprovalRequested, warning without values, nothing approved
+    not ok 17 - Codex display (1o): a command shows the full command line (no ellipsis), cwd, network flag, the escalation as its own field, Codex reason only in the untrusted slot
+    not ok 18 - Codex display (1o): a file change shows every full path and the count; 500 paths ok; 501 paths or a command over 8 KB → display_unavailable
+    not ok 19 - Codex display (1o): a display port plugs in (E02 params) and its output is what is shown; a throwing port → display_unavailable
+    not ok 20 - Codex join (1o c / 1p): a joined request is declined at once with duplicate_request; only the first can be approved; each request answered exactly once; joinedTo logged; no "you declined" copy
+    not ok 21 - Codex join (1o): on the C-08 timeout the dialog expires once (one ApprovalResolved{expired}, before TaskFinished) and the joined request had already been declined
+    not ok 22 - validateEvent (X5, 1l/1m/1o): display is required and must follow its kind rule
+    not ok 23 - validateEvent (1o/1q): TaskProgress awaitingClarification boolean, turnsSoFar number; awaitingClarification:true only in LISTENING
+    not ok 24 - 1q: every coordinator TaskProgress with awaitingClarification:true is emitted in LISTENING (both emit sites), and carries turnsSoFar
+    not ok 25 - 1r: requestSource is set from coordinator state (coordinator for pre-dispatch, codex for Codex approvals) and bound in CR2; an adapter-supplied one is ignored
+    not ok 26 - 1r validateEvent: requestSource required (codex | tool_host | coordinator); every wrong kind/source pairing rejected; UI-action methods only as ui_action
+    not ok 27 - 1r validateEvent: each pre_dispatch mismatch is rejected (possibleRepeat, retryOfTaskId vs priorTaskId, category, risk)
+    not ok 28 - DOT-060 AC 11 (1r follow-up): a clean-failure retry (possibleRepeat null) whose display.retryOfTaskId differs from the utterance retryOfTaskId emits no ApprovalRequested and dispatches nothing
+    not ok 29 - DOT-060 AC 11 (control): the same clean-failure retry without the bug emits the approval with display.retryOfTaskId = the utterance retryOfTaskId
+    not ok 30 - 1r: one builder per kind; each builder output validates only with its own requestSource; builders fail closed on missing fields
+    not ok 31 - 1t codex_command: a multi-line command shows its lines and line count; CRLF normalised for display only; the bound (hashed) command is the raw bytes
+    not ok 32 - 1t codex_command: ESC, a lone CR, U+202E, zero-width, BOM and soft hyphen render as visible escapes with the badge; tab and trailing spaces are visible; nothing is stripped from the bound value
+    not ok 33 - 1t: bound paths and the window title keep hidden characters (rendered, not stripped); only the untrusted summary/reason slots are stripped
+B8 join not declined: KILLED (5 failing)
+    not ok 20 - Codex join (1o c / 1p): a joined request is declined at once with duplicate_request; only the first can be approved; each request answered exactly once; joinedTo logged; no "you declined" copy
+    not ok 21 - Codex join (1o): on the C-08 timeout the dialog expires once (one ApprovalResolved{expired}, before TaskFinished) and the joined request had already been declined
+    not ok 36 - DOT-060 AC 10 (E01 1m): a joined request (declined, 1o c) never extends the FIRST expiry; one ApprovalResolved{decision:expired} for the one dialog
+    not ok 161 - E01 (1j/1o): a joined (duplicate) Codex approval keeps the FIRST expiry and one ApprovalRequested; the joined request itself is declined duplicate_request (1o c)
+    not ok 165 - E01 1o (c) (supersedes 1k c for Codex): a join after an approved or expired answer is declined duplicate_request (never replayed) and never reopens the dialog
+B9 8 KB limit removed: KILLED (16 failing)
+    not ok 18 - Codex display (1o): a file change shows every full path and the count; 500 paths ok; 501 paths or a command over 8 KB → display_unavailable
+    not ok 19 - Codex display (1o): a display port plugs in (E02 params) and its output is what is shown; a throwing port → display_unavailable
+    not ok 20 - Codex join (1o c / 1p): a joined request is declined at once with duplicate_request; only the first can be approved; each request answered exactly once; joinedTo logged; no "you declined" copy
+    not ok 21 - Codex join (1o): on the C-08 timeout the dialog expires once (one ApprovalResolved{expired}, before TaskFinished) and the joined request had already been declined
+    not ok 22 - validateEvent (X5, 1l/1m/1o): display is required and must follow its kind rule
+    not ok 23 - validateEvent (1o/1q): TaskProgress awaitingClarification boolean, turnsSoFar number; awaitingClarification:true only in LISTENING
+    not ok 24 - 1q: every coordinator TaskProgress with awaitingClarification:true is emitted in LISTENING (both emit sites), and carries turnsSoFar
+    not ok 25 - 1r: requestSource is set from coordinator state (coordinator for pre-dispatch, codex for Codex approvals) and bound in CR2; an adapter-supplied one is ignored
+    not ok 26 - 1r validateEvent: requestSource required (codex | tool_host | coordinator); every wrong kind/source pairing rejected; UI-action methods only as ui_action
+    not ok 27 - 1r validateEvent: each pre_dispatch mismatch is rejected (possibleRepeat, retryOfTaskId vs priorTaskId, category, risk)
+    not ok 28 - DOT-060 AC 11 (1r follow-up): a clean-failure retry (possibleRepeat null) whose display.retryOfTaskId differs from the utterance retryOfTaskId emits no ApprovalRequested and dispatches nothing
+    not ok 29 - DOT-060 AC 11 (control): the same clean-failure retry without the bug emits the approval with display.retryOfTaskId = the utterance retryOfTaskId
+    not ok 30 - 1r: one builder per kind; each builder output validates only with its own requestSource; builders fail closed on missing fields
+    not ok 31 - 1t codex_command: a multi-line command shows its lines and line count; CRLF normalised for display only; the bound (hashed) command is the raw bytes
+    not ok 32 - 1t codex_command: ESC, a lone CR, U+202E, zero-width, BOM and soft hyphen render as visible escapes with the badge; tab and trailing spaces are visible; nothing is stripped from the bound value
+    not ok 33 - 1t: bound paths and the window title keep hidden characters (rendered, not stripped); only the untrusted summary/reason slots are stripped
+B10 500-path limit removed (builder): KILLED (16 failing)
+    not ok 18 - Codex display (1o): a file change shows every full path and the count; 500 paths ok; 501 paths or a command over 8 KB → display_unavailable
+    not ok 19 - Codex display (1o): a display port plugs in (E02 params) and its output is what is shown; a throwing port → display_unavailable
+    not ok 20 - Codex join (1o c / 1p): a joined request is declined at once with duplicate_request; only the first can be approved; each request answered exactly once; joinedTo logged; no "you declined" copy
+    not ok 21 - Codex join (1o): on the C-08 timeout the dialog expires once (one ApprovalResolved{expired}, before TaskFinished) and the joined request had already been declined
+    not ok 22 - validateEvent (X5, 1l/1m/1o): display is required and must follow its kind rule
+    not ok 23 - validateEvent (1o/1q): TaskProgress awaitingClarification boolean, turnsSoFar number; awaitingClarification:true only in LISTENING
+    not ok 24 - 1q: every coordinator TaskProgress with awaitingClarification:true is emitted in LISTENING (both emit sites), and carries turnsSoFar
+    not ok 25 - 1r: requestSource is set from coordinator state (coordinator for pre-dispatch, codex for Codex approvals) and bound in CR2; an adapter-supplied one is ignored
+    not ok 26 - 1r validateEvent: requestSource required (codex | tool_host | coordinator); every wrong kind/source pairing rejected; UI-action methods only as ui_action
+    not ok 27 - 1r validateEvent: each pre_dispatch mismatch is rejected (possibleRepeat, retryOfTaskId vs priorTaskId, category, risk)
+    not ok 28 - DOT-060 AC 11 (1r follow-up): a clean-failure retry (possibleRepeat null) whose display.retryOfTaskId differs from the utterance retryOfTaskId emits no ApprovalRequested and dispatches nothing
+    not ok 29 - DOT-060 AC 11 (control): the same clean-failure retry without the bug emits the approval with display.retryOfTaskId = the utterance retryOfTaskId
+    not ok 30 - 1r: one builder per kind; each builder output validates only with its own requestSource; builders fail closed on missing fields
+    not ok 31 - 1t codex_command: a multi-line command shows its lines and line count; CRLF normalised for display only; the bound (hashed) command is the raw bytes
+    not ok 32 - 1t codex_command: ESC, a lone CR, U+202E, zero-width, BOM and soft hyphen render as visible escapes with the badge; tab and trailing spaces are visible; nothing is stripped from the bound value
+    not ok 33 - 1t: bound paths and the window title keep hidden characters (rendered, not stripped); only the untrusted summary/reason slots are stripped
+B11 kind/source guard removed: KILLED (2 failing)
+    not ok 26 - 1r validateEvent: requestSource required (codex | tool_host | coordinator); every wrong kind/source pairing rejected; UI-action methods only as ui_action
+    not ok 30 - 1r: one builder per kind; each builder output validates only with its own requestSource; builders fail closed on missing fields
+B12 ui_action app fields not required: SURVIVED (0 failing)
+B13 display not required: KILLED (1 failing)
+    not ok 22 - validateEvent (X5, 1l/1m/1o): display is required and must follow its kind rule
+B14 requestSource from adapter: KILLED (1 failing)
+    not ok 25 - 1r: requestSource is set from coordinator state (coordinator for pre-dispatch, codex for Codex approvals) and bound in CR2; an adapter-supplied one is ignored
+B15 AC 11 display retry check removed: KILLED (1 failing)
+    not ok 28 - DOT-060 AC 11 (1r follow-up): a clean-failure retry (possibleRepeat null) whose display.retryOfTaskId differs from the utterance retryOfTaskId emits no ApprovalRequested and dispatches nothing
+B16 awaitingClarification back on the non-LISTENING site: KILLED (2 failing)
+    not ok 24 - 1q: every coordinator TaskProgress with awaitingClarification:true is emitted in LISTENING (both emit sites), and carries turnsSoFar
+    not ok 153 - E01 retry set: a 'clarification' prior is not retryable → TaskFinished{failed, retry_not_allowed}, no dispatch, no speech
+B17 validator: awaitingClarification in any state: KILLED (1 failing)
+    not ok 23 - validateEvent (1o/1q): TaskProgress awaitingClarification boolean, turnsSoFar number; awaitingClarification:true only in LISTENING
+B18 bound command stripped (1t): KILLED (3 failing)
+    not ok 31 - 1t codex_command: a multi-line command shows its lines and line count; CRLF normalised for display only; the bound (hashed) command is the raw bytes
+    not ok 32 - 1t codex_command: ESC, a lone CR, U+202E, zero-width, BOM and soft hyphen render as visible escapes with the badge; tab and trailing spaces are visible; nothing is stripped from the bound value
+    not ok 33 - 1t: bound paths and the window title keep hidden characters (rendered, not stripped); only the untrusted summary/reason slots are stripped
+B19 renderer strips instead of escaping: KILLED (2 failing)
+    not ok 32 - 1t codex_command: ESC, a lone CR, U+202E, zero-width, BOM and soft hyphen render as visible escapes with the badge; tab and trailing spaces are visible; nothing is stripped from the bound value
+    not ok 33 - 1t: bound paths and the window title keep hidden characters (rendered, not stripped); only the untrusted summary/reason slots are stripped
+B20 pre_dispatch retryOfTaskId vs priorTaskId unchecked: KILLED (1 failing)
+    not ok 27 - 1r validateEvent: each pre_dispatch mismatch is rejected (possibleRepeat, retryOfTaskId vs priorTaskId, category, risk)
+B21 extra fields allowed: KILLED (1 failing)
+    not ok 26 - 1r validateEvent: requestSource required (codex | tool_host | coordinator); every wrong kind/source pairing rejected; UI-action methods only as ui_action
+B22 wrong requestSource in CR2: KILLED (2 failing)
+    not ok 1 - actionId: the CONFIRMING path gets its id from the ActionIdPort with the CR2 binding; IdSource is never asked for one
+    not ok 25 - 1r: requestSource is set from coordinator state (coordinator for pre-dispatch, codex for Codex approvals) and bound in CR2; an adapter-supplied one is ignored
+TOTAL 21/22 killed
+DONE
+## B12 rerun after strengthening the display-rule test
+B12 ui_action app fields not required (rerun after test fix): KILLED (1 failing)
+    not ok 22 - validateEvent (X5, 1l/1m/1o): display is required and must follow its kind rule
+TOTAL 1/1 killed

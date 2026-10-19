@@ -1,0 +1,8 @@
+# {"caseId": "DOT-061+E01-R1-mutation", "commit": "16b3880", "build": null, "installerSha256": null, "startedAt": "2026-10-19T01:07:17-05:00", "finishedAt": "2026-10-19T01:07:17-05:00", "runner": "named host: grok-box (linux)", "command": "temporary src mutation, npx tsc, node --test --test-timeout=8000 dist/test/*.test.js; src restored after each (diff-verified)", "exitCode": 0, "durationMs": null, "result": "pass", "platform": "Linux box (Node v20.19.2); NOT Windows evidence", "tree": "pre-commit working copy in /workspace/dottie/packages/coordinator (untracked there); code committed as 16b3880"}
+# note: each line reintroduces a forbidden behaviour; fail>0 = caught. M7/M10 first attempt was not applied (shell quoting) and was rerun; the unapplied attempt is not a result.
+M8 reserved keys stripped and call allowed (old behaviour) => # pass 81 # fail 12 # cancelled 0 
+M9 clientUserMessageId = taskId (ADR-0010 v1 rule) => # pass 91 # fail 2 # cancelled 0 
+M11 codex_unavailable block speaks a sign-in prompt => # pass 87 # fail 6 # cancelled 0 
+M12 hwnd/pid not reserved => # pass 88 # fail 5 # cancelled 0 
+M7 unavailable/unknown/read failures routed to AUTH_REQUIRED (old behaviour) => # pass 82 # fail 11 # cancelled 0 
+M10 unanswered clarification without reason => # pass 90 # fail 3 # cancelled 0 

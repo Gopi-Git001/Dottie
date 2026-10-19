@@ -1,0 +1,19 @@
+commit c5a9f3db36816eeef708e49cbc38a6a369aae3f0 porcelain(repo excl docs/evidence)=[]
+2026-10-19T06:15:08.711-05:00 [start] electron=0 supervisor=0
+2026-10-19T06:15:11.845-05:00 [forced] runner exit 1
+2026-10-19T06:15:11.846-05:00 [forced+0s] electron=0 supervisor=0
+2026-10-19T06:15:16.884-05:00 [forced+5s] electron=0 supervisor=0
+2026-10-19T06:15:19.923-05:00 [sigKILL before] electron=8 supervisor=1
+./orphan-proof.sh: line 30: 582240 Killed                  node scripts/smoke-run.mjs --runs 1 --timeout-ms 90000 --out $L/runner-sig$sig --case-id DOT099-FU1-RUNNER-SIG$sig > $L/runner-sig$sig.console.txt 2>&1
+2026-10-19T06:15:19.965-05:00 [sigKILL] runner exit 137
+2026-10-19T06:15:20.146-05:00 [sigKILL] none left after 184 ms
+2026-10-19T06:15:25.150-05:00 [sigKILL +5s] electron=0 supervisor=0
+2026-10-19T06:15:28.190-05:00 [sigTERM before] electron=8 supervisor=1
+2026-10-19T06:15:28.279-05:00 [sigTERM] runner exit 1
+2026-10-19T06:15:28.324-05:00 [sigTERM] none left after 94 ms
+2026-10-19T06:15:33.328-05:00 [sigTERM +5s] electron=0 supervisor=0
+2026-10-19T06:15:36.373-05:00 [sigINT before] electron=8 supervisor=1
+2026-10-19T06:15:36.520-05:00 [sigINT] runner exit 130
+2026-10-19T06:15:36.559-05:00 [sigINT] none left after 145 ms
+2026-10-19T06:15:41.563-05:00 [sigINT +5s] electron=0 supervisor=0
+2026-10-19T06:15:41.602-05:00 [end] electron=0 supervisor=0

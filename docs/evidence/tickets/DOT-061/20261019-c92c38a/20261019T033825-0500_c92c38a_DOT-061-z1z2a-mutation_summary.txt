@@ -1,0 +1,58 @@
+# {"caseId": "DOT-061-z1z2a-mutation", "commit": "c92c38a", "build": null, "installerSha256": null, "startedAt": null, "finishedAt": "2026-10-19T03:37:25-05:00", "runner": "named host: grok-box (linux)", "command": "python3 /tmp/d14/mutz.py (Z1-Z19, npm test per mutant) + /tmp/d14/mutz5b.py (Z5b)", "exitCode": 0, "durationMs": null, "result": "pass", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "tree": "c92c38a tree, one mutant at a time, restored after each"}
+Z1 1z: old prefix-only UI-action regex: KILLED (2 failing)
+    not ok 37 - 1v final limits (CUT): max-1 / max / max+1 for every cut field; at or under unchanged, over cut to max-1 + ellipsis; the cut display validates
+    not ok 203 - 1z: UI-action method is exactly ^(ui|window)\\.[a-z][a-z0-9_]*$ in the builder and in validateEvent
+Z2 1z: end anchor dropped: KILLED (2 failing)
+    not ok 37 - 1v final limits (CUT): max-1 / max / max+1 for every cut field; at or under unchanged, over cut to max-1 + ellipsis; the cut display validates
+    not ok 203 - 1z: UI-action method is exactly ^(ui|window)\\.[a-z][a-z0-9_]*$ in the builder and in validateEvent
+Z3 1z: uppercase allowed: KILLED (1 failing)
+    not ok 203 - 1z: UI-action method is exactly ^(ui|window)\\.[a-z][a-z0-9_]*$ in the builder and in validateEvent
+Z4 1z: leading digit allowed: KILLED (1 failing)
+    not ok 203 - 1z: UI-action method is exactly ^(ui|window)\\.[a-z][a-z0-9_]*$ in the builder and in validateEvent
+Z5 1z: method check dropped from the until-re-vendor validator: KILLED (0 failing, tsc error)
+Z6 1z: ui_action builder input check dropped: SURVIVED (0 failing)
+Z7 2a: coverage filter dropped (895676d behaviour): KILLED (7 failing)
+    not ok 98 - every event the coordinator emits validates against contract v1 and carries ids + timestamps
+    not ok 108 - CONTRACTS §3 ApprovalRequested.category: exactly the 11 CONTRACTS values in order; navigate accepted, unknown rejected
+    not ok 133 - E02 vectors: 46 of the 47 invalid displays are rejected by our validateEvent; 1 is superseded by E01 2a (until E02 re-vendor)
+Z8 2a: filter applied to every kind: KILLED (3 failing)
+    not ok 133 - E02 vectors: 46 of the 47 invalid displays are rejected by our validateEvent; 1 is superseded by E01 2a (until E02 re-vendor)
+    not ok 141 - builders end with E02's validator: a ui_action whose processImage is a path (not a basename) is display_unavailable (null), as E02 rules
+    not ok 205 - 2a: pre_dispatch / codex_command / codex_file_change are valid for read and navigate (and hashable); tool and ui_action read/navigate → display_unavailable; credential_access never
+Z9 2a: ui_action added to the any-category kinds: KILLED (2 failing)
+    not ok 141 - builders end with E02's validator: a ui_action whose processImage is a path (not a basename) is display_unavailable (null), as E02 rules
+    not ok 205 - 2a: pre_dispatch / codex_command / codex_file_change are valid for read and navigate (and hashable); tool and ui_action read/navigate → display_unavailable; credential_access never
+Z10 2a: credential_access exempted too: KILLED (1 failing)
+    not ok 205 - 2a: pre_dispatch / codex_command / codex_file_change are valid for read and navigate (and hashable); tool and ui_action read/navigate → display_unavailable; credential_access never
+Z11 2a: navigate not exempted: KILLED (4 failing)
+    not ok 108 - CONTRACTS §3 ApprovalRequested.category: exactly the 11 CONTRACTS values in order; navigate accepted, unknown rejected
+    not ok 160 - C-25 (D14, E01 1f b): the forced category skips navigate and read: last approval navigate → the earlier delete; only navigate/read → local_change/high
+    not ok 163 - C-25 (D14, E01 1g): a navigate approval inside a possible-repeat retry carries no possibleRepeat (like read)
+Z12 2a: only pre_dispatch exempted (codex_* not): KILLED (6 failing)
+    not ok 98 - every event the coordinator emits validates against contract v1 and carries ids + timestamps
+    not ok 108 - CONTRACTS §3 ApprovalRequested.category: exactly the 11 CONTRACTS values in order; navigate accepted, unknown rejected
+    not ok 145 - C-25 (D14): a read-category retry gets no possibleRepeat (no warning), but still goes through approval
+Z13 2a: builders gated by the vendored validator alone: KILLED (6 failing)
+    not ok 37 - 1v final limits (CUT): max-1 / max / max+1 for every cut field; at or under unchanged, over cut to max-1 + ellipsis; the cut display validates
+    not ok 98 - every event the coordinator emits validates against contract v1 and carries ids + timestamps
+    not ok 145 - C-25 (D14): a read-category retry gets no possibleRepeat (no warning), but still goes through approval
+Z14 2a: validateEvent uses the vendored validator alone: KILLED (6 failing)
+    not ok 98 - every event the coordinator emits validates against contract v1 and carries ids + timestamps
+    not ok 108 - CONTRACTS §3 ApprovalRequested.category: exactly the 11 CONTRACTS values in order; navigate accepted, unknown rejected
+    not ok 133 - E02 vectors: 46 of the 47 invalid displays are rejected by our validateEvent; 1 is superseded by E01 2a (until E02 re-vendor)
+Z15 2a: port hashes via vendored computeDisplayHash (throws on read): KILLED (2 failing)
+    not ok 145 - C-25 (D14): a read-category retry gets no possibleRepeat (no warning), but still goes through approval
+    not ok 205 - 2a: pre_dispatch / codex_command / codex_file_change are valid for read and navigate (and hashable); tool and ui_action read/navigate → display_unavailable; credential_access never
+Z16 port: hash without validation: KILLED (1 failing)
+    not ok 205 - 2a: pre_dispatch / codex_command / codex_file_change are valid for read and navigate (and hashable); tool and ui_action read/navigate → display_unavailable; credential_access never
+Z17 1z: tool prefix check uses the strict regex (builder): SURVIVED (0 failing)
+Z18 1z: tool prefix check uses the strict regex (validateEvent): SURVIVED (0 failing)
+Z19 1z: fileCount filled as a number: KILLED (8 failing)
+    not ok 30 - 1r: one builder per kind; each builder output validates only with its own requestSource; builders fail closed on missing fields
+    not ok 37 - 1v final limits (CUT): max-1 / max / max+1 for every cut field; at or under unchanged, over cut to max-1 + ellipsis; the cut display validates
+    not ok 38 - 1v final limits (NEVER cut): limit passes unchanged, limit+1 → null (display_unavailable) for command bytes, path count, path bytes, cwd bytes, escalation count and entry length
+TOTAL 16/19 killed
+
+Z5b 1z: until-re-vendor method check weakened to the prefix (compiles): KILLED (1 failing)
+    not ok 37 - 1v final limits (CUT): max-1 / max / max+1 for every cut field; at or under unchanged, over cut to max-1 + ellipsis; the cut display validates
+TOTAL 1/1 killed

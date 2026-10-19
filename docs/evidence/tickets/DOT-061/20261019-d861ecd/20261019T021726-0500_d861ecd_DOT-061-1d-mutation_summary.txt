@@ -1,0 +1,55 @@
+# {"caseId": "DOT-061-1d-mutations", "commit": "94239f9 (src identical to d861ecd; the amend changed README only)", "build": null, "installerSha256": null, "startedAt": "2026-10-19T02:17:26-05:00", "finishedAt": "2026-10-19T02:17:49-05:00", "runner": "named host: grok-box (linux)", "command": "python3 mut1d.py (per mutant: npx tsc; node --test dist/test/*.test.js; source restored + verified byte-equal)", "exitCode": 0, "durationMs": null, "result": "pass", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "note": "second run; the first run was interrupted after ~3 s and left mutant N1 applied in src/coordinator.ts, which was restored from the commit (git checkout -- file) before this run; it produced no results"}
+N1 actionId check removed: KILLED (10 failing)
+    not ok 125 - ruling 1d: a MISSING actionId → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 126 - ruling 1d: a malformed actionId (uppercase hex) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 127 - ruling 1d: a malformed actionId (63 chars) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 128 - ruling 1d: a malformed actionId (65 chars) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 129 - ruling 1d: a malformed actionId (legacy act_ id) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 130 - ruling 1d: a malformed actionId (empty string) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 131 - ruling 1d: a malformed actionId (null) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 132 - ruling 1d: a malformed actionId (number) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 133 - ruling 1d: a malformed actionId (object) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 134 - ruling 1d: a malformed actionId (hex with whitespace) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+N2 any string accepted: KILLED (7 failing)
+    not ok 126 - ruling 1d: a malformed actionId (uppercase hex) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 127 - ruling 1d: a malformed actionId (63 chars) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 128 - ruling 1d: a malformed actionId (65 chars) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 129 - ruling 1d: a malformed actionId (legacy act_ id) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 130 - ruling 1d: a malformed actionId (empty string) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 134 - ruling 1d: a malformed actionId (hex with whitespace) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 135 - ruling 1d: the rejection log carries ids and key names only, never the actionId value or arg values
+N3 missing accepted (only malformed rejected): KILLED (1 failing)
+    not ok 125 - ruling 1d: a MISSING actionId → DENIED_BY_POLICY, sideEffect none, the tool never runs
+N4 case-insensitive hex: KILLED (1 failing)
+    not ok 126 - ruling 1d: a malformed actionId (uppercase hex) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+N5 wrong code PRECONDITION_FAILED (ruling 1c): KILLED (10 failing)
+    not ok 125 - ruling 1d: a MISSING actionId → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 126 - ruling 1d: a malformed actionId (uppercase hex) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 127 - ruling 1d: a malformed actionId (63 chars) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 128 - ruling 1d: a malformed actionId (65 chars) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 129 - ruling 1d: a malformed actionId (legacy act_ id) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 130 - ruling 1d: a malformed actionId (empty string) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 131 - ruling 1d: a malformed actionId (null) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 132 - ruling 1d: a malformed actionId (number) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 133 - ruling 1d: a malformed actionId (object) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 134 - ruling 1d: a malformed actionId (hex with whitespace) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+N6 actionId check before reserved keys: KILLED (1 failing)
+    not ok 136 - ruling 1d order: a reserved key wins over a bad actionId (INVALID_ARGUMENT), with or without a live turn
+N7 actionId check before active-turn check: KILLED (12 failing)
+    not ok 126 - ruling 1d: a malformed actionId (uppercase hex) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 127 - ruling 1d: a malformed actionId (63 chars) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 128 - ruling 1d: a malformed actionId (65 chars) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 129 - ruling 1d: a malformed actionId (legacy act_ id) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 130 - ruling 1d: a malformed actionId (empty string) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 131 - ruling 1d: a malformed actionId (null) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 132 - ruling 1d: a malformed actionId (number) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 133 - ruling 1d: a malformed actionId (object) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 134 - ruling 1d: a malformed actionId (hex with whitespace) → DENIED_BY_POLICY, sideEffect none, the tool never runs
+    not ok 135 - ruling 1d: the rejection log carries ids and key names only, never the actionId value or arg values
+    not ok 137 - ruling 1d order: no active turn wins over a bad or missing actionId (PRECONDITION_FAILED), idle and after a stop
+    not ok 152 - Ruling 1: no tool call is authorised without an active turn, or once a stop was requested
+N8 actionId value logged: KILLED (1 failing)
+    not ok 135 - ruling 1d: the rejection log carries ids and key names only, never the actionId value or arg values
+N9 retryable true on refusal: KILLED (1 failing)
+    not ok 125 - ruling 1d: a MISSING actionId → DENIED_BY_POLICY, sideEffect none, the tool never runs
+TOTAL 9/9 killed

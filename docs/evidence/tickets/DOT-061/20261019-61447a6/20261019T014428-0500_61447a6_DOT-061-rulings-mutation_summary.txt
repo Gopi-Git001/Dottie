@@ -1,0 +1,24 @@
+# {"caseId": "DOT-061-rulings-mutations", "commit": "61447a6", "build": null, "installerSha256": null, "startedAt": "2026-10-19T01:44:09-05:00", "finishedAt": "2026-10-19T01:44:28-05:00", "runner": "named host: grok-box (linux)", "command": "python3 mut2.py (per mutant: npx tsc; node --test dist/test/*.test.js; source restored + diff-verified)", "exitCode": 0, "durationMs": null, "result": "pass", "platform": "Linux box (Node v20.19.2); NOT Windows evidence", "tree": "pre-commit working copy, src == 61447a6"}
+M9 binding turnId back to null: KILLED (1 failing)
+    not ok 1 - actionId: the CONFIRMING path gets its id from the ActionIdPort with the CR2 binding; IdSource is never asked for one
+M10 dispatched turn 1 ignores the minted id (t0 off-by-one): KILLED (5 failing)
+    not ok 1 - actionId: the CONFIRMING path gets its id from the ActionIdPort with the CR2 binding; IdSource is never asked for one
+    not ok 48 - Ruling 2: the answer continues the same taskId as a new turn on the same thread; targetIds survive
+    not ok 94 - §1.5: attempts are capped at maxAttempts; every retry has its own turnId and clientUserMessageId
+    not ok 100 - ruling 3: turn 1 committed, turn 2 fails transient with an empty TURN ledger → retried to the cap, then failed_after_side_effects reporti
+    not ok 123 - Ruling 1: the host is told the active turn at every turn start (incl. retries) and cleared between turns
+M11 binding taskId constant (cross-task replay): KILLED (1 failing)
+    not ok 1 - actionId: the CONFIRMING path gets its id from the ActionIdPort with the CR2 binding; IdSource is never asked for one
+M12 not-approvable finish without reason: KILLED (2 failing)
+    not ok 5 - actionId: no ActionIdPort wired (default until DOT-090) → fail closed: no ApprovalRequested, declined, warning without args
+    not ok 6 - actionId: bad port output → fail closed (act_ id, uppercase hex, wrong length, non-string, throw, rejected promise)
+M13 declined accepts any reason: KILLED (1 failing)
+    not ok 68 - CONTRACTS §3 TaskFinished (E01 2026-10-19): declined carries no reason or approval_unavailable only; approval_unavailable fits only declin
+M14 approval_unavailable dropped from the shared set: KILLED (2 failing)
+    not ok 67 - CONTRACTS §2.1/§3 (E01 2026-10-19): any reason from the shared set is accepted with failed_after_side_effects; anything outside the set is
+    not ok 68 - CONTRACTS §3 TaskFinished (E01 2026-10-19): declined carries no reason or approval_unavailable only; approval_unavailable fits only declin
+M15 navigate missing: KILLED (1 failing)
+    not ok 69 - CONTRACTS §3 ApprovalRequested.category: exactly the 11 CONTRACTS values in order; navigate accepted, unknown rejected
+M16 navigate in the wrong position: KILLED (1 failing)
+    not ok 69 - CONTRACTS §3 ApprovalRequested.category: exactly the 11 CONTRACTS values in order; navigate accepted, unknown rejected
+sources restored: diff vs backups clean (RESTORED)

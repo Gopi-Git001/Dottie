@@ -1,0 +1,13 @@
+# Browser sign-in that succeeds. login/start + authUrl shape: V-run L9-10 (query redacted).
+# login/completed{success:true} and the signed-in account/read shape are UNVERIFIED on the wire (CONTRACTS §1.2);
+# hand-written from the pinned schema (AccountLoginCompletedNotification, GetAccountResponse). Replace with the
+# Windows Week-1 capture when it exists.
+>> {"method":"account/login/start","params":{"type":"chatgpt"}}
+<< {"id":"$","result":{"type":"chatgpt","loginId":"11111111-1111-4111-8111-111111111111","authUrl":"https://auth.openai.com/oauth/authorize?response_type=code&client_id=<redacted>&redirect_uri=http%3A%2F%2F127.0.0.1%3A1455%2Fauth%2Fcallback&state=<redacted>&originator=dottie"}}
+## wait user-signs-in
+<< {"method":"account/login/completed","params":{"loginId":"11111111-1111-4111-8111-111111111111","success":true,"error":null,"onboardingEntrypoint":null},"emittedAtMs":1792330300000}
+>> {"method":"account/read","id":"$r1","params":{"refreshToken":false}}
+<< {"method":"account/updated","params":{"authMode":"chatgpt","planType":"plus"},"emittedAtMs":1792330300001}
+>> {"method":"account/read","id":"$r2","params":{"refreshToken":false}}
+<< {"id":"$r1","result":{"account":{"type":"chatgpt","email":"person@example.com","planType":"plus"},"requiresOpenaiAuth":true,"workspaceRouting":null}}
+<< {"id":"$r2","result":{"account":{"type":"chatgpt","email":"person@example.com","planType":"plus"},"requiresOpenaiAuth":true,"workspaceRouting":null}}

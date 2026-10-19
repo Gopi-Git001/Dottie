@@ -1,0 +1,46 @@
+# {"caseId": "DOT-061-e02swap-mutation", "commit": "96afea0", "build": null, "installerSha256": null, "startedAt": null, "finishedAt": null, "runner": "named host: grok-box (linux)", "command": "python3 mut8.py (X1-X14) + mut8b.py (X9 rerun after the gate test); sources restored and asserted equal", "exitCode": 0, "durationMs": null, "result": "13/14 killed; X13 equivalent (see README)", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "tree": "working copy == 96afea0"}
+X1 port: sorted-key JSON.stringify instead of E02 canonical: KILLED (3 failing)
+    not ok 3 - actionId: pre-dispatch vector re-pinned to E02 895676d (un-held): the real port gives the vector bytes for the coordinator's own binding
+    not ok 129 - E02 vectors: the seven pinned actionIds and six displayHashes, byte-for-byte, through the real port
+    not ok 130 - E02 vectors: all 23 actionId vectors (canonical + id) and all 17 invalid bindings (incl. null / missing / out-of-enum requestSource) through the real port
+X2 port: displayHash over JSON.stringify (unsorted): KILLED (6 failing)
+    not ok 3 - actionId: pre-dispatch vector re-pinned to E02 895676d (un-held): the real port gives the vector bytes for the coordinator's own binding
+    not ok 129 - E02 vectors: the seven pinned actionIds and six displayHashes, byte-for-byte, through the real port
+    not ok 131 - E02 vectors: all 34 displays: hash byte-identical; our validateEvent accepts each; our builder for that kind rebuilds the same bytes
+X3 render: old (smaller) hidden set: KILLED (1 failing)
+    not ok 137 - strip set (1t): bound fields keep the added characters and render them as visible escapes with the badge
+X4 strip: old (smaller) untrusted set: KILLED (2 failing)
+    not ok 135 - strip set (bug): a pre-dispatch summary with a character only E02 strips is emitted and validates (before: kept, then rejected / not approvable)
+    not ok 136 - strip set: our untrusted strip equals E02 for every code point; lone surrogates become U+FFFD; our validateEvent rejects a hidden character left in an untrusted slot
+X5 strip: lone surrogates not mapped to U+FFFD: KILLED (1 failing)
+    not ok 136 - strip set: our untrusted strip equals E02 for every code point; lone surrogates become U+FFFD; our validateEvent rejects a hidden character left in an untrusted slot
+X6 tool: count not filled in: KILLED (7 failing)
+    not ok 30 - 1r: one builder per kind; each builder output validates only with its own requestSource; builders fail closed on missing fields
+    not ok 37 - 1v final limits (CUT): max-1 / max / max+1 for every cut field; at or under unchanged, over cut to max-1 + ellipsis; the cut display validates
+    not ok 38 - 1v final limits (NEVER cut): limit passes unchanged, limit+1 → null (display_unavailable) for command bytes, path count, path bytes, cwd bytes, escalation count and entry length
+X7 tool: bodyUntrusted not stripped/cut: KILLED (1 failing)
+    not ok 138 - 1x tool keys: no detail; external_send body is bodyUntrusted (stripped, cut at 200); delete/overwrite get fileCount, local_change itemCount; exact key set per category
+X8 tool: final E02 gate removed: KILLED (3 failing)
+    not ok 30 - 1r: one builder per kind; each builder output validates only with its own requestSource; builders fail closed on missing fields
+    not ok 38 - 1v final limits (NEVER cut): limit passes unchanged, limit+1 → null (display_unavailable) for command bytes, path count, path bytes, cwd bytes, escalation count and entry length
+    not ok 138 - 1x tool keys: no detail; external_send body is bodyUntrusted (stripped, cut at 200); delete/overwrite get fileCount, local_change itemCount; exact key set per category
+X9 ui_action: final E02 gate removed: SURVIVED (0 failing)
+X10 codex: final E02 gate removed (file change): KILLED (2 failing)
+    not ok 159 - C-25 (D14, E01 1f b): the forced category skips navigate and read: last approval navigate → the earlier delete; only navigate/read → local_change/high
+    not ok 162 - C-25 (D14, E01 1g; updated for E02 895676d): a navigate approval inside a possible-repeat retry opens no dialog (navigate has no display rule → display_unavailable) and nothing carries possibleRepeat but the gate
+X11 validateEvent: E02 display rules not applied: KILLED (6 failing)
+    not ok 26 - 1r validateEvent: requestSource required (codex | tool_host | coordinator); every wrong kind/source pairing rejected; UI-action methods only as ui_action
+    not ok 40 - 1v final limits: validateEvent accepts each field at its limit and rejects limit+1 (cut fields and never-cut bounds; validator rejects, never repairs)
+    not ok 108 - CONTRACTS §3 ApprovalRequested.category: exactly the 11 CONTRACTS values in order; navigate accepted, unknown rejected
+X12 1y: app.* accepted as a UI-action method: KILLED (1 failing)
+    not ok 139 - 1y: app.launch is NOT a ui_action: the ui_action builder refuses it, validateEvent rejects an app.launch ui_action display, and it builds and validates as kind tool
+X13 tool: extra keys allowed (key check dropped): SURVIVED (0 failing)
+X14 coordinator: args.displayHash dropped from the pre-dispatch preimage: KILLED (43 failing)
+    not ok 1 - actionId: the CONFIRMING path gets its id from the ActionIdPort with the CR2 binding; IdSource is never asked for one
+    not ok 2 - actionId (CONTRACTS §2.1 pre-dispatch preimage): the same summary under a different turnId or task gives a different actionId
+    not ok 3 - actionId: pre-dispatch vector re-pinned to E02 895676d (un-held): the real port gives the vector bytes for the coordinator's own binding
+TOTAL 12/14 killed
+## X9 rerun after adding the builder-gate test:
+X9 ui_action: final E02 gate removed: KILLED (1 failing)
+    not ok 141 - builders end with E02's validator: a ui_action whose processImage is a path (not a basename) is display_unavailable (null), as E02 rules
+TOTAL 1/1 killed

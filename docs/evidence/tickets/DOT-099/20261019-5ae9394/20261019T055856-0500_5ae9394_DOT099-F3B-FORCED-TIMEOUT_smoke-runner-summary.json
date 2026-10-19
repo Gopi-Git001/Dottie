@@ -1,0 +1,12 @@
+{"caseId":"DOT099-F3B-FORCED-TIMEOUT","commit":"5ae93948e047bca3ce4efb606acd7ccce22509c1","dirtyTree":false,"build":null,"installerSha256":null,"startedAt":"2026-10-19T05:58:56.104-05:00","finishedAt":"2026-10-19T05:58:59.156-05:00","command":"node scripts/smoke-run.mjs --runs 1 --timeout-ms 3000 --out /workspace/smoke-logs/5ae9394/forced-timeout --case-id DOT099-F3B-FORCED-TIMEOUT","exitCode":1,"durationMs":3052,"result":"fail","runner":"linux-box"}
+{
+  "runs": 1,
+  "ok": 0,
+  "failed": 1,
+  "timedOut": 1,
+  "failedSteps": [],
+  "msMin": 3051,
+  "msMedian": 3051,
+  "msMax": 3051,
+  "logs": "/workspace/smoke-logs/5ae9394/forced-timeout"
+}

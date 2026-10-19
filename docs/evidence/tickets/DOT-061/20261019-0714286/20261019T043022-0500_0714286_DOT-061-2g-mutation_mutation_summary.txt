@@ -1,0 +1,38 @@
+# {"caseId": "DOT-061-2g-mutation", "commit": "0714286", "build": null, "installerSha256": null, "startedAt": null, "finishedAt": null, "runner": "named host: grok-box (linux)", "command": "python3 /tmp/d15/mutg.py (G1-G11)", "exitCode": 0, "result": "11/11 killed", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "tree": "0714286 src (restored, cmp-checked)"}
+G1 TaskFinished emitted before the active task is cleared (old order): KILLED (2 failing)
+    not ok 232 - 2g: null after TaskFinished; the snapshot is updated before the terminal event is emitted (no stale id)
+    not ok 235 - 2g: a refused retry (fresh taskId, immediate TaskFinished retry_not_allowed) ends null, never stale
+G2 TaskCancelled emitted before the active task is cleared (old order): KILLED (3 failing)
+    not ok 233 - 2g: null after TaskCancelled; updated before it is emitted; TaskCancelled is emitted exactly once
+    not ok 234 - 2g: a cancel during the pending pre-dispatch approval also ends null before TaskCancelled
+    not ok 236 - 2g: a terminal event for a queued task never clears the running task; the next task becomes active only after the first ends
+G3 TaskCancelled never clears the active task: KILLED (5 failing)
+    not ok 144 - ruling 1j (c): a CANCELLED prior is not retryable: nothing starts, TaskFinished{failed, retry_not_allowed}, silent
+    not ok 233 - 2g: null after TaskCancelled; updated before it is emitted; TaskCancelled is emitted exactly once
+    not ok 234 - 2g: a cancel during the pending pre-dispatch approval also ends null before TaskCancelled
+    not ok 235 - 2g: a refused retry (fresh taskId, immediate TaskFinished retry_not_allowed) ends null, never stale
+G4 setActive does not notify listeners: KILLED (5 failing)
+    not ok 231 - 2g: activeTaskId equals the task while its pre-dispatch approval is pending, set before any TaskProgress
+    not ok 232 - 2g: null after TaskFinished; the snapshot is updated before the terminal event is emitted (no stale id)
+    not ok 233 - 2g: null after TaskCancelled; updated before it is emitted; TaskCancelled is emitted exactly once
+    not ok 234 - 2g: a cancel during the pending pre-dispatch approval also ends null before TaskCancelled
+G5 task start sets active without notifying: KILLED (1 failing)
+    not ok 231 - 2g: activeTaskId equals the task while its pre-dispatch approval is pending, set before any TaskProgress
+G6 endActive clears whatever task is active (queued terminal clears running): KILLED (2 failing)
+    not ok 236 - 2g: a terminal event for a queued task never clears the running task; the next task becomes active only after the first ends
+    not ok 237 - 2g: onStateChange returns an unsubscribe; a throwing listener is logged and does not break the coordinator or other listeners
+G7 taskActive from state instead of activeTaskId: KILLED (4 failing)
+    not ok 232 - 2g: null after TaskFinished; the snapshot is updated before the terminal event is emitted (no stale id)
+    not ok 233 - 2g: null after TaskCancelled; updated before it is emitted; TaskCancelled is emitted exactly once
+    not ok 234 - 2g: a cancel during the pending pre-dispatch approval also ends null before TaskCancelled
+    not ok 236 - 2g: a terminal event for a queued task never clears the running task; the next task becomes active only after the first ends
+G8 state transitions do not notify listeners: KILLED (1 failing)
+    not ok 230 - 2g: activeTaskId is null at boot and in STANDBY; the snapshot is {state, taskActive, activeTaskId}
+G9 a throwing listener is not isolated: KILLED (1 failing)
+    not ok 237 - 2g: onStateChange returns an unsubscribe; a throwing listener is logged and does not break the coordinator or other listeners
+G10 unsubscribe is a no-op: KILLED (1 failing)
+    not ok 237 - 2g: onStateChange returns an unsubscribe; a throwing listener is logged and does not break the coordinator or other listeners
+G11 activeTaskId reported only once a TaskProgress exists (null while CONFIRMING): KILLED (2 failing)
+    not ok 231 - 2g: activeTaskId equals the task while its pre-dispatch approval is pending, set before any TaskProgress
+    not ok 234 - 2g: a cancel during the pending pre-dispatch approval also ends null before TaskCancelled
+TOTAL 11/11 killed

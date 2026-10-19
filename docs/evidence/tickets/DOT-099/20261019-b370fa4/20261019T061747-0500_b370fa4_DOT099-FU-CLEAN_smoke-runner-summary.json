@@ -1,0 +1,12 @@
+{"caseId":"DOT099-FU-CLEAN","commit":"b370fa491ef67f9c29983329340a3af96f3e0711","dirtyTree":false,"dirtyTreeScope":"repo, excluding docs/evidence/","build":null,"installerSha256":null,"buildNote":"n/a: unpackaged","startedAt":"2026-10-19T06:17:47.560-05:00","finishedAt":"2026-10-19T06:18:25.716-05:00","command":"node scripts/smoke-run.mjs --runs 5 --out /workspace/smoke-logs/b370fa4/clean-5 --timeout-ms 90000 --case-id DOT099-FU-CLEAN","exitCode":0,"durationMs":38156,"result":"pass","runner":"linux-box"}
+{
+  "runs": 5,
+  "ok": 5,
+  "failed": 0,
+  "timedOut": 0,
+  "failedSteps": [],
+  "msMin": 7594,
+  "msMedian": 7616,
+  "msMax": 7701,
+  "logs": "/workspace/smoke-logs/b370fa4/clean-5"
+}

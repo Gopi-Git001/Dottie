@@ -1,0 +1,19 @@
+{
+  "schema": "dottie.event",
+  "version": 2,
+  "type": "TaskProgress",
+  "eventId": "evt-taskprogress",
+  "correlationId": "corr-1",
+  "timestamp": "2026-10-18T14:03:00.123-05:00",
+  "payload": {
+    "taskId": "task-1",
+    "state": "EXECUTING",
+    "message": "Creating the folder",
+    "toolId": "files.mkdir",
+    "redactedMetadata": {
+      "step": 1,
+      "dryRun": false
+    }
+  },
+  "taskId": "task-1"
+}

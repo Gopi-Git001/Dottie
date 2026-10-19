@@ -1,0 +1,115 @@
+{
+ "schema": "dottie.evidence.manifest",
+ "version": 1,
+ "ticket": "DOT-064",
+ "caseIds": [
+  "DOT-064-pytest",
+  "DOT-064-lint",
+  "DOT-064-env",
+  "DOT-064-baseline",
+  "DOT-064-sweep"
+ ],
+ "commit": "2878b58",
+ "build": null,
+ "installerSha256": null,
+ "runner": "named host: grok-box (linux)",
+ "platform": "Linux box (Linux fakes only, no Windows build); NOT Windows evidence",
+ "createdAt": "2026-10-19T01:41:54-05:00",
+ "owner": "E11",
+ "tree": {
+  "head": "2878b58",
+  "commit": "2878b581743accf77630403cf903e067a0be69ae",
+  "branch": "feature/E11-verifier (local, not pushed)",
+  "headCommitDate": "2026-10-19T01:41:21-05:00",
+  "source": "git archive 2878b58 src/verifier (committed tree, extracted to a temp dir)",
+  "srcVerifierTracked": true,
+  "srcVerifierIgnoredBy": null,
+  "srcVerifierContentSha256": "2ebccaee1747cf3fd755820a8f4287bab5756b8279b4ee5d3ded06cc2d35d8d9",
+  "srcVerifierFileCount": 41,
+  "srcVerifierContentHashMethod": "sha256 of sorted 'sha256  relpath' lines of every file under src/verifier, excluding caches",
+  "worktreeStatusPorcelain": [],
+  "clean": true
+ },
+ "verdict": "pass",
+ "results": {
+  "pytest": {
+   "result": "pass",
+   "passed": 485,
+   "failed": 0,
+   "exitCode": 0
+  },
+  "ruff": {
+   "result": "pass",
+   "version": "ruff 0.17.1",
+   "exitCode": 0
+  },
+  "secretSweep": "clean"
+ },
+ "supersedes": {
+  "pack": "docs/evidence/tickets/DOT-064/20261019-9220bf4",
+  "seal": "5e113388b5a57055cfcb1cdb6fb200f247f61d0df40a93cc97ef54ad65a5483e",
+  "note": "previous pack left sealed and unchanged (addendum rule: never edit a sealed file)"
+ },
+ "baselineRatchet": {
+  "metric": "pytest passed (src/verifier)",
+  "from": 455,
+  "to": 485,
+  "allowed": true
+ },
+ "files": [
+  {
+   "path": "20261019T014152-0500_2878b58_DOT-064-lint_ruff-log.txt",
+   "sha256": "e04bd830052fda4a27c8e3d843a682acffc74d71f1b8078ccf1ff121e83923d7",
+   "size": 715,
+   "producedBy": "cd src/verifier && uvx ruff@0.17.1 --version && uvx ruff@0.17.1 check ."
+  },
+  {
+   "path": "20261019T014152-0500_2878b58_DOT-064-pytest_junit.xml",
+   "sha256": "b731cc9defd9e1da5e6ebaf444fc559d30b203cd1e2d049cb63c08b9c2665091",
+   "size": 86775,
+   "producedBy": "cd src/verifier && python3 -m pytest -q -p no:cacheprovider --junitxml=<tmp>; hostname attribute redacted"
+  },
+  {
+   "path": "20261019T014152-0500_2878b58_DOT-064-pytest_log.txt",
+   "sha256": "d22061ec48a7c00aec483a955c3388e63654b1e3431125a21f7ffd1f580ffdc6",
+   "size": 1224,
+   "producedBy": "cd src/verifier && python3 -m pytest -q -p no:cacheprovider (fresh env -i bash --noprofile --norc)"
+  },
+  {
+   "path": "20261019T014152-0500_2878b58_DOT-064-pytest_results.json",
+   "sha256": "d19ef2dc0595ff4ec30ac8ab5286fa661d827c40a133227fcc041841f2b30092",
+   "size": 108410,
+   "producedBy": "derived from the JUnit XML by the pack script"
+  },
+  {
+   "path": "20261019T014152-0500_2878b58_DOT-064_baseline-ratchet.json",
+   "sha256": "0ef765d631fe5229b988cae27e4d3fd7ba4a3b665049b4f658e1b4275e5a5516",
+   "size": 1649,
+   "producedBy": "pack script"
+  },
+  {
+   "path": "20261019T014152-0500_2878b58_DOT-064_environment.json",
+   "sha256": "8965cd740c969e147570b4fa1bddcb750a67edd884f76d78671be253117a34dd",
+   "size": 1850,
+   "producedBy": "pack script (os-release, uname -srm, tool --version, git)"
+  },
+  {
+   "path": "20261019T014152-0500_2878b58_DOT-064_secret-sweep.txt",
+   "sha256": "fd1cc6d72cb22f07f97d584bdc42de0bb6f733509e8781668b4c3f6170358b6e",
+   "size": 1047,
+   "producedBy": "skill step 5 rg sweep + host/user-path patterns"
+  },
+  {
+   "path": "README.md",
+   "sha256": "69ae0d00a5e96f656f5aebbe5463cbfdf640e7817c28ad8c663ffedb2ff19a53",
+   "size": 2400,
+   "producedBy": "pack script (hand-reviewed summary)"
+  }
+ ],
+ "generator": {
+  "name": "make_dot064_pack_v3.py (E11 scratch on the box, not in the repo)",
+  "sha256": "07d1d61049db14cac423ce689edfff56a6f694e9de162f9233e54573ece27d20"
+ },
+ "sealMethod": "sha256 of json.dumps({k: manifest[k] for k != 'seal'}, sort_keys=True, separators=(',', ':')) encoded UTF-8",
+ "seal": "9f34897a45c4a1ca42340c39d9edf1a598c775451f8f07717db0fdadddfb43d3"
+}

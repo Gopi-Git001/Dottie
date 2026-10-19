@@ -1,0 +1,32 @@
+{
+  "errorPath": "payload.requestSource",
+  "event": {
+    "schema": "dottie.event",
+    "version": 2,
+    "type": "ApprovalRequested",
+    "eventId": "evt-approvalrequested",
+    "correlationId": "corr-1",
+    "timestamp": "2026-10-18T14:03:00.123-05:00",
+    "payload": {
+      "taskId": "task-1",
+      "actionId": "3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f",
+      "summary": "Delete 3 files in Downloads",
+      "risk": "high",
+      "expiry": "2026-10-18T14:05:00-05:00",
+      "category": "delete",
+      "display": {
+        "kind": "tool",
+        "category": "delete",
+        "method": "files.delete_item",
+        "targetLabel": "Delete 3 files in Downloads",
+        "paths": [
+          "C:\\USERS\\GOPI\\DOWNLOADS\\F0.TXT",
+          "C:\\USERS\\GOPI\\DOWNLOADS\\F1.TXT",
+          "C:\\USERS\\GOPI\\DOWNLOADS\\F2.TXT"
+        ],
+        "fileCount": "3"
+      }
+    },
+    "taskId": "task-1"
+  }
+}
