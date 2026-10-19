@@ -193,10 +193,11 @@ The `EXPOSED_TOOLS` explicit-allowlist idea from `registry.py` (never auto-expos
 |---|---|
 | RiskClass `read` | severity floor `low`, category `read` |
 | RiskClass `reversible` | `medium`, category `local_change` |
-| RiskClass `sensitive` | `high`, category set per tool: `delete` (delete_file), `overwrite` (write/copy/move with overwrite), `install_or_elevate`, `security_setting`, `external_send`/`external_upload`, `purchase` (→ `critical`). Every spec §10 "always confirm" category needs approval regardless of severity |
+| RiskClass `sensitive` | `high`, category set per tool: `delete` (delete_file), `overwrite` (write/copy/move with overwrite), `install_or_elevate`, `security_setting`, `external_send`/`external_upload`, `purchase` (→ `critical`). Severity is only a floor and never removes a confirmation: the category decides whether to confirm (spec §10; ADR-0009 item 8), and an unmapped tool or category is `DENIED_BY_POLICY` |
+| (no RiskClass) category `navigate` | no-confirm exception (ADR-0009 item 8, E08 co-signed). Closed membership: the only member is `explorer.open_known_folder`, and adding a member needs E08 sign-off. Not eligible for ADR-0017 recovery reuse beyond its own window |
 | RiskClass `forbidden` | no ApprovalRequested; `DENIED_BY_POLICY` (e.g. `credential_access`, deny-listed reads) |
 | v1 error `NEEDS_APPROVAL` | `APPROVAL_REQUIRED` |
-| v1 side effect `ATTEMPTED` | `unknown` (the enum value is removed) |
+| v1 side effect `ATTEMPTED` | `unknown` (the enum value is removed): the action may have run. No automatic retry; a re-run needs a new approval plus the DOT-094 repeat warning. The audit records `sideEffect=unknown` |
 | v1 `needs_clarification` | `error.code:'AMBIGUOUS'` + `observedState.question` + `candidates[{id,label}]` |
 | v1 `ok` / `success` | removed; `verified` is the only truth field; MCP `isError = !verified` |
 | v1 `untrusted_content` | **dropped (E01 ruling 9).** Untrusted text goes only in MCP `content` blocks under E08's fixed header, never in `structuredContent` 

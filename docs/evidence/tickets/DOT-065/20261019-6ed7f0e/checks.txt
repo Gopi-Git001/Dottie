@@ -1,0 +1,47 @@
+# DOT-065 E08 change-request re-run; working tree on top of 6ed7f0e; 2026-10-19 13:24 CDT on the box
+
+$ rg -n 'NEEDS_APPROVAL|ATTEMPTED' docs/plans/e04-tools-plan.md
+199:| v1 error `NEEDS_APPROVAL` | `APPROVAL_REQUIRED` |
+200:| v1 side effect `ATTEMPTED` | `unknown` (the enum value is removed): the action may have run. No automatic retry; a re-run needs a new approval plus the DOT-094 repeat warning. The audit records `sideEffect=unknown` |
+
+$ rg -n '^### Vocabulary mapping' docs/plans/e04-tools-plan.md
+190:### Vocabulary mapping (DOT-065; E08 to review the RiskClass row)
+
+$ rg -n 'RiskClass `|category `navigate` \|' docs/plans/e04-tools-plan.md
+194:| RiskClass `read` | severity floor `low`, category `read` |
+195:| RiskClass `reversible` | `medium`, category `local_change` |
+196:| RiskClass `sensitive` | `high`, category set per tool: `delete` (delete_file), `overwrite` (write/copy/move with overwrite), `install_or_elevate`, `security_setting`, `external_send`/`external_upload`, `purchase` (→ `critical`). Severity is only a floor and never removes a confirmation: the category decides whether to confirm (spec §10; ADR-0009 item 8), and an unmapped tool or category is `DENIED_BY_POLICY` |
+197:| (no RiskClass) category `navigate` | no-confirm exception (ADR-0009 item 8, E08 co-signed). Closed membership: the only member is `explorer.open_known_folder`, and adding a member needs E08 sign-off. Not eligible for ADR-0017 recovery reuse beyond its own window |
+198:| RiskClass `forbidden` | no ApprovalRequested; `DENIED_BY_POLICY` (e.g. `credential_access`, deny-listed reads) |
+
+$ rg -n '^ErrorCode' -A3 docs/plans/e04-tools-plan.md
+209:ErrorCode = Literal["DENIED_BY_POLICY", "PERMISSION_REQUIRED", "APPROVAL_REQUIRED", "AMBIGUOUS", "NOT_FOUND",
+210-                    "TIMEOUT", "PRECONDITION_FAILED", "POSTCONDITION_FAILED", "POSTCONDITION_UNKNOWN",
+211-                    "CANCELLED", "USER_DECLINED", "INVALID_ARGUMENT", "INTERNAL"]
+212-
+
+$ rg -n 'dynamic preferred' docs/plans/e04-tools-plan.md; echo exit=$?
+exit=1
+
+$ rg -n '^2\. \*\*Hosting|^3\. \*\*Shell' docs/plans/e04-tools-plan.md
+21:2. **Hosting:** the v1 preference for dynamic tools is withdrawn. ADR-0008 applies (MCP stdio, decided by W1-S2), because `dynamicTools` exists only in the `--experimental` 0.163.0 schema.
+22:3. **Shell:** ADR-0016 applies. Codex exec is the default single path, and DOT-033/tests 31–36 are **blocked** until W1-S1.
+
+$ rg -n 'external_send|external_upload|install_or_elevate' docs/plans/e04-tools-plan.md
+196:| RiskClass `sensitive` | `high`, category set per tool: `delete` (delete_file), `overwrite` (write/copy/move with overwrite), `install_or_elevate`, `security_setting`, `external_send`/`external_upload`, `purchase` (→ `critical`). Severity is only a floor and never removes a confirmation: the category decides whether to confirm (spec §10; ADR-0009 item 8), and an unmapped tool or category is `DENIED_BY_POLICY` |
+
+$ sed -n 43p docs/adr/ADR-0012-contract-vocabulary-and-envelope-v2.md
+   - EXTENSION, required in v2: `category` ∈ `read | navigate | local_change | delete | overwrite | external_send | external_upload | purchase | install_or_elevate | security_setting | credential_access`.
+
+$ rg -n 'Always-confirm categories' -A1 docs/adr/ADR-0009-fail-closed-policy-and-approval-bridge.md
+53:8. **Always-confirm categories** (CONTRACTS §3 `category`): `local_change`, `delete`, `overwrite`, `external_send`, `external_upload`, `purchase`,
+54-   `install_or_elevate`, `security_setting`. **Overwrite counts as destructive** (same handling as `delete`). `credential_access` is `DENIED_BY_POLICY` with
+
+$ rg -n 'docs/e04/' packages/tools/README.md docs/plans/e04-tools-plan.md; echo exit=$?
+exit=1
+
+$ cd packages/tools && python3 -m pytest -p no:cacheprovider 2>&1 | tail -1
+748 passed, 4 xfailed in 0.62s
+
+$ rg -n -e '\.(local|corp|lan)\b' -e 'DESKTOP-[A-Z0-9]{4,}' -e 'auth\.json' -e 'sk-[A-Za-z0-9]{20}' -e 'C:\\\\Users\\\\[A-Za-z]' docs/plans/e04-tools-plan.md packages/tools/README.md; echo exit=$?
+exit=1
