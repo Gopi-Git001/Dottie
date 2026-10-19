@@ -1,0 +1,17 @@
+// AST scan: `in` operator and for..in in .ts files. usage: node in-scan.mjs <pkgdir-with-typescript> <files...>
+import { createRequire } from 'node:module'; import fs from 'node:fs';
+const [pkg, ...files] = process.argv.slice(2);
+const ts = createRequire(pkg + '/package.json')('typescript');
+let hits = 0;
+for (const f of files) {
+  const sf = ts.createSourceFile(f, fs.readFileSync(f, 'utf8'), ts.ScriptTarget.Latest, true);
+  const visit = n => {
+    let kind = null;
+    if (ts.isBinaryExpression(n) && n.operatorToken.kind === ts.SyntaxKind.InKeyword) kind = 'in-operator';
+    if (ts.isForInStatement(n)) kind = 'for..in';
+    if (kind) { hits++; const { line } = sf.getLineAndCharacterOfPosition(n.getStart()); console.log(`${f}:${line + 1}: ${kind}: ${n.getText().split('\n')[0].slice(0, 120)}`); }
+    ts.forEachChild(n, visit);
+  };
+  visit(sf);
+}
+console.log(`in-scan: ${hits} hit(s) in ${files.length} file(s)`); process.exit(hits ? 1 : 0);
