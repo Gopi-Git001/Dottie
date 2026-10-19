@@ -22,7 +22,7 @@
  * TODO(DOT-095): final per-field maxima with E06's dialog layout; `source` as a URL vs a label; recipient formats per
  * channel; the P27 list of UI-action methods (CONTRACTS: `ui_action` only for UI-action methods).
  */
-import { CanonicalError, canonicalJson, sha256Hex } from './canonical.js';
+import { CanonicalError, canonicalJson, hasOwn, isPlainArray, isPlainObject, sha256Hex } from './canonical.js';
 import { PRIOR_SIDE_EFFECTS, RISK_SEVERITIES, type ApprovalCategory, type PriorSideEffect, type RequestSource, type Risk } from './enums.js';
 
 /** Categories that open a dialog (ruling 1l coverage); each has a display rule. */
@@ -367,9 +367,8 @@ export interface DisplayIssue {
   readonly path: string;
   readonly message: string;
 }
-function isObj(v: unknown): v is Record<string, unknown> {
-  return typeof v === 'object' && v !== null && !Array.isArray(v);
-}
+/** Plain data objects only (prototype Object.prototype or null; own enumerable data keys): see isPlainObject. */
+const isObj = isPlainObject;
 
 /** Validate an untrusted ApprovalDisplay (strict, per kind). Never coerces. */
 export function validateApprovalDisplay(v: unknown, path = 'display'): { readonly ok: boolean; readonly issues: readonly DisplayIssue[] } {
@@ -394,7 +393,7 @@ export function validateApprovalDisplay(v: unknown, path = 'display'): { readonl
   /** A path list (ruling 1r): 1-500 full paths, never shortened. */
   const pathList = (k: string): number => {
     const x = (v as Record<string, unknown>)[k];
-    if (!Array.isArray(x) || x.length === 0 || x.length > PATH_LIST_MAX) {
+    if (!isPlainArray(x) || x.length === 0 || x.length > PATH_LIST_MAX) {
       bad(k, `must be a list of 1-${PATH_LIST_MAX} full paths (more → display_unavailable)`);
       return -1;
     }
@@ -406,7 +405,7 @@ export function validateApprovalDisplay(v: unknown, path = 'display'): { readonl
   };
   const list = (k: string, minItems: number, maxItems: number, maxLen: number): void => {
     const x = (v as Record<string, unknown>)[k];
-    if (!Array.isArray(x) || x.length < minItems || x.length > maxItems) return void bad(k, `must be a list of ${minItems}-${maxItems} entries`);
+    if (!isPlainArray(x) || x.length < minItems || x.length > maxItems) return void bad(k, `must be a list of ${minItems}-${maxItems} entries`);
     x.forEach((e, i) => {
       if (typeof e !== 'string' || e.length === 0) bad(`${k}[${i}]`, 'must be a non-empty string');
       else if (codePoints(e) > maxLen) bad(`${k}[${i}]`, `at most ${maxLen} code points`);
@@ -418,7 +417,7 @@ export function validateApprovalDisplay(v: unknown, path = 'display'): { readonl
     if (listLen > 0 && (v as Record<string, unknown>)[k] !== String(listLen)) bad(k, 'is the list length as a decimal string');
   };
 
-  if (!isObj(v)) return { ok: false, issues: [{ path, message: 'must be an object' }] };
+  if (!isObj(v)) return { ok: false, issues: [{ path, message: 'must be a plain object (prototype Object.prototype or null, own data keys only)' }] };
   const kind = v[K.kind];
   if (!(DISPLAY_KINDS as readonly unknown[]).includes(kind)) return { ok: false, issues: [{ path: `${path}.${K.kind}`, message: `must be one of ${DISPLAY_KINDS.join('|')}` }] };
   const cat = v[K.category];
@@ -428,7 +427,7 @@ export function validateApprovalDisplay(v: unknown, path = 'display'): { readonl
     keys = DISPLAY_KIND_KEYS.tool[cat as DialogCategory];
   } else keys = DISPLAY_KIND_KEYS[kind as Exclude<DisplayKind, 'tool'>];
   for (const k of Object.keys(v)) if (!keys.includes(k)) bad(k, `is not a field of a ${String(kind)} display`);
-  for (const k of keys) if (!(k in v)) bad(k, 'is required (null when it does not apply)');
+  for (const k of keys) if (!hasOwn(v, k)) bad(k, 'is required (null when it does not apply)');
   // Ruling 2a: the coverage rule is per kind (tool already checked above; ui_action dialog categories only;
   // pre_dispatch / codex_* every category but credential_access).
   {
@@ -462,11 +461,12 @@ export function validateApprovalDisplay(v: unknown, path = 'display'): { readonl
       if (typeof v[K.method] === 'string' && !isUiActionMethod(v[K.method])) bad(K.method, 'is not a UI-action method (ruling 1z: ^(ui|window)\\.[a-z][a-z0-9_]*$)');
       const app = v[K.app];
       if (!isObj(app)) {
-        bad(K.app, 'must be an object {appName, windowTitle, processImage}');
+        bad(K.app, 'must be a plain object {appName, windowTitle, processImage}');
         break;
       }
       const p = `${K.app}.`;
       for (const k of Object.keys(app)) if (!(UI_ACTION_APP_KEYS as readonly string[]).includes(k)) bad(p + k, 'is not a field of a ui_action app');
+      for (const k of UI_ACTION_APP_KEYS) if (!hasOwn(app, k)) bad(p + k, 'is required');
       textIn(app, p, K.appName, DISPLAY_MAX[K.appName]);
       textIn(app, p, K.windowTitle, DISPLAY_MAX[K.windowTitle]);
       textIn(app, p, K.processImage, DISPLAY_MAX[K.processImage]);

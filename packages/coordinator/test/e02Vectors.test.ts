@@ -1,6 +1,6 @@
 /**
  * E02's real computeActionId / computeDisplayHash and E02's vectors, re-vendored at dottie-e02
- * feature/E02-approvals-bridge 0146c90 (E01 1y follow-up; on top of 2581593 / cc22afb) (packages/contracts/fixtures/action-id/vectors.json; CONTRACTS e41d1ca + rulings
+ * feature/E02-approvals-bridge 45129fe (plain data only; on top of 0146c90 1y follow-up, 2581593 / cc22afb) (packages/contracts/fixtures/action-id/vectors.json; CONTRACTS e41d1ca + rulings
  * 1v (c19b751), 1x (474c502), 1y (c0b36d4), 1z (492c01c), 2a (972d5f4), 2b (97e7bc0), 1y follow-up; first vendored at 895676d, every 895676d
  * entry is byte-identical in cc22afb). The E02 sources are VENDORED verbatim under
  * src/vendor/e02-contracts (no runtime dependency on @dottie/contracts; see the NOTICE there); the vectors are vendored
@@ -49,9 +49,9 @@ const byName = (section: string, name: string) => {
 };
 
 const gitBlob = (b: Buffer) => createHash('sha1').update(Buffer.concat([Buffer.from(`blob ${b.length}\0`), b])).digest('hex');
-test('E02 vectors: the vendored fixture is 0146c90 byte-for-byte (blob SHA) and has the sections we pin', () => {
-  // git blob id = sha1("blob <len>\0" + bytes): equals `git rev-parse 0146c90:packages/contracts/fixtures/action-id/vectors.json`
-  assert.equal(gitBlob(raw), '1530244b3151ed213a4f9d67e9409c876cc00be0');
+test('E02 vectors: the vendored fixture is 45129fe byte-for-byte (blob SHA) and has the sections we pin', () => {
+  // git blob id = sha1("blob <len>\0" + bytes): equals `git rev-parse 45129fe:packages/contracts/fixtures/action-id/vectors.json`
+  assert.equal(gitBlob(raw), '524d2c311f91c3b2c86022b5b1cdeaa0dccdc4b9');
   assert.equal(V.purpose, 'dottie.actionId.v1');
   assert.deepEqual([V['displays']!.length, V['displayCuts']!.length, V['actionId']!.length, V['actionIdInvalid']!.length, V['displaysInvalid']!.length], [43, 9, 23, 17, 62]);
 });
@@ -270,7 +270,7 @@ test('1y: app.launch is NOT a ui_action: the ui_action builder refuses it, valid
   assert.equal(reqEnv(tool, { requestSource: 'codex' }).ok, false, 'kind/source guard still applies');
 });
 
-test('vendored E02 files are unedited: SHA-256 of each matches SHA256SUMS, git blob ids are 0146c90\'s (and NOTICE names 0146c90)', () => {
+test('vendored E02 files are unedited: SHA-256 of each matches SHA256SUMS, git blob ids are 45129fe\'s (and NOTICE names 45129fe)', () => {
   const dir = new URL('../../src/vendor/e02-contracts/', import.meta.url);
   const check = (sums: URL, base: URL) => {
     const lines = readFileSync(sums, 'utf8').trim().split('\n');
@@ -286,9 +286,9 @@ test('vendored E02 files are unedited: SHA-256 of each matches SHA256SUMS, git b
   assert.equal(check(new URL('SHA256SUMS', fx), fx), 1);
   const ev = new URL('../../test/fixtures/e02/events/invalid/', import.meta.url);
   assert.equal(check(new URL('SHA256SUMS', ev), ev), 5);
-  assert.match(readFileSync(new URL('NOTICE.md', dir), 'utf8'), /0146c9071c2d55b5ddd3c152812d31f05efb362b/);
-  // git blob ids = `git rev-parse 0146c90:packages/contracts/src/<file>`
-  const blobs: Record<string, string> = { 'canonical.ts': '36bfbaf40a90a3ba8f4cbf45aaba2886d8c47afc', 'display.ts': '0498f79433b242783ee72cdb4baae861d400fde4', 'enums.ts': '48e25aadf78b5dbe8022a241d69af75bde92f6cd' };
+  assert.match(readFileSync(new URL('NOTICE.md', dir), 'utf8'), /45129fe9b9e6ab98d009c88620a3cc2183ef9b43/);
+  // git blob ids = `git rev-parse 45129fe:packages/contracts/src/<file>`
+  const blobs: Record<string, string> = { 'canonical.ts': '3bf7343e6e00877b5634794bc5a937ba7cd6a99c', 'display.ts': '6c9091e788cf627914c314fceeed4e2e52645765', 'enums.ts': '48e25aadf78b5dbe8022a241d69af75bde92f6cd' };
   for (const [f, b] of Object.entries(blobs)) assert.equal(gitBlob(readFileSync(new URL(f, dir))), b, `${f}: blob`);
 });
 

@@ -12,6 +12,7 @@
  * and free text sits only in a slot whose key says it is untrusted.
  */
 import * as e02 from './vendor/e02-contracts/display.js';
+import { isPlainArray, isPlainObject } from './vendor/e02-contracts/canonical.js';
 
 export const DISPLAY_KEYS = {
   kind: 'kind',
@@ -52,7 +53,7 @@ export const KIND_SOURCE: Readonly<Record<DisplayKind, RequestSource>> = {
  * Settled, E01 1y (c0b36d4): UI-action methods are `ui.*` (in-app control: click, type, key press, UIA invoke) and
  * `window.*` (focus/close/move/minimize/maximize). `app.*` (launch/terminate) is NOT a UI action: kind `tool`.
  * E01 1z (492c01c): exactly ^(ui|window)\.[a-z][a-z0-9_]*$, so a bare `ui.`/`window.`, uppercase, a leading digit or
- * any other character is not a UI-action method. The vendored E02 check (0146c90) is used as-is.
+ * any other character is not a UI-action method. The vendored E02 check (45129fe) is used as-is.
  */
 export const UI_ACTION_METHOD_RE: RegExp = e02.UI_ACTION_METHOD_RE;
 export const isUiActionMethod = (method: unknown): boolean => e02.isUiActionMethod(method);
@@ -64,17 +65,13 @@ export const isUiActionMethod = (method: unknown): boolean => e02.isUiActionMeth
 export const UI_ACTION_PREFIX_RE = /^(ui|window)\./i;
 export const hasUiActionPrefix = (method: unknown): boolean => typeof method === 'string' && UI_ACTION_PREFIX_RE.test(method);
 /**
- * Prototype-key hardening: a display (and its nested `app`) must be a plain JSON-like object whose fields are its OWN
- * properties (prototype Object.prototype or null). An object with inherited fields would pass an `in` / index check
- * but canonicalise (and hash) as its own keys only, so it is refused before any validation or hashing.
+ * E02 45129fe: plain data only (vendored `isPlainObject` / `isPlainArray`: prototype Object.prototype or null, own
+ * enumerable DATA keys, no symbols, dense arrays). The vendored validator decides plain-ness; this only says whether
+ * OUR event-level checks may read the display's fields (no getter is ever invoked: a non-plain display, app or list
+ * short-circuits to the vendored issues).
  */
-export function plainOwnDisplay(v: unknown): boolean {
-  if (typeof v !== 'object' || v === null || Array.isArray(v)) return false;
-  const proto = Object.getPrototypeOf(v);
-  if (proto !== Object.prototype && proto !== null) return false;
-  return Object.values(v).every(x => typeof x !== 'object' || x === null || Array.isArray(x) || plainOwnDisplay(x));
-}
-const own = (o: Record<string, unknown>, k: string): unknown => (Object.hasOwn(o, k) ? o[k] : undefined);
+const plainValue = (v: unknown): boolean =>
+  typeof v !== 'object' || v === null || (Array.isArray(v) ? isPlainArray(v) && v.every(plainValue) : isPlainObject(v) && Object.values(v).every(plainValue));
 /**
  * E02 FINAL never-cut bounds (E01 1o/1r/1v): over any of them the display can't be built → display_unavailable
  * (declined, no dialog). Bytes are raw UTF-8 bytes; escalation entries and method are counted in Unicode code points.
@@ -118,7 +115,7 @@ export type ApprovalDisplay = { readonly [key: string]: DisplayValue };
 
 /**
  * What E02's adapter supplies on a Codex approval (CodexApprovalRequest.display): the validated params, as the
- * 'codex_command' / 'codex_file_change' union members. Field names settled (E02 895676d mirrors them exactly; unchanged at 0146c90).
+ * 'codex_command' / 'codex_file_change' union members. Field names settled (E02 895676d mirrors them exactly; unchanged at 45129fe).
  */
 export interface CodexCommandParams {
   readonly kind: 'codex_command';
@@ -140,7 +137,7 @@ export type CodexDisplayParams = CodexCommandParams | CodexFileChangeParams;
 // E01 1t (E08 co-signed): in UNTRUSTED free text (the summary / reason slots) control, bidi and invisible format
 // characters are stripped. BOUND fields (command, paths, window title, …) are never stripped: they are bound raw
 // (displayHash covers the raw bytes) and rendered with visible escapes (renderCodexCommand / DOT-095 renderer).
-// Hidden-character set = E02 packages/contracts display.ts HIDDEN_CHAR @ 0146c90 (unchanged since 895676d) (C0/C1, DEL, bidi, zero-width and
+// Hidden-character set = E02 packages/contracts display.ts HIDDEN_CHAR @ 45129fe (unchanged since 895676d) (C0/C1, DEL, bidi, zero-width and
 // invisible format characters incl. U+034F, Hangul fillers, U+17B4/5, U+206A-206F, U+FFF9-FFFB, tags U+E0000-E007F).
 // Rendering keeps TAB (own marker) and LF (line break) out of the escape set; everything else in it is escaped.
 // eslint-disable-next-line no-control-regex
@@ -151,7 +148,7 @@ const HIDDEN = /[\u0000-\u0008\u000B-\u001F\u007F-\u009F\u00AD\u034F\u061C\u115F
  */
 const untrusted = (s: string, max: number): string => e02.untrustedText(s, max);
 /**
- * Final gate on every builder: E02's validator (vendored 0146c90, the contract's): exact key sets, limits (incl. the
+ * Final gate on every builder: E02's validator (vendored 45129fe, the contract's): exact key sets, limits (incl. the
  * never-cut method), the 1z method regex, the 2a kind-scoped coverage rule, credential_access for every kind. Anything
  * it rejects is display_unavailable.
  */
@@ -178,7 +175,9 @@ export function preDispatchDisplay(p: { category: string; risk: string; possible
  * with display_unavailable; there is no generic fallback).
  */
 export function codexDisplay(category: string, params: unknown): ApprovalDisplay | null {
-  if (typeof params !== 'object' || params === null) return null;
+  // E02 45129fe: the adapter's params must be plain data too (a getter, symbol key or sparse list → null), checked
+  // here because the builder copies values into a fresh display, where the vendored validator can no longer see them.
+  if (!plainValue(params) || !isPlainObject(params)) return null;
   const p = params as Record<string, unknown>;
   const reason = p['reason'];
   if (reason !== undefined && typeof reason !== 'string') return null;
@@ -210,13 +209,14 @@ export function codexDisplay(category: string, params: unknown): ApprovalDisplay
 }
 
 /**
- * E01 1r/1x: K8's tool-host display (kind 'tool'). Per-category keys are E02's (0146c90 DISPLAY_KIND_KEYS.tool,
+ * E01 1r/1x: K8's tool-host display (kind 'tool'). Per-category keys are E02's (45129fe DISPLAY_KIND_KEYS.tool,
  * settled, E01 1x): no `detail`; external_send's body is `bodyUntrusted` (stripped, cut at 200); delete/overwrite get
  * `fileCount` and local_change `itemCount` (= list length, filled in here, never supplied). `fields` must be exactly the
  * category's other keys. A UI-action method (1y) must use uiActionDisplay. Anything E02's validator rejects (missing
  * or extra key, over a limit, bad amount/currency, …) → null (display_unavailable).
  */
 export function toolDisplay(p: { category: string; method: string; targetLabel: string; fields?: Readonly<Record<string, string | readonly string[]>> }): ApprovalDisplay | null {
+  if (p.fields !== undefined && (!isPlainObject(p.fields) || !plainValue(p.fields))) return null; // E02 45129fe: plain data only
   if (!nonEmpty(p.method) || !nonEmpty(p.targetLabel) || hasUiActionPrefix(p.method)) return null;
   // own-property lookups only: a category such as 'toString' or '__proto__' is simply not a tool category
   const table = e02.DISPLAY_KIND_KEYS.tool as Readonly<Record<string, readonly string[]>>;
@@ -306,8 +306,11 @@ export const renderCodexCommand = (display: ApprovalDisplay): RenderedBoundText 
 export function displayProblems(display: unknown, ctx: { category: unknown; risk: unknown; priorSideEffect: unknown; priorTaskId: unknown; requestSource: unknown }): string[] {
   const out: string[] = [];
   if (!isRecord(display)) return ['payload.display must be an object'];
-  if (!plainOwnDisplay(display)) return ['payload.display must be a plain object with its own fields (no inherited keys)'];
   const d = display;
+  if (!plainValue(d)) {
+    const issues = e02.validateApprovalDisplay(d).issues.map(i => `payload.${i.path} ${i.message}`);
+    return issues.length > 0 ? issues : ['payload.display must be plain data (E02 isPlainObject / isPlainArray)'];
+  }
   if (!canonical(d)) out.push('payload.display values must be strings, null, arrays of strings or objects of those');
   const kind = d[K.kind];
   if (!(DISPLAY_KINDS as readonly unknown[]).includes(kind)) return [...out, `payload.display.${K.kind} must be one of ${DISPLAY_KINDS.join(', ')}`];
@@ -319,27 +322,26 @@ export function displayProblems(display: unknown, ctx: { category: unknown; risk
   };
   if (ctx.category === 'credential_access') out.push('credential_access has no display rule (always DENIED_BY_POLICY, no request)');
   const need = (obj: Record<string, unknown>, prefix: string, ...keys: string[]) => {
-    for (const k of keys) if (!nonEmpty(own(obj, k))) out.push(`payload.display.${prefix}${k} is required (non-empty string) for kind ${String(kind)}`);
+    for (const k of keys) if (!nonEmpty(obj[k])) out.push(`payload.display.${prefix}${k} is required (non-empty string) for kind ${String(kind)}`);
   };
   const maxLen = (obj: Record<string, unknown>, prefix: string, k: string, max: number) => {
-    const v = own(obj, k);
+    const v = obj[k];
     if (typeof v === 'string' && codePoints(v) > max) out.push(`payload.display.${prefix}${k} exceeds ${max} code points (builders cut with an ellipsis)`);
   };
   const maxBytes = (obj: Record<string, unknown>, k: string, max: number) => {
-    const v = own(obj, k);
+    const v = obj[k];
     if (typeof v === 'string' && utf8Bytes(v) > max) out.push(`payload.display.${k} exceeds ${max} bytes (display_unavailable)`);
   };
   const pathBytes = (paths: unknown) => {
     if (Array.isArray(paths) && paths.some(x => typeof x === 'string' && utf8Bytes(x) > DISPLAY_HARD_LIMITS.pathBytes)) out.push(`payload.display.${K.paths} has a path over ${DISPLAY_HARD_LIMITS.pathBytes} bytes (display_unavailable)`);
   };
-  // The contract's own per-kind / per-category rules (E02 validateApprovalDisplay @ 0146c90, vendored): exact key sets
+  // The contract's own per-kind / per-category rules (E02 validateApprovalDisplay @ 45129fe, vendored; plain data only): exact key sets
   // (1x tool keys), limits, hidden characters left in untrusted slots, lone surrogates, process-image basename, formats.
   for (const i of e02.validateApprovalDisplay(d).issues) out.push(`payload.${i.path} ${i.message}`);
   switch (kind as DisplayKind) {
     case 'pre_dispatch': {
       const allowed: string[] = [K.kind, K.category, K.risk, K.possibleRepeat, K.retryOfTaskId, K.summary];
       exact(...allowed);
-      for (const k of allowed) if (!Object.hasOwn(d, k)) out.push(`payload.display.${k} is required for pre_dispatch`);
       if (ctx.priorTaskId !== undefined && ctx.priorTaskId !== null && d[K.retryOfTaskId] !== ctx.priorTaskId) out.push(`payload.display.${K.retryOfTaskId} must equal payload.possibleRepeat.priorTaskId`);
       if (d[K.risk] !== ctx.risk) out.push(`payload.display.${K.risk} must equal payload.risk`);
       if (d[K.possibleRepeat] !== (ctx.priorSideEffect ?? null)) out.push(`payload.display.${K.possibleRepeat} must equal payload.possibleRepeat.priorSideEffect (or null)`);
@@ -392,7 +394,7 @@ export function displayProblems(display: unknown, ctx: { category: unknown; risk
       break;
     }
     case 'tool': {
-      // Per-category keys: settled, E01 1x (474c502) = E02 0146c90 DISPLAY_KIND_KEYS.tool; exact key sets are enforced by
+      // Per-category keys: settled, E01 1x (474c502) = E02 45129fe DISPLAY_KIND_KEYS.tool; exact key sets are enforced by
       // the vendored validateApprovalDisplay above (no `detail`; `bodyUntrusted`; delete/overwrite `fileCount`).
       need(d, '', K.method, K.targetLabel);
       if (hasUiActionPrefix(d[K.method])) out.push(`payload.display.${K.method} has a ui./window. prefix: only kind ui_action may use it (E01 1y)`);
