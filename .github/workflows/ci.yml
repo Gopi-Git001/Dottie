@@ -174,7 +174,7 @@ jobs:
         run: |
           sudo apt-get update -q
           # Ubuntu 24.04: libasound2 is only a virtual package; the library is libasound2t64.
-          sudo apt-get install -y -q xvfb ripgrep \
+          sudo apt-get install -y -q xvfb openbox ripgrep \
             libnss3 libatk1.0-0t64 libatk-bridge2.0-0t64 libcups2t64 libdrm2 \
             libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 \
             libasound2t64 libpango-1.0-0 libcairo2 libgtk-3-0t64 libx11-xcb1 libxss1 libxtst6
@@ -198,7 +198,9 @@ jobs:
           # smoke-run.mjs: --case-id and --runner must match [A-Za-z0-9-]+.
           # A raw Actions URL is rejected, and it would put a host and user in the header.
           # actions-runs-<id> is this workflow run, which is where the log artifact is uploaded.
-          setsid xvfb-run -a npm run smoke:ci -- --case-id SMK-DESK-01 --runner "actions-runs-${{ github.run_id }}" >"$outer" 2>&1 &
+          # openbox is the window manager. Without one, xvfb often never focuses the
+          # approval window, Approve stays disabled, and repeat.approveDoubleClick times out.
+          setsid xvfb-run -a bash -c 'openbox >/dev/null 2>&1 & exec npm run smoke:ci -- --case-id SMK-DESK-01 --runner "actions-runs-${{ github.run_id }}"' >"$outer" 2>&1 &
           leader=$!
           echo "$leader" >"$pgid_file"
           kill_group() {
