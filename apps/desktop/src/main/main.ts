@@ -9,7 +9,7 @@ import { isOnboardingComplete } from '../shared/onboarding';
 import { DesktopController } from './controller';
 import { DottieTray } from './electron/tray';
 import { MainWindow } from './electron/window';
-import { ApprovalWindow } from './electron/approvalWindow';
+import { ApprovalWindow, type SmokeWindowState } from './electron/approvalWindow';
 import { hardenSession, installGlobalHardening } from './electron/harden';
 import { handleAppScheme, registerAppSchemePrivileges } from './electron/protocol';
 import { readFlags } from './flags';
@@ -373,30 +373,47 @@ async function smokeApproval(approvalWindow: ApprovalWindow, coordinator: StubCo
   out['notActiveTask'] = { pending: controller.approvals.size, sent: coordinator.resolutions.length, windowOpen: approvalWindow.webContents !== null };
   coordinator.requestApproval({ ...base, actionId: 'a'.repeat(64), category: 'delete', display: deleteDisplay, requestSource: 'tool_host', possibleRepeat: { priorTaskId: 'smoke-t0', priorSideEffect: 'committed' } });
   let wc = await waitLoad('repeat.waitLoad');
-  // Sample from load until Approve becomes enabled; record whether it was disabled while the
-  // warning was already on screen, and try an early Approve over IPC at that moment.
+  // Sample until Approve becomes enabled; record whether it was disabled while the warning was
+  // already on screen, and try an early Approve over IPC at that moment.
+  const smokeApprovalWindow = approvalWindow as ApprovalWindow & {
+    nudgeForSmokeTest(): void;
+    smokeWindowState(): SmokeWindowState;
+  };
   let state: { warning: string | null; approveDisabled: boolean | null } = { warning: null, approveDisabled: null };
   let disabledWithWarning = false;
   let earlyApprove: unknown = null;
-  for (let i = 0; i < 60; i++) {
-    // Once the window is visible and focused, stop. Another focus() would restart the 500 ms timer.
-    if (!approvalWindow.isAttentive()) (approvalWindow as ApprovalWindow & { nudgeForSmokeTest(): void }).nudgeForSmokeTest();
-    state = (await js('repeat.probe', wc, probe)) as typeof state;
-    if (state.warning && state.approveDisabled === true && !disabledWithWarning) {
-      disabledWithWarning = true;
-      earlyApprove = await js('repeat.earlyApprove', wc, 
-        `window.dottie.getApproval().then((g) => window.dottie.resolveApproval({ dialogId: g.data.approval.dialogId, decision: 'approve' })).then((r) => r.ok ? 'ok' : r.error.code)`,
-      );
-      // D2 join while the dialog is open: same dialog, no reload.
-      coordinator.requestApproval({ ...base, actionId: 'a'.repeat(64), category: 'delete', display: deleteDisplay, requestSource: 'tool_host', possibleRepeat: { priorTaskId: 'smoke-t0', priorSideEffect: 'committed' } });
-    }
-    if (state.approveDisabled === false) break;
-    await sleep(50);
-  }
-  out['repeat'] = { ...state, approveDisabledWhileWarningShown: disabledWithWarning, earlyApprove, joined: controller.approvals.joinedCount('a'.repeat(64)) };
-  if (state.approveDisabled !== false) {
-    throw new SmokeStepAssertion('repeat.approveEnabled', 'Approve stayed disabled; the approval window never stayed visible and focused');
-  }
+  let nudges = 0;
+  let beforeNudge: SmokeWindowState | null = null;
+  const publishRepeat = (): void => {
+    out['repeat'] = { ...state, approveDisabledWhileWarningShown: disabledWithWarning, earlyApprove, joined: controller.approvals.joinedCount('a'.repeat(64)), nudges, beforeNudge };
+  };
+  state = await smokeSteps.waitFor(
+    'repeat.waitApproveEnabled',
+    async () => {
+      // State before the first nudge, so the log shows whether the nudge had anything to do.
+      beforeNudge ??= smokeApprovalWindow.smokeWindowState();
+      // setWindowAttention ignores an unchanged value. attentionSince starts only on a
+      // not-attentive → attentive change, so another focus() while already attentive does not
+      // restart the 500 ms timer. Nudge only while the window is not attentive.
+      if (!approvalWindow.isAttentive()) {
+        nudges += 1;
+        smokeApprovalWindow.nudgeForSmokeTest();
+      }
+      state = (await js('repeat.probe', wc, probe)) as typeof state;
+      if (state.warning && state.approveDisabled === true && !disabledWithWarning) {
+        disabledWithWarning = true;
+        earlyApprove = await js('repeat.earlyApprove', wc,
+          `window.dottie.getApproval().then((g) => window.dottie.resolveApproval({ dialogId: g.data.approval.dialogId, decision: 'approve' })).then((r) => r.ok ? 'ok' : r.error.code)`,
+        );
+        // D2 join while the dialog is open: same dialog, no reload.
+        coordinator.requestApproval({ ...base, actionId: 'a'.repeat(64), category: 'delete', display: deleteDisplay, requestSource: 'tool_host', possibleRepeat: { priorTaskId: 'smoke-t0', priorSideEffect: 'committed' } });
+      }
+      publishRepeat();
+      return state.approveDisabled === false ? state : null;
+    },
+    STEP_MS,
+  );
+  publishRepeat();
   out['forgedId'] = (await js('repeat.forgedId', wc, `window.dottie.resolveApproval({ dialogId: '${'f'.repeat(64)}', decision: 'approve' }).then((r) => r.ok ? 'ok' : r.error.code)`));
   const replies = (): ReplyEntry[] => replyEntries(coordinator);
   const closed = (): boolean => approvalWindow.webContents === null;

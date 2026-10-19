@@ -94,9 +94,16 @@ export class ApprovalWindow {
   }
 }
 
+export interface SmokeWindowState {
+  visible: boolean;
+  focused: boolean;
+  isAttentive: boolean;
+}
+
 type SmokeApprovalWindow = ApprovalWindow & {
   nudgeForSmokeTest(): void;
   hideForSmokeTest(): void;
+  smokeWindowState(): SmokeWindowState;
 };
 
 /**
@@ -117,5 +124,11 @@ if (__DOTTIE_SMOKE__) {
     assertSmokeMode();
     const w = (this as unknown as { win: BrowserWindow | null }).win;
     if (w && !w.isDestroyed()) w.hide();
+  };
+  proto.smokeWindowState = function (this: ApprovalWindow): SmokeWindowState {
+    assertSmokeMode();
+    const w = (this as unknown as { win: BrowserWindow | null }).win;
+    if (!w || w.isDestroyed()) return { visible: false, focused: false, isAttentive: false };
+    return { visible: w.isVisible(), focused: w.isFocused(), isAttentive: this.isAttentive() };
   };
 }
