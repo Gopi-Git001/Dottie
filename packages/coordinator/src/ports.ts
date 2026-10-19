@@ -68,7 +68,7 @@ export interface ActionIdBinding {
 
 /**
  * Injected actionId source. Must return 64 lowercase hex (SHA-256 of the §3.3 canonical JSON). The real one is
- * `contractsActionIdPort` (src/actionIdPort.ts: E02 computeActionId / computeDisplayHash @ 0146c90, vendored). Unwired, throwing, or malformed output fails closed:
+ * `contractsActionIdPort` (src/actionIdPort.ts: E02 computeActionId / computeDisplayHash @ 45129fe, vendored). Unwired, throwing, or malformed output fails closed:
  * no ApprovalRequested; the confirmation resolves as decline (ADR-0009 CR1).
  */
 export interface ActionIdPort {
@@ -139,7 +139,7 @@ export interface CodexApprovalRequest {
   readonly toolId?: string;
   /**
    * E01 1o/1r: the adapter's validated params as the 'codex_command' / 'codex_file_change' ApprovalDisplay members
-   * (field names settled, E02 895676d mirrors them exactly; unchanged at 0146c90). The coordinator builds the bound display from it (ApprovalDisplayPort);
+   * (field names settled, E02 895676d mirrors them exactly; unchanged at 45129fe). The coordinator builds the bound display from it (ApprovalDisplayPort);
    * absent, malformed or over the limits → the approval is declined with display_unavailable.
    */
   readonly display?: CodexDisplayParams;

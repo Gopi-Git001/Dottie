@@ -11,6 +11,7 @@
 import { isCoordinatorState, type CoordinatorState } from './states.js';
 
 import { displayProblems, REQUEST_SOURCES, type ApprovalDisplay, type RequestSource } from './display.js';
+import { isPlainArray, isPlainObject } from './vendor/e02-contracts/canonical.js';
 export const EVENT_SCHEMA = 'dottie.event' as const;
 export const EVENT_SCHEMA_VERSION = 2 as const;
 
@@ -393,9 +394,8 @@ const OBSERVED_STATE_FIELDS: readonly FieldSpec[] = [
 const TOOL_ERROR_FIELDS: readonly FieldSpec[] = [f('code', TOOL_ERROR_CODES), f('message', 'string'), f('retryable', 'boolean')];
 const POSSIBLE_REPEAT_FIELDS: readonly FieldSpec[] = [f('priorTaskId', 'nonempty_string'), f('priorSideEffect', POSSIBLE_REPEAT_SIDE_EFFECTS)];
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
+/** E02 45129fe: plain data objects only (vendored isPlainObject: no inherited fields, getters or symbol keys). */
+const isRecord = (value: unknown): value is Record<string, unknown> => isPlainObject(value);
 
 function checkField(obj: Record<string, unknown>, spec: FieldSpec, path: string, errors: string[]): void {
   const value = Object.hasOwn(obj, spec.name) ? obj[spec.name] : undefined; // own fields only
@@ -437,7 +437,7 @@ function checkField(obj: Record<string, unknown>, spec: FieldSpec, path: string,
     return;
   }
   const ok =
-    kind === 'array' ? Array.isArray(value)
+    kind === 'array' ? isPlainArray(value)
     : kind === 'object' ? isRecord(value)
     : kind === 'state' ? isCoordinatorState(value)
     : kind === 'number' ? typeof value === 'number' && Number.isFinite(value)
@@ -468,7 +468,11 @@ export function validateEvent(input: unknown): ValidationResult {
   if (!isRecord(payload)) {
     errors.push('payload must be an object');
   } else {
-    for (const spec of PAYLOAD_FIELDS[type as EventType]) checkField(payload, spec, 'payload', errors);
+    const specs = PAYLOAD_FIELDS[type as EventType];
+    for (const spec of specs) checkField(payload, spec, 'payload', errors);
+    // Closed payloads (E02 validateEvent "is not a v2 field"): an unknown own key, also one named constructor /
+    // toString / valueOf / __proto__, is rejected; known names are matched against the spec list, never by lookup.
+    for (const k of Object.keys(payload)) if (!specs.some(s => s.name === k)) errors.push(`payload.${k} is not a v2 field of ${type}`);
     for (const key of ['timestamp', 'expiry'] as const) {
       const v = payload[key];
       if (typeof v === 'string' && !ISO.test(v)) errors.push(`payload.${key} must be ISO-8601`);

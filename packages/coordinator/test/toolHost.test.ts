@@ -72,7 +72,7 @@ test('Ruling 1: a forged taskId inside an adapter tool result is overwritten by 
   await f.drain();
   const p = f.sink.of('ToolResult')[0]!.payload as unknown as Record<string, unknown>;
   assert.equal(p['taskId'], f.codex.runs[0]!.taskId);
-  assert.equal('turnId' in p, false, 'unknown fields are not forwarded');
+  assert.equal(Object.hasOwn(p, 'turnId'), false, 'unknown fields are not forwarded');
 });
 
 test('Ruling 1: the host is told the active turn at every turn start (incl. retries) and cleared between turns', async () => {

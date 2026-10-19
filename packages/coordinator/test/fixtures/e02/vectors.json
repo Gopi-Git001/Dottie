@@ -1404,7 +1404,7 @@
         "windowTitle": "notes.txt - Notepad",
         "processImage": "notepad.exe"
       },
-      "error": "display.appName is not a field of a ui_action display; display.windowTitle is not a field of a ui_action display; display.processImage is not a field of a ui_action display; display.app is required (null when it does not apply); display.app must be an object {appName, windowTitle, processImage}"
+      "error": "display.appName is not a field of a ui_action display; display.windowTitle is not a field of a ui_action display; display.processImage is not a field of a ui_action display; display.app is required (null when it does not apply); display.app must be a plain object {appName, windowTitle, processImage}"
     },
     {
       "name": "ui_action app with an extra field",
@@ -2914,7 +2914,7 @@
           "windowTitle": "notes.txt - Notepad"
         }
       },
-      "error": "display.app.processImage must be a non-empty string"
+      "error": "display.app.processImage is required; display.app.processImage must be a non-empty string"
     },
     {
       "name": "ui_action with an empty windowTitle",

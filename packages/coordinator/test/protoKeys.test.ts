@@ -9,7 +9,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { validateEvent } from '../src/contracts.js';
-import { DISPLAY_KEYS as K, codexDisplay, hasUiActionPrefix, plainOwnDisplay, preDispatchDisplay, toolDisplay, uiActionDisplay, type ApprovalDisplay } from '../src/display.js';
+import { DISPLAY_KEYS as K, codexDisplay, hasUiActionPrefix, preDispatchDisplay, toolDisplay, uiActionDisplay, type ApprovalDisplay } from '../src/display.js';
 import { contractsActionIdPort } from '../src/actionIdPort.js';
 import { PinnedToolCatalog } from '../src/toolCatalog.js';
 import { validateApprovalDisplay } from '../src/vendor/e02-contracts/display.js';
@@ -139,15 +139,17 @@ test('prototype keys: an event whose payload fields are INHERITED is rejected by
   assert.equal(validateEvent(Object.assign(Object.create({ schema: base.schema, version: base.version }), { ...base, payload, schema: undefined, version: undefined })).ok, false, 'inherited envelope fields');
 });
 
-test('prototype keys: plainOwnDisplay accepts only plain / null-prototype objects whose nested objects are plain too', () => {
+test('prototype keys (vendored path since E02 45129fe; was our plainOwnDisplay): validateEvent and the port accept plain / null-prototype displays and reject inherited fields, class instances and non-plain nested values', () => {
   const g = uiActionDisplay({ category: 'local_change', method: 'window.close', appName: 'N', windowTitle: 'w', processImage: 'n.exe' })!;
-  assert.equal(plainOwnDisplay(g), true);
-  assert.equal(plainOwnDisplay(JSON.parse(JSON.stringify(g))), true);
-  assert.equal(plainOwnDisplay(Object.assign(Object.create(null), g)), true);
-  assert.equal(plainOwnDisplay(Object.create(g)), false, 'inherited fields');
-  assert.equal(plainOwnDisplay({ ...g, [K.app]: Object.create(g[K.app] as object) }), false, 'inherited app fields');
+  for (const ok of [g, JSON.parse(JSON.stringify(g)), Object.assign(Object.create(null), g)]) {
+    assert.equal(ev(ok).ok, true);
+    assert.equal(contractsActionIdPort.computeDisplayHash!(ok), contractsActionIdPort.computeDisplayHash!(g), 'null prototype hashes the same');
+  }
   class D { kind = 'ui_action'; }
-  assert.equal(plainOwnDisplay(new D()), false, 'class instance');
-  assert.equal(plainOwnDisplay({ ...g, [K.app]: new Map() }), false, 'a Map inside');
-  for (const v of [null, [], 'x', 1, undefined]) assert.equal(plainOwnDisplay(v), false, String(v));
+  const bad: [string, unknown][] = [['inherited fields', Object.create(g)], ['inherited app fields', { ...g, [K.app]: Object.create(g[K.app] as object) }], ['class instance', new D()], ['a Map inside', { ...g, [K.app]: new Map() }]];
+  for (const [label, v] of bad) {
+    assert.equal(ev(v).ok, false, label);
+    assert.throws(() => contractsActionIdPort.computeDisplayHash!(v as ApprovalDisplay), (e: Error) => e.name === 'CanonicalError', `${label}: port`);
+  }
+  for (const v of [null, [], 'x', 1]) assert.equal(ev(v).ok, false, String(v));
 });

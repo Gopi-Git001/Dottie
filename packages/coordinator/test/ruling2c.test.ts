@@ -21,7 +21,7 @@ const unshowable = (actionId: string, f: Fixture) => {
   const ev = approval(actionId, false, f);
   const e = { ...ev, payload: { ...ev.payload, reason: 'display_unavailable' as const } };
   assert.ok(validateEvent(e).ok, 'a valid 2c answer (no decision field)');
-  assert.equal('decision' in e.payload, false);
+  assert.equal(Object.hasOwn(e.payload, 'decision'), false);
   return e;
 };
 const USER_DECLINED = /you declined|declined it|won't do that|you said no|cancelled by you/i;

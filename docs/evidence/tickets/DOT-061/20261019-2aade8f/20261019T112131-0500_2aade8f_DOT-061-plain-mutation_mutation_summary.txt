@@ -1,0 +1,27 @@
+# {"caseId": "DOT-061-plain-mutation", "commit": "2aade8f", "build": null, "installerSha256": null, "startedAt": null, "finishedAt": null, "runner": "named host: grok-box (linux)", "command": "python3 /tmp/d17/mutq.py (Q1-Q9)", "exitCode": 0, "result": "9/9 killed", "platform": "Linux box (Node v20.19.2, npm 11.21.0); NOT Windows evidence", "tree": "2aade8f src (restored, cmp-checked)"}
+Q1 validateEvent records not plain (typeof object only): KILLED (2 failing)
+    not ok 144 - plain data: a GETTER-defined field (even one that throws) is rejected by validateEvent and the port and refused by the builder; nothing invokes a throwing ge
+    not ok 145 - plain data: a SYMBOL key on the display, the app, the Codex params or the payload is rejected / refused
+Q2 validateEvent array fields not plain (Array.isArray): KILLED (1 failing)
+    not ok 148 - plain data: list fields: a sparse or getter-indexed list (even a throwing one) is rejected at the event level and inside the display, never read
+Q3 closed-payload check removed: KILLED (1 failing)
+    not ok 146 - plain data: an unknown payload key named constructor / toString / valueOf (or any other unknown key) is rejected, for ApprovalRequested and every other event
+Q4 closed-payload check by object lookup (constructor/toString/valueOf look known): KILLED (1 failing)
+    not ok 146 - plain data: an unknown payload key named constructor / toString / valueOf (or any other unknown key) is rejected, for ApprovalRequested and every other event
+Q5 display short-circuit removed (our reads touch non-plain data): KILLED (2 failing)
+    not ok 144 - plain data: a GETTER-defined field (even one that throws) is rejected by validateEvent and the port and refused by the builder; nothing invokes a throwing ge
+    not ok 148 - plain data: list fields: a sparse or getter-indexed list (even a throwing one) is rejected at the event level and inside the display, never read
+Q6 plainValue not recursive (top level only): KILLED (2 failing)
+    not ok 144 - plain data: a GETTER-defined field (even one that throws) is rejected by validateEvent and the port and refused by the builder; nothing invokes a throwing ge
+    not ok 148 - plain data: list fields: a sparse or getter-indexed list (even a throwing one) is rejected at the event level and inside the display, never read
+Q7 plainValue lists not plain (Array.isArray): KILLED (1 failing)
+    not ok 148 - plain data: list fields: a sparse or getter-indexed list (even a throwing one) is rejected at the event level and inside the display, never read
+Q8 codexDisplay params plain check removed: KILLED (4 failing)
+    not ok 144 - plain data: a GETTER-defined field (even one that throws) is rejected by validateEvent and the port and refused by the builder; nothing invokes a throwing ge
+    not ok 145 - plain data: a SYMBOL key on the display, the app, the Codex params or the payload is rejected / refused
+    not ok 147 - plain data end to end: Codex approvals whose params are sparse / getter / symbol are declined display_unavailable; no ApprovalRequested, no throw
+    not ok 148 - plain data: list fields: a sparse or getter-indexed list (even a throwing one) is rejected at the event level and inside the display, never read
+Q9 toolDisplay fields plain check removed: KILLED (2 failing)
+    not ok 144 - plain data: a GETTER-defined field (even one that throws) is rejected by validateEvent and the port and refused by the builder; nothing invokes a throwing ge
+    not ok 145 - plain data: a SYMBOL key on the display, the app, the Codex params or the payload is rejected / refused
+TOTAL 9/9 killed
