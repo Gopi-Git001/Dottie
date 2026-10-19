@@ -25,6 +25,7 @@ import {
   type ToolError,
   type ToolResult,
   type WorkspaceScope,
+  type ObservedState,
   CLARIFICATION_REASONS,
 } from './contracts.js';
 import { SideEffectLedger, cancelReport, decideStopStatus } from './cancellation.js';
@@ -705,7 +706,7 @@ export class Coordinator {
       requestId: event.payload.requestId,
       interactionId: event.correlationId,
       text,
-      scope: this.policy.workspaceScopeFor(text),
+      scope: copyScope(this.policy.workspaceScopeFor(text)), // E01 2i: only {scopes, paths}; a port extra never reaches TaskRequested
       causationId: event.eventId,
       abort: new AbortController(),
       ledger: new SideEffectLedger(),
@@ -1109,7 +1110,8 @@ export class Coordinator {
 
   /** Whitelist the adapter's fields and enforce CONTRACTS §5 invariants; taskId is always the coordinator's. */
   private normalizeToolResult(task: Task, partial: Omit<ToolResult, 'taskId'>): ToolResult {
-    let error: ToolError | undefined = partial.error;
+    // E01 2i: copy only contract fields from the adapter's result (top level, error, observedState); extras are dropped.
+    let error: ToolError | undefined = partial.error === undefined ? undefined : copyError(partial.error);
     let verified = partial.verified === true && error === undefined;
     if (partial.verified === true && error !== undefined) this.logger.log('warn', 'coordinator.tool_result.normalized', { taskId: task.taskId, toolId: partial.toolId, rule: 'error_implies_unverified' });
     if (!verified && error === undefined) {
@@ -1124,12 +1126,32 @@ export class Coordinator {
     return {
       taskId: task.taskId,
       toolId: partial.toolId,
-      observedState: partial.observedState,
+      observedState: this.copyObserved(task, partial.observedState),
       verified,
       sideEffect: partial.sideEffect,
       ...(error !== undefined ? { error } : {}),
       ...(partial.evidenceRef !== undefined ? { evidenceRef: partial.evidenceRef } : {}),
     };
+  }
+
+  /**
+   * E01 2i: ObservedState's contract fields, plus tool-specific keys only when their value is a scalar (CONTRACTS §5;
+   * E02's validateEvent `scalar` rule). Anything else the adapter attached is dropped (logged by count, no values).
+   */
+  private copyObserved(task: Task, o: ObservedState): ObservedState {
+    if (typeof o !== 'object' || o === null || Array.isArray(o)) return o;
+    const src = o as unknown as Record<string, unknown>;
+    const out: Record<string, unknown> = { outcome: o.outcome, decision: o.decision, checks: copyChecks(o.checks), sideEffect: o.sideEffect };
+    if (o.question !== undefined) out['question'] = o.question;
+    if (o.candidates !== undefined) out['candidates'] = Array.isArray(o.candidates) ? o.candidates.map(c => ({ id: c?.id, label: c?.label })) : o.candidates;
+    let dropped = 0;
+    for (const k of Object.keys(src)) {
+      if (OBSERVED_KNOWN.includes(k)) continue;
+      if (isScalarValue(src[k])) out[k] = src[k];
+      else dropped++;
+    }
+    if (dropped > 0) this.logger.log('warn', 'coordinator.port_field.dropped', { taskId: task.taskId, where: 'observedState', count: dropped });
+    return out as unknown as ObservedState;
   }
 
   private hooksFor(task: Task): CodexRunHooks {
@@ -1568,4 +1590,18 @@ export class Coordinator {
 /** turnId = `<taskId>.t<n>` (CONTRACTS §1/§2.1). */
 function turnIdFor(taskId: string, n: number): string {
   return `${taskId}.t${n}`;
+}
+
+// ------------------------------------------------------------------ E01 2i: port results → event fields (copy, never pass through)
+const OBSERVED_KNOWN: readonly string[] = ['outcome', 'decision', 'checks', 'sideEffect', 'question', 'candidates'];
+const isScalarValue = (v: unknown): boolean => v === null || typeof v === 'string' || typeof v === 'boolean' || (typeof v === 'number' && Number.isFinite(v));
+function copyScope(s: WorkspaceScope): WorkspaceScope {
+  return { scopes: [...s.scopes], paths: [...s.paths] };
+}
+function copyError(e: ToolError): ToolError {
+  return { code: e.code, message: e.message, retryable: e.retryable };
+}
+function copyChecks(c: ObservedState['checks']): ObservedState['checks'] {
+  if (typeof c !== 'object' || c === null || Array.isArray(c)) return c;
+  return Object.fromEntries(Object.keys(c).map(k => [k, c[k]!]));
 }
