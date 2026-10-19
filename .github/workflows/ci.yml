@@ -19,8 +19,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
       - run: sudo apt-get update -q && sudo apt-get install -y -q ripgrep
-      - run: bash scripts/secret-scan.sh .
+      - name: Self-test canaries fail the scan
+        run: bash scripts/secret-scan-self-test.sh
+      - name: Scan the tree and origin/main..HEAD
+        run: bash scripts/secret-scan.sh --history .
 
   catalog-pin:
     runs-on: ubuntu-latest
@@ -133,12 +138,13 @@ jobs:
       cancel-in-progress: false
     permissions:
       contents: read
-      actions: write # upload-artifact
     defaults:
       run:
         working-directory: apps/desktop
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "22.23.3"
@@ -149,7 +155,7 @@ jobs:
         run: |
           sudo apt-get update -q
           # Ubuntu 24.04: libasound2 is only a virtual package; the library is libasound2t64.
-          sudo apt-get install -y -q xvfb \
+          sudo apt-get install -y -q xvfb ripgrep \
             libnss3 libatk1.0-0t64 libatk-bridge2.0-0t64 libcups2t64 libdrm2 \
             libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 \
             libasound2t64 libpango-1.0-0 libcairo2 libgtk-3-0t64 libx11-xcb1 libxss1 libxtst6
@@ -214,8 +220,18 @@ jobs:
               kill -KILL -- "-$pgid" 2>/dev/null || true
             fi
           fi
-      - name: Upload smoke logs, including partials
+      - name: Secret-scan smoke logs before upload
+        id: smoke-log-scan
         if: always()
+        working-directory: .
+        run: |
+          if [[ -d apps/desktop/smoke-logs ]]; then
+            bash scripts/secret-scan.sh apps/desktop/smoke-logs
+          else
+            echo "secret-scan: no smoke-logs directory to scan"
+          fi
+      - name: Upload smoke logs, including partials
+        if: always() && steps.smoke-log-scan.outcome == 'success'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: desktop-smoke-logs
