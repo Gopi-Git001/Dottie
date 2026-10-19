@@ -72,11 +72,14 @@
  *    badge; nothing is stripped and the display object is never modified. Untrusted free text
  *    (summary, Codex reason, message body) stays stripped. The title is still the category template.
  */
+import { own } from '../../shared/own';
 import { randomBytes } from 'node:crypto';
 import { renderBoundText, renderCodexCommand } from '../../shared/commandRender';
 import { ApprovalIdentitySchema, ApprovalRequestedSchema, ApprovalResolvedSchema, HIDDEN_CHAR, type ApprovalCategory, type ApprovalDisplay, type ApprovalRequested, type ApprovalResolved } from '../../shared/contracts.draft';
 import { APPROVE_ATTENTION_MS, ApprovalViewSchema, POSSIBLE_REPEAT_WARNINGS, UNTRUSTED_CODEX_REASON_LABEL, UNTRUSTED_SUMMARY_LABEL, WARNING_MIN_VISIBLE_MS, type ApprovalView, type BoundFieldKey, type BoundFieldView, type CodexView } from '../../shared/approval';
 
+/** Shown only if a category ever lacks a label (unreachable after schema validation). */
+export const UNKNOWN_CATEGORY_LABEL = 'this action';
 export const CATEGORY_LABELS: Record<ApprovalCategory, string> = {
   read: 'Read files or data',
   navigate: 'Open or navigate',
@@ -593,8 +596,8 @@ function toView(p: Pending): ApprovalView {
   return {
     dialogId: p.dialogId,
     // TODO(DOT-095): body from ApprovalRequested.display for the other shapes (see header); category template title.
-    title: `Approve: ${CATEGORY_LABELS[r.category]}?`,
-    categoryLabel: CATEGORY_LABELS[r.category],
+    title: `Approve: ${own(CATEGORY_LABELS, r.category) ?? UNKNOWN_CATEGORY_LABEL}?`,
+    categoryLabel: own(CATEGORY_LABELS, r.category) ?? UNKNOWN_CATEGORY_LABEL,
     risk: r.risk,
     category: r.category,
     expiresAt: r.expiry,
@@ -604,6 +607,6 @@ function toView(p: Pending): ApprovalView {
     untrustedLabel: codexReason !== null ? UNTRUSTED_CODEX_REASON_LABEL : UNTRUSTED_SUMMARY_LABEL,
     codex: cx?.codex ?? null,
     fields: boundFields(r.display),
-    warning: r.possibleRepeat ? { priorSideEffect: r.possibleRepeat.priorSideEffect, text: POSSIBLE_REPEAT_WARNINGS[r.possibleRepeat.priorSideEffect] } : null,
+    warning: r.possibleRepeat ? { priorSideEffect: r.possibleRepeat.priorSideEffect, text: own(POSSIBLE_REPEAT_WARNINGS, r.possibleRepeat.priorSideEffect) ?? POSSIBLE_REPEAT_WARNINGS.committed } : null,
   };
 }

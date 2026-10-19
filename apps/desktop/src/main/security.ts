@@ -1,4 +1,5 @@
 /** Pure security constants/helpers shared by protocol + window setup (no electron import). */
+import { own } from '../shared/own';
 import { extname, join, normalize, relative, sep, isAbsolute } from 'node:path';
 import { APP_HOST, APP_SCHEME } from './ipc/trust';
 
@@ -47,7 +48,7 @@ const MIME: Readonly<Record<string, string>> = {
 };
 
 export function mimeFor(file: string): string | null {
-  return MIME[extname(file).toLowerCase()] ?? null;
+  return own(MIME, extname(file).toLowerCase()) ?? null;
 }
 
 /**

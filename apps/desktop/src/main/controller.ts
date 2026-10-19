@@ -3,6 +3,7 @@
  * activity, auto-start and service ports, and implements every IPC handler and tray action.
  * main.ts injects the few Electron capabilities it needs (PlatformHooks).
  */
+import { own } from '../shared/own';
 import { z } from 'zod';
 import { isAbsolute, normalize, parse as parsePath } from 'node:path';
 import type { AppView, ControlAction, NavigateTarget } from '../shared/ipc';
@@ -12,7 +13,7 @@ import type { FolderGrant, Settings } from '../shared/settings';
 import { admitUtterance } from './input/utteranceGate';
 import { MemoryAuditSink } from './services/stubs';
 import type { AuditSink } from './services/types';
-import { TRAY_IPC_CHANNEL, type UtteranceOrigin, ApprovalResolvedFields, approvalResolvedIssues, StopTaskResultSchema, TaskCancelledSchema, TaskFinishedSchema, TaskProgressSchema, UtteranceReadySchema, type StopStatus } from '../shared/contracts.draft';
+import { TRAY_IPC_CHANNEL, type UtteranceOrigin, ApprovalResolvedFields, approvalResolvedIssues, StopTaskResultSchema, isNoActiveTask, TaskCancelledSchema, TaskFinishedSchema, TaskProgressSchema, UtteranceReadySchema, type StopStatus } from '../shared/contracts.draft';
 import { randomUUID } from 'node:crypto';
 import type { AuthStatus, FailedAfterChanges, LastTaskNote, MenuItemId, NetworkStatus, TaskBlock } from '../shared/states';
 import { ActivityLog } from './activity';
@@ -377,12 +378,12 @@ export class DesktopController {
           break;
         }
         const r = parsed.data;
-        if ('noActiveTask' in r) {
+        if (isNoActiveTask(r)) {
           this.activity.add('info', 'No task was running.');
           break;
         }
         const calm = r.stopStatus === 'stopped_before_dispatch' || r.stopStatus === 'stopped_no_side_effects';
-        this.activity.add(calm ? 'info' : 'warning', STOP_MESSAGES[r.stopStatus]);
+        this.activity.add(calm ? 'info' : 'warning', own(STOP_MESSAGES, r.stopStatus) ?? STOP_MESSAGES.stop_unconfirmed);
         break;
       }
       case 'reconnect':

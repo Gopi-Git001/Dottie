@@ -44,6 +44,7 @@
  *
  * New tasks may be dispatched only when the runtime is `running` (plus the existing conditions).
  */
+import { own } from '../../shared/own';
 import type { RuntimeStatus } from '../../shared/runtime';
 import { LAST_TASK_NOTE_TOOLTIP, REASON_DETAIL } from './taskOutcomeCopy';
 import {
@@ -197,12 +198,12 @@ function tooltipFor(state: TrayState, s: DesktopSnapshot): string {
         parts.push('Codex unavailable; wake word still works');
         break;
       }
-      const runtimeDetail = RUNTIME_STANDBY_DETAIL[s.runtime];
+      const runtimeDetail = own(RUNTIME_STANDBY_DETAIL, s.runtime);
       if (runtimeDetail !== undefined) {
         parts.push(runtimeDetail);
         break;
       }
-      const detail = STANDBY_DETAIL[s.coordinator];
+      const detail = own(STANDBY_DETAIL, s.coordinator);
       parts.push(detail ?? 'say "Dottie"');
       break;
     }
@@ -211,9 +212,11 @@ function tooltipFor(state: TrayState, s: DesktopSnapshot): string {
   // new task runs (it is cleared then anyway).
   if (state !== 'executing' && s.failedAfterChanges !== 'none') {
     const f = s.failedAfterChanges;
-    parts.push(f === 'unspecified' ? 'last task failed after making changes' : `last task failed after making changes (${FAILED_AFTER_CHANGES_DETAIL[f]})`);
+    const fd = f === 'unspecified' ? undefined : own(FAILED_AFTER_CHANGES_DETAIL, f);
+    parts.push(fd === undefined ? 'last task failed after making changes' : `last task failed after making changes (${fd})`);
   }
-  if (state !== 'executing' && s.lastTaskNote !== 'none') parts.push(LAST_TASK_NOTE_TOOLTIP[s.lastTaskNote]);
+  const note = s.lastTaskNote === 'none' ? undefined : own(LAST_TASK_NOTE_TOOLTIP, s.lastTaskNote);
+  if (state !== 'executing' && note !== undefined) parts.push(note);
   // Windows tray tooltips are truncated at 127 chars.
   return parts.join(' · ').slice(0, 127);
 }

@@ -156,8 +156,10 @@ export const IPC_INVOKE = {
 
 /** Required sender page for a channel, if any (approval channels: approval.html only). */
 export function requiredPage(key: InvokeKey): string | null {
-  const spec = IPC_INVOKE[key];
-  return 'page' in spec ? spec.page : null;
+  if (!Object.hasOwn(IPC_INVOKE, key)) return null; // not an own invoke key (e.g. 'constructor')
+  const spec: object = IPC_INVOKE[key];
+  const page: unknown = Object.hasOwn(spec, 'page') ? Reflect.get(spec, 'page') : undefined;
+  return typeof page === 'string' ? page : null;
 }
 
 export type InvokeKey = keyof typeof IPC_INVOKE;
