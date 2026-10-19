@@ -57,6 +57,11 @@ export class MainWindow {
     void win.loadURL(`${RENDERER_ENTRY_URL}#${view}`);
   }
 
+  /** Smoke test only: hide the onboarding window so it cannot keep focus from the approval dialog. */
+  hideForSmokeTest(): void {
+    if (this.win && !this.win.isDestroyed() && this.win.isVisible()) this.win.hide();
+  }
+
   send(key: keyof typeof IPC_EVENTS, payload: unknown): void {
     const wc = this.webContents;
     if (!wc || wc.isLoading() || !isTrustedRendererUrl(wc.getURL())) return;

@@ -331,6 +331,9 @@ async function smokeBody(window: MainWindow, approvalWindow: ApprovalWindow, coo
       // The main window must not be able to use the approval channels.
       result['mainWindowGetApproval'] = (await js('renderer.mainWindowGetApproval', wc, `window.dottie.getApproval().then((r) => r.ok ? 'ok' : r.error.code)`));
     }
+    // The onboarding window is shown first. On xvfb it often keeps focus, and ready-to-show
+    // sometimes never fires, so the approval dialog stays hidden and Approve stays disabled.
+    window.hideForSmokeTest();
     const out: Record<string, unknown> = {};
     result['approval'] = out; // filled in as it goes, so a failure report shows the partial output
     await smokeApproval(approvalWindow, coordinator, controller, out);
@@ -369,6 +372,8 @@ async function smokeApproval(approvalWindow: ApprovalWindow, coordinator: StubCo
   let disabledWithWarning = false;
   let earlyApprove: unknown = null;
   for (let i = 0; i < 60; i++) {
+    // Once the window is visible and focused, stop. Another focus() would restart the 500 ms timer.
+    if (!approvalWindow.isAttentive()) approvalWindow.nudgeForSmokeTest();
     state = (await js('repeat.probe', wc, probe)) as typeof state;
     if (state.warning && state.approveDisabled === true && !disabledWithWarning) {
       disabledWithWarning = true;
@@ -382,6 +387,9 @@ async function smokeApproval(approvalWindow: ApprovalWindow, coordinator: StubCo
     await sleep(50);
   }
   out['repeat'] = { ...state, approveDisabledWhileWarningShown: disabledWithWarning, earlyApprove, joined: controller.approvals.joinedCount('a'.repeat(64)) };
+  if (state.approveDisabled !== false) {
+    throw new SmokeStepAssertion('repeat.approveEnabled', 'Approve stayed disabled; the approval window never stayed visible and focused');
+  }
   out['forgedId'] = (await js('repeat.forgedId', wc, `window.dottie.resolveApproval({ dialogId: '${'f'.repeat(64)}', decision: 'approve' }).then((r) => r.ok ? 'ok' : r.error.code)`));
   const replies = (): ReplyEntry[] => replyEntries(coordinator);
   const closed = (): boolean => approvalWindow.webContents === null;

@@ -86,6 +86,18 @@ export class ApprovalWindow {
     void win.loadURL(APPROVAL_URL);
   }
 
+  /**
+   * Smoke test only. ready-to-show does not always fire under xvfb, so approval.html can be
+   * loaded and probed while the window is still hidden and unfocused. Approve then stays
+   * disabled. Show and focus without reloading (show() reloads, which would reset the timers).
+   */
+  nudgeForSmokeTest(): void {
+    const w = this.win;
+    if (!w || w.isDestroyed()) return;
+    if (!w.isVisible()) w.show();
+    if (!w.isFocused()) w.focus();
+  }
+
   /** Smoke test only: hide the window (fires the real 'hide' event). */
   hideForSmokeTest(): void {
     if (this.win && !this.win.isDestroyed()) this.win.hide();
