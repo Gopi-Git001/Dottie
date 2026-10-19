@@ -273,3 +273,33 @@ test('ruling 2i: a completed turn carrying an (off-schema) error object forwards
   await downstream(h, rec, r);
   clean(h);
 });
+
+test('ruling 2i: reply routing uses OWN keys only: a polluted Object.prototype.result / noReply never changes how a reply is written', async () => {
+  const { AppServerConnection } = await import('../src/connection.js');
+  const { ManualScheduler } = await import('./support/manual-scheduler.js');
+  const { memoryLogger } = await import('./support/harness.js');
+  const route = async (reply: unknown) => {
+    let onLine: (l: string) => void = () => undefined;
+    const written: string[] = [];
+    const conn = new AppServerConnection(
+      { write: (d) => void written.push(d), onLine: (cb) => void (onLine = cb), onStderrLine: () => undefined, onExit: () => undefined, close: () => undefined, kill: () => undefined },
+      { logger: memoryLogger(), scheduler: new ManualScheduler() },
+    );
+    conn.setServerRequestHandler(() => reply as never);
+    onLine('{"id":"srv-1","method":"item/tool/call","params":{}}');
+    for (let k = 0; k < 5; k++) await new Promise((r) => setImmediate(r));
+    return written.map((w) => JSON.parse(w) as J);
+  };
+  const proto = Object.prototype as J;
+  for (const k of ['result', 'noReply']) {
+    Object.defineProperty(proto, k, { value: k === 'result' ? { hijacked: true } : true, configurable: true, writable: true, enumerable: false });
+    try {
+      assert.deepEqual(await route({ error: { code: -32601, message: 'Method not found' } }), [{ id: 'srv-1', error: { code: -32601, message: 'Method not found' } }], `${k}: an error reply stays an error`);
+      assert.deepEqual(await route({ result: { decision: 'decline' } }), [{ id: 'srv-1', result: { decision: 'decline' } }], `${k}: a result reply is written`);
+    } finally {
+      delete proto[k];
+    }
+  }
+  assert.ok(!('result' in {}) && !('noReply' in {}), 'Object.prototype restored');
+  assert.deepEqual(await route({ noReply: true }), [], 'an own noReply still writes nothing');
+});

@@ -88,7 +88,14 @@ is rejected (closed objects). Fixtures: valid `task-cancelled-null-observed-stat
 pair `task-cancelled-{stopped-no-side-effects,completed-before-stop}.json`; invalid
 `cancelled-null-observed-state-{certainty-committed,stopped-no-side-effects,completed-before-stop,side-effects-none}.json`
 and `cancelled-observed-state-missing.json`. No JSON Schema or Python record covers events, so none changed. No
-hash changed. If E01 meant new per-entry `verified` / `sideEffect` members, (a) needs revisiting.
+hash changed. E01 approved this reading (see below).
+
+E01 approvals (2026-10-19 11:41 CDT, relayed by E02's dispatcher; not yet in dottie-e01, no pin SHA). (1) 2i's
+approval-request exception is approved. An unknown TOP-LEVEL key on an App Server approval request stays fail-closed:
+exactly one `decline` (`schema_invalid`), no dialog, nothing forwarded. Nested unknown fields are dropped. (2) The
+2j reading is approved. `CommittedAction` gets no new members; `certainty` is the entry's side effect, so
+`observedState: null` only with `certainty: 'possible'`. Also from 2i: the adapter's reply routing (connection.ts)
+uses `Object.hasOwn`, not `in`.
 
 When E01 lands a new ruling, update the mirror and this pin in the same commit. Where CONTRACTS leaves
 something open, the conservative reading is implemented and noted at the code site (search for
